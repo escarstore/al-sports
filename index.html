@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>KITANGA FC — Official Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0A1F6E;--blue-mid:#1338BE;--blue-light:#2255E8;--accent:#00C2FF;--gold:#FFB800;
+  --red:#FF3D57;--green:#00E676;--white:#FFF;--grey:#8A9BB5;
+  --dark:#070E2B;--card:#0D1E4F;--card2:#091540;--border:rgba(255,255,255,.07);
+  --transition: all 0.3s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden}
+
+/* NAVIGATION - UPDATED LAYOUT */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,14,43,.97);backdrop-filter:blur(14px);border-bottom:2px solid var(--accent);padding:0 4%}
+.nav-container{display:flex;align-items:center;justify-content:space-between;height:70px;flex-wrap:wrap}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-crest{width:44px;height:44px;border-radius:50% 50% 44% 44%;background:linear-gradient(135deg,var(--blue-mid),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;box-shadow:0 0 18px rgba(0,194,255,.4)}
+.nav-logo span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px}
+.nav-links{display:flex;gap:22px;list-style:none;flex-wrap:wrap}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-decoration:none;transition:var(--transition)}
+.nav-links a:hover{color:var(--accent)}
+.nav-live{background:var(--red);color:#fff !important;padding:6px 12px;border-radius:3px;animation:pulse 2s infinite}
+.nav-watch{background:var(--accent);color:var(--dark) !important;padding:6px 12px;border-radius:3px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+/* HAMBURGER MENU */
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;padding:12px;background:transparent;border:none;z-index:999;width:44px;height:44px}
+.hamburger span{display:block;width:26px;height:2px;background:var(--white);border-radius:2px;transition:var(--transition)}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+@media (max-width:900px){
+  .hamburger{display:flex}
+  .nav-links{display:none !important;flex-direction:column;position:fixed;top:70px;left:0;right:0;background:rgba(7,14,43,.98);backdrop-filter:blur(14px);padding:10px 5%;gap:0;border-bottom:2px solid var(--accent);z-index:998;list-style:none}
+  .nav-links.open{display:flex !important}
+  .nav-links li{border-bottom:1px solid rgba(255,255,255,.05)}
+  .nav-links a{display:block;padding:14px 0;font-size:16px}
+}
+
+/* TICKER */
+.ticker{background:var(--accent);padding:9px 0;overflow:hidden;display:flex;align-items:center;margin-top:70px;transition:var(--transition)}
+.ticker.hidden{display:none}
+.ticker-label{background:var(--dark);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:0 16px;white-space:nowrap}
+.ticker-track{display:flex;gap:50px;animation:tMove 35s linear infinite;white-space:nowrap}
+@keyframes tMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--dark);display:inline-flex;align-items:center;gap:8px}
+
+/* AD BANNER */
+.ad-banner-top{margin-top:12px;background:linear-gradient(#0a0a1a,#111133,#0a0a1a);border-bottom:1px solid rgba(255,255,255,.05);padding:12px 4%;display:flex;flex-direction:column;align-items:center;min-height:88px}
+.ad-ph{width:100%;max-width:728px;height:80px;border:1px dashed rgba(0,194,255,.2);border-radius:4px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.15);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px}
+.ad-lbl{font-size:9px;color:rgba(255,255,255,.15);letter-spacing:3px;margin-top:4px}
+
+/* HERO SECTION - CENTERED LOGO */
+#hero{padding:60px 4%;background:radial-gradient(ellipse at 30% 50%,rgba(19,56,190,.3),transparent 60%),linear-gradient(160deg,#070E2B,#0A1F6E 55%,#070E2B);text-align:center}
+.hero-content{max-width:800px;margin:0 auto}
+.hero-tag{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:var(--accent);border:1px solid var(--accent);padding:4px 12px;border-radius:2px;margin-bottom:16px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,9vw,108px);line-height:.9;letter-spacing:4px}
+.hero-title span{color:var(--accent)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--grey);margin:16px 0 28px;line-height:1.6;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-p{background:var(--accent);color:var(--dark);padding:13px 28px;border:none;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none;display:inline-block;transition:var(--transition)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,194,255,.4)}
+.btn-s{background:transparent;color:var(--white);padding:13px 28px;border:2px solid rgba(255,255,255,.25);border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none;display:inline-block;transition:var(--transition)}
+.btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.hero-stats{display:flex;gap:36px;justify-content:center;margin-top:44px;padding-top:28px;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.hs-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--accent);line-height:1}
+.hs-lbl{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--grey);margin-top:3px}
+
+/* LIVE PANEL - WATCH LINKS */
+.live-panel{background:var(--card);border-radius:12px;padding:20px;margin-top:30px;max-width:600px;margin-left:auto;margin-right:auto}
+.lp-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.ldot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite}
+.watch-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.watch-card{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;transition:var(--transition);cursor:pointer;text-decoration:none;color:var(--white)}
+.watch-card:hover{border-color:var(--accent);background:rgba(0,194,255,.08);transform:translateX(4px)}
+.watch-info .watch-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}
+.watch-info .watch-sub{font-size:11px;color:var(--grey)}
+.watch-arrow{color:var(--accent);font-size:18px}
+
+/* SPONSOR STRIP */
+.sp-strip{background:var(--dark);padding:18px 4%;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.sp-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;color:var(--grey);text-align:center;margin-bottom:14px}
+.sp-logos{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
+.sp-slot{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);border-radius:6px;width:145px;height:54px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.2);text-decoration:none;transition:var(--transition)}
+.sp-slot:hover{border-color:var(--accent);color:var(--accent)}
+.sp-slot.filled{border-style:solid;border-color:rgba(255,255,255,.12);color:var(--white);font-size:18px}
+
+/* LEAGUES SECTION - MAIN FOCUS */
+#leagues{background:var(--card2);padding:68px 4%}
+.sl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:5px;color:var(--accent);margin-bottom:6px;text-align:center}
+.st{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,50px);letter-spacing:3px;line-height:1;margin-bottom:34px;text-align:center}
+.st span{color:var(--accent)}
+.lg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.lhc{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:var(--transition)}
+.lhc:hover{transform:translateY(-5px);border-color:var(--accent)}
+.lh-head{padding:16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.lh-flag{font-size:32px}
+.lh-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
+.lh-sub{font-size:11px;color:var(--grey)}
+.lh-matches{padding:12px 18px;display:flex;flex-direction:column;gap:8px}
+.lmr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);flex-wrap:wrap;gap:8px}
+.lmt{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;flex:1}
+.lms{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--accent);min-width:50px;text-align:center}
+.lms.live{color:var(--red)}
+.lmtime{font-size:10px;color:var(--grey);min-width:45px;text-align:right}
+.lml{background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:2px}
+.lh-foot{padding:12px 18px;display:flex;gap:10px;flex-wrap:wrap}
+.wbf{flex:1;background:var(--accent);color:var(--dark);border:none;border-radius:6px;padding:10px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none;display:block;text-align:center;transition:var(--transition)}
+.wbf:hover{opacity:.85}
+.tbtn{background:rgba(255,255,255,.08);color:var(--white);border:none;border-radius:6px;padding:10px 12px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:block;text-align:center;transition:var(--transition)}
+.tbtn:hover{background:rgba(255,255,255,.15)}
+
+/* BETTING SECTION */
+#betting{background:linear-gradient(135deg,#070e1a,#0a1530);border-top:1px solid rgba(255,184,0,.15);border-bottom:1px solid rgba(255,184,0,.15);padding:68px 4%}
+.bet-hdr{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.bet-badge{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 12px;border-radius:3px}
+.bet-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold)}
+.bet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:24px}
+.bet-card{background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.2);border-radius:10px;padding:20px;text-align:center;transition:var(--transition)}
+.bet-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.bet-logo{font-size:36px;margin-bottom:8px}
+.bet-name{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:6px}
+.bet-offer{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:13px}
+.bet-cta{display:block;background:var(--gold);color:#000;padding:10px;border-radius:5px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;transition:var(--transition)}
+.bet-cta:hover{opacity:.85}
+.bet-terms{font-size:10px;color:var(--grey);margin-top:8px}
+
+/* NEXT MATCH */
+.next-match-section{background:var(--card);padding:68px 4%}
+.match-card{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-mid) 100%);border-radius:16px;padding:40px 30px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(0,194,255,.2);flex-wrap:wrap;gap:24px}
+.match-team{text-align:center;flex:1}
+.mt-crest{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;margin:0 auto 12px;border:2px solid rgba(255,255,255,.2)}
+.mt-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700}
+.mt-sub{font-size:11px;color:var(--grey);margin-top:4px}
+.match-vs{text-align:center;flex:2}
+.vs-text{font-family:'Bebas Neue',sans-serif;font-size:54px;color:rgba(255,255,255,.12);line-height:1}
+.match-info{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--accent);background:rgba(0,194,255,.1);border:1px solid var(--accent);padding:5px 14px;border-radius:3px;display:inline-block}
+.match-detail{font-size:12px;color:var(--grey);margin-top:8px}
+.countdown{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.cd-u{text-align:center}
+.cd-n{font-family:'Bebas Neue',sans-serif;font-size:28px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:4px;display:block;border:1px solid rgba(0,194,255,.2);min-width:50px}
+.cd-l{font-size:9px;letter-spacing:2px;color:var(--grey);margin-top:4px}
+
+/* FORMATION DISPLAY */
+.formation-display-section{background:var(--card2);padding:0 4% 68px 4%}
+.formation-display-section.hidden{display:none}
+.formation-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px}
+.formation-box{background:rgba(0,0,0,.3);border-radius:16px;padding:20px}
+.formation-box-title{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;color:var(--accent);text-align:center}
+.formation-pitch-display{background:linear-gradient(135deg,#0a4a2a,#0a3a1a);border-radius:16px;padding:20px;min-height:380px}
+.formation-rows{display:flex;flex-direction:column;gap:20px}
+.formation-row-display{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.player-slot{width:70px;height:70px;border-radius:50%;background:rgba(0,0,0,.7);border:2px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);font-size:9px;text-align:center;padding:5px}
+.player-slot:hover{transform:scale(1.05);background:rgba(0,194,255,.2)}
+.player-slot.empty{opacity:.5;border-color:var(--grey)}
+.player-slot .pos-name{font-weight:700;font-size:10px}
+.player-slot .player-name{font-size:8px;color:var(--accent);margin-top:3px}
+.player-slot .player-number{font-size:7px;color:var(--grey)}
+
+/* FIXTURES & RESULTS */
+#fixtures{background:var(--dark);padding:68px 4%}
+.fx-grid{display:flex;flex-direction:column;gap:12px}
+.fx-row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;transition:var(--transition);flex-wrap:wrap;gap:12px}
+.fx-row:hover{border-color:var(--accent)}
+.fx-comp{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--accent);min-width:80px}
+.fx-teams{flex:1;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600}
+.fx-score{font-family:'Bebas Neue',sans-serif;font-size:18px;padding:5px 12px;border-radius:5px;min-width:70px;text-align:center}
+.fx-score.win{background:#0a3d1f;color:#4ade80;border:1px solid #4ade80}
+.fx-score.loss{background:#3d0a0a;color:#f87171;border:1px solid #f87171}
+.fx-score.draw{background:#2a2a0a;color:#fbbf24;border:1px solid #fbbf24}
+.fx-score.upcoming{background:rgba(0,194,255,.1);border:1px solid var(--accent);color:var(--accent);font-size:11px;padding:5px 12px}
+.fx-date{font-size:12px;color:var(--grey);min-width:100px;text-align:right}
+
+/* PLAYERS */
+#players{background:var(--card2);padding:68px 4%}
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
+.pl-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:var(--transition);cursor:pointer}
+.pl-card:hover{transform:translateY(-6px);border-color:var(--accent)}
+.pl-img{height:170px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pl-num-bg{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,.06);position:absolute;bottom:-10px;right:5px}
+.pl-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid rgba(0,194,255,.4);z-index:1;background:rgba(255,255,255,.1)}
+.pl-av{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:24px;border:3px solid rgba(0,194,255,.4);z-index:1}
+.pl-pos-badge{position:absolute;top:12px;left:12px;background:var(--accent);color:var(--dark);font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 8px;border-radius:3px}
+.pl-info{padding:15px}
+.pl-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700}
+.pl-sub{font-size:11px;color:var(--grey);margin-top:3px}
+.pl-stats{display:flex;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap}
+.pl-stat{font-size:10px;color:var(--grey)}
+.pl-stat strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--white);font-weight:700}
+.pl-rating{color:var(--gold);margin-top:8px;font-size:12px}
+.g1{background:linear-gradient(135deg,#0d2068,#1338be)}
+.g2{background:linear-gradient(135deg,#082055,#0a50a0)}
+.g3{background:linear-gradient(135deg,#051535,#0b3a80)}
+.g4{background:linear-gradient(135deg,#0a1f6e,#2255e8)}
+.g5{background:linear-gradient(135deg,#071240,#1030b0)}
+
+/* PLAYER MODAL */
+.player-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:var(--transition)}
+.player-modal.open{opacity:1;pointer-events:all}
+.player-modal-content{background:var(--card);border:1px solid var(--accent);border-radius:20px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto;position:relative;transform:translateY(30px);transition:var(--transition)}
+.player-modal.open .player-modal-content{transform:translateY(0)}
+.player-modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--grey);font-size:24px;cursor:pointer;z-index:10}
+.player-modal-header{text-align:center;padding:30px 20px 20px;background:linear-gradient(135deg,var(--blue-mid),var(--accent));border-radius:20px 20px 0 0}
+.player-modal-photo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--white);margin-bottom:16px;background:rgba(255,255,255,.2)}
+.player-modal-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
+.player-modal-number{font-size:14px;color:rgba(255,255,255,.8);margin-top:4px}
+.player-modal-body{padding:24px}
+.player-modal-info{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.info-item{background:rgba(255,255,255,.05);border-radius:10px;padding:12px;text-align:center}
+.info-label{font-size:10px;color:var(--grey);letter-spacing:2px}
+.info-value{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);margin-top:4px}
+.player-modal-bio{font-size:14px;line-height:1.6;color:var(--grey);margin-bottom:20px;padding-top:16px;border-top:1px solid var(--border)}
+.player-modal-stats{display:flex;gap:12px;justify-content:space-around;flex-wrap:wrap}
+.stat-badge{background:rgba(0,194,255,.1);border-radius:10px;padding:10px 16px;text-align:center;flex:1}
+.stat-badge .stat-number{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent)}
+.stat-badge .stat-label{font-size:10px;color:var(--grey)}
+
+/* GALLERY */
+#gallery{background:var(--card);padding:68px 4%}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.gal-item{border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:var(--card2);border:1px solid var(--border);aspect-ratio:4/3}
+.gal-item:hover .gal-ov{opacity:1}
+.gal-img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-ov{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;opacity:0;transition:var(--transition);font-size:32px}
+.gal-cap{position:absolute;bottom:0;left:0;right:0;padding:10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600}
+.gal-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--grey);font-size:14px;padding:60px;grid-column:1/-1;text-align:center}
+
+/* VIDEOS */
+#videos{background:var(--dark);padding:68px 4%}
+.vid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.vid-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:var(--transition)}
+.vid-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.vid-thumb{height:170px;position:relative;overflow:hidden;background:linear-gradient(135deg,#0d2068,#1338be);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vid-thumb img{width:100%;height:100%;object-fit:cover}
+.vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);transition:var(--transition)}
+.vid-thumb:hover .vid-play{background:rgba(0,0,0,.5)}
+.vid-play-icon{width:52px;height:52px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--dark)}
+.vid-badge{position:absolute;top:10px;left:10px;background:#FF0000;color:#fff;font-size:8px;font-weight:700;letter-spacing:2px;padding:3px 8px;border-radius:3px}
+.vid-info{padding:15px}
+.vid-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;margin-bottom:5px}
+.vid-meta{font-size:11px;color:var(--grey)}
+.vid-empty{color:var(--grey);font-size:14px;text-align:center;padding:60px;grid-column:1/-1}
+
+/* REVIEWS */
+#reviews{background:var(--card2);padding:68px 4%}
+.rv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.rv-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;transition:var(--transition)}
+.rv-card:hover{border-color:var(--accent)}
+.rv-stars{color:#fbbf24;font-size:14px;margin-bottom:10px}
+.rv-text{font-size:14px;line-height:1.7;color:rgba(255,255,255,.85);margin-bottom:15px;font-style:italic}
+.rv-author{display:flex;align-items:center;gap:12px}
+.rv-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue-mid),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px}
+.rv-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700}
+.rv-date{font-size:11px;color:var(--grey)}
+.wr{background:var(--card);border:1px solid rgba(0,194,255,.2);border-radius:12px;padding:30px;margin-top:30px}
+.wr h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:2px;margin-bottom:20px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
+@media (max-width:600px){.fr{grid-template-columns:1fr}}
+.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:12px 15px;color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none}
+.fi:focus{border-color:var(--accent)}
+textarea.fi{resize:vertical;min-height:100px}
+.ss{display:flex;gap:6px;margin-bottom:15px}
+.sb{background:none;border:none;font-size:22px;cursor:pointer;color:var(--grey);transition:var(--transition);padding:0}
+.sb.active{color:#fbbf24}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:var(--transition)}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox img{max-width:90vw;max-height:85vh;border-radius:8px;object-fit:contain}
+.lightbox-x{position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer}
+.lightbox-cap{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:14px;text-align:center}
+
+/* WATCH MODAL */
+.modal-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:var(--transition)}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid rgba(0,194,255,.3);border-radius:16px;padding:32px;max-width:500px;width:92%;position:relative;transform:translateY(30px);transition:var(--transition)}
+.modal-ov.open .modal{transform:translateY(0)}
+.modal-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--grey);font-size:20px;cursor:pointer}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;margin-bottom:5px}
+.modal-sub{font-size:13px;color:var(--grey);margin-bottom:20px}
+.wo-list{display:flex;flex-direction:column;gap:10px}
+.wo{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-decoration:none;color:var(--white);transition:var(--transition)}
+.wo:hover{border-color:var(--accent);background:rgba(0,194,255,.08)}
+.wo-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
+.wo-sub{font-size:12px;color:var(--grey)}
+.wo-arr{color:var(--accent);font-size:18px}
+
+/* FOOTER */
+footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent)}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+@media (max-width:768px){.fg{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.fg{grid-template-columns:1fr}}
+.fb .cl{width:60px;height:60px;border-radius:50% 50% 44% 44%;background:linear-gradient(135deg,var(--blue-mid),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:15px;box-shadow:0 0 22px rgba(0,194,255,.3)}
+.fb-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px}
+.fb-tag{font-size:13px;color:var(--grey);margin-top:8px;line-height:1.6}
+.fc h4{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:var(--accent);margin-bottom:16px}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fc ul a{color:var(--grey);text-decoration:none;font-size:13px;transition:var(--transition)}
+.fc ul a:hover{color:var(--white)}
+.fbot{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap;gap:12px}
+.fcopy{font-size:12px;color:var(--grey)}
+.slinks{display:flex;gap:12px}
+.slink{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:var(--transition)}
+.slink:hover{background:var(--accent)}
+
+/* Supabase Status */
+.supabase-status{position:fixed;bottom:15px;right:15px;z-index:1000;font-size:10px;padding:5px 10px;border-radius:20px;background:rgba(0,0,0,.85);color:#fff;display:flex;align-items:center;gap:6px;cursor:pointer}
+.supabase-status .status-dot{width:8px;height:8px;border-radius:50%}
+.supabase-status .status-dot.connected{background:#00E676;box-shadow:0 0 5px #00E676}
+.supabase-status .status-dot.disconnected{background:#FF3D57;box-shadow:0 0 5px #FF3D57}
+
+.responsibility-note{font-size:11px;color:var(--grey);margin-bottom:15px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;text-align:center}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <div class="nav-crest">KFC</div>
+      <span>KITANGA FC</span>
+    </a>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#leagues" class="nav-live" onclick="closeNav()">🔴 LIVE</a></li>
+      <li><a href="#next-match" onclick="closeNav()">Next Match</a></li>
+      <li><a href="#fixtures" onclick="closeNav()">Fixtures</a></li>
+      <li><a href="#players" onclick="closeNav()">Squad</a></li>
+      <li><a href="#gallery" onclick="closeNav()">Gallery</a></li>
+      <li><a href="#videos" onclick="closeNav()">Videos</a></li>
+      <li><a href="#reviews" onclick="closeNav()">Fan Zone</a></li>
+      <li><a href="#leagues" class="nav-watch" onclick="closeNav()">▶ Watch</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="ticker-label">LIVE</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track" id="ticker-content"></div>
+  </div>
+</div>
+
+<!-- AD BANNER -->
+<div class="ad-banner-top">
+  <div class="ad-ph">📢 Advertisement Space - Contact sponsor@kitangafc.com</div>
+  <div class="ad-lbl">Advertisement</div>
+</div>
+
+<!-- HERO SECTION - CENTERED -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Official Club Website</div>
+    <h1 class="hero-title">KITANGA<br><span>FC</span></h1>
+    <p class="hero-sub">Passion. Pride. Power. Your home for Kitanga FC news, fixtures, and squad updates.</p>
+    <div class="hero-btns">
+      <a href="#leagues" class="btn-p">▶ Watch Live Football</a>
+      <a href="#fixtures" class="btn-s">Our Fixtures</a>
+    </div>
+    <div class="hero-stats" id="hero-stats">
+      <div><div class="hs-num" id="hs-wins">—</div><div class="hs-lbl">Wins</div></div>
+      <div><div class="hs-num" id="hs-players">—</div><div class="hs-lbl">Players</div></div>
+      <div><div class="hs-num" id="hs-videos">—</div><div class="hs-lbl">Videos</div></div>
+    </div>
+    
+    <!-- Watch Live Panel -->
+    <div class="live-panel">
+      <div class="lp-title"><div class="ldot"></div> Watch Football Live</div>
+      <div class="watch-links">
+        <a href="https://www.youtube.com/results?search_query=live+football+today" target="_blank" class="watch-card">
+          <div class="watch-info"><div class="watch-name">▶ YouTube</div><div class="watch-sub">Free highlights & live streams</div></div>
+          <div class="watch-arrow">→</div>
+        </a>
+        <a href="https://www.sofascore.com" target="_blank" class="watch-card">
+          <div class="watch-info"><div class="watch-name">📊 SofaScore</div><div class="watch-sub">Live stats & match tracker</div></div>
+          <div class="watch-arrow">→</div>
+        </a>
+        <a href="https://www.flashscore.com" target="_blank" class="watch-card">
+          <div class="watch-info"><div class="watch-name">⚡ FlashScore</div><div class="watch-sub">Live scores from all leagues</div></div>
+          <div class="watch-arrow">→</div>
+        </a>
+        <a href="https://www.bbc.com/sport/football" target="_blank" class="watch-card">
+          <div class="watch-info"><div class="watch-name">📺 BBC Sport</div><div class="watch-sub">Live commentary & reports</div></div>
+          <div class="watch-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR STRIP -->
+<div class="sp-strip">
+  <div class="sp-lbl">Our Sponsors — <a href="#" style="color:var(--accent);text-decoration:none">Advertise Here</a></div>
+  <div class="sp-logos">
+    <a href="#" class="sp-slot filled">🏪 BOARD-4</a>
+    <a href="#" class="sp-slot filled">⚡ CLEW-2</a>
+    <a href="#" class="sp-slot">+ ESCAR-INC</a>
+    <a href="#" class="sp-slot">+ XAVIER</a>
+  </div>
+</div>
+
+<!-- LEAGUES HUB - MAIN SECTION -->
+<section id="leagues">
+  <div class="sl">International Football</div>
+  <div class="st">Live Scores &amp; <span>Tables</span></div>
+  <div class="lg-grid" id="leagues-grid"></div>
+</section>
+
+<!-- BETTING - Affiliate Links -->
+<section id="betting">
+  <div class="bet-hdr"><div class="bet-badge">18+ | SPONSORED</div><div class="bet-title">Top Betting Offers</div></div>
+  <p style="font-size:12px;color:var(--grey);margin-bottom:8px;text-align:center">⚠️ 18+ only. Gamble responsibly.</p>
+  <div class="bet-grid" id="betting-grid">
+    <div class="bet-card"><div class="bet-logo">🎰</div><div class="bet-name">Betway</div><div class="bet-offer">Up to <strong style="color:var(--gold)">$50 Free Bet</strong> on first deposit!</div><a href="https://www.betway.com" target="_blank" class="bet-cta" rel="sponsored">Claim Offer →</a><div class="bet-terms">T&Cs apply. 18+.</div></div>
+    <div class="bet-card"><div class="bet-logo">⚽</div><div class="bet-name">Bwin</div><div class="bet-offer">100% Welcome Bonus up to <strong style="color:var(--gold)">$50</strong>!</div><a href="https://www.bwin.com" target="_blank" class="bet-cta" rel="sponsored">Claim Offer →</a><div class="bet-terms">T&Cs apply. 18+.</div></div>
+    <div class="bet-card"><div class="bet-logo">🏆</div><div class="bet-name">SportyBet</div><div class="bet-offer">100% Welcome Bonus up to <strong style="color:var(--gold)">$100</strong>!</div><a href="https://www.sportybet.com" target="_blank" class="bet-cta" rel="sponsored">Claim Offer →</a><div class="bet-terms">T&Cs apply. 18+.</div></div>
+    <div class="bet-card"><div class="bet-logo">🔥</div><div class="bet-name">Betpawa</div><div class="bet-offer">Double your first deposit up to <strong style="color:var(--gold)">$50</strong>!</div><a href="https://www.betpawa.com" target="_blank" class="bet-cta" rel="sponsored">Claim Offer →</a><div class="bet-terms">T&Cs apply. 18+.</div></div>
+  </div>
+</section>
+
+<!-- NEXT MATCH SECTION -->
+<section id="next-match" class="next-match-section">
+  <div class="sl">Upcoming</div>
+  <div class="st">Next <span>Match</span></div>
+  <div class="match-card" id="next-match-card">
+    <div style="color:var(--grey);width:100%;text-align:center;font-size:14px">Loading next match...</div>
+  </div>
+</section>
+
+<!-- FORMATION DISPLAY SECTION -->
+<div id="formation-display-section" class="formation-display-section">
+  <div class="sl">Team Formation</div>
+  <div class="st">Matchday <span>Lineup</span></div>
+  <div id="formation-display-container" class="formation-compare"></div>
+</div>
+
+<!-- FIXTURES & RESULTS -->
+<section id="fixtures">
+  <div class="sl">KITANGA FC</div>
+  <div class="st">Fixtures &amp; <span>Results</span></div>
+  <div class="fx-grid" id="fixtures-list">
+    <div style="color:var(--grey);font-size:14px;padding:20px;text-align:center">Loading fixtures...</div>
+  </div>
+</section>
+
+<!-- SQUAD -->
+<section id="players">
+  <div class="sl">The Squad</div>
+  <div class="st">Meet The <span>Players</span></div>
+  <div class="pl-grid" id="players-grid">
+    <div style="color:var(--grey);font-size:14px;padding:20px;text-align:center">Loading players...</div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="sl">Club Photos</div>
+  <div class="st">Photo <span>Gallery</span></div>
+  <div class="gal-grid" id="gallery-grid">
+    <div class="gal-empty">📸<br>No photos uploaded yet.<br><span style="font-size:12px">Admin can upload photos in the admin panel.</span></div>
+  </div>
+</section>
+
+<!-- MATCH VIDEOS -->
+<section id="videos">
+  <div class="sl">Watch Again</div>
+  <div class="st">Match <span>Videos</span></div>
+  <div class="vid-grid" id="videos-grid">
+    <div class="vid-empty">🎬<br>No match videos yet.</div>
+  </div>
+</section>
+
+<!-- FAN REVIEWS -->
+<section id="reviews">
+  <div class="sl">Fan Zone</div>
+  <div class="st">Fan <span>Reviews</span></div>
+  <div class="rv-grid" id="rv-container"></div>
+  <div class="wr">
+    <h3>Leave A Review</h3>
+    <div class="fr"><input class="fi" id="rn" placeholder="Your Name"/><input class="fi" id="rm" placeholder="Which Match?"/></div>
+    <div class="ss" id="ss"><button class="sb" onclick="setStar(1)">★</button><button class="sb" onclick="setStar(2)">★</button><button class="sb" onclick="setStar(3)">★</button><button class="sb" onclick="setStar(4)">★</button><button class="sb" onclick="setStar(5)">★</button></div>
+    <textarea class="fi" id="rt" placeholder="Share your match experience..."></textarea>
+    <button class="btn-p" style="margin-top:15px" onclick="postReview()">Post Review</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div class="fb"><div class="cl">KFC</div><div class="fb-name">KITANGA FC</div><p class="fb-tag">Official home of Kitanga FC. Live scores, fixtures, squad & world football — all in one place.</p><p style="font-size:11px;color:var(--grey);margin-top:12px">📧 sponsor@kitangafc.com</p></div>
+    <div class="fc"><h4>Club</h4><ul><li><a href="#next-match">Next Match</a></li><li><a href="#fixtures">Fixtures</a></li><li><a href="#players">Squad</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#videos">Videos</a></li></ul></div>
+    <div class="fc"><h4>Leagues</h4><ul><li><a href="https://www.premierleague.com" target="_blank">Premier League</a></li><li><a href="https://www.laliga.com" target="_blank">La Liga</a></li><li><a href="https://www.bundesliga.com" target="_blank">Bundesliga</a></li><li><a href="https://www.ligue1.com" target="_blank">Ligue 1</a></li></ul></div>
+    <div class="fc"><h4>Partners</h4><ul><li><a href="https://www.betway.com" target="_blank">Betway</a></li><li><a href="https://www.bwin.com" target="_blank">Bwin</a></li><li><a href="https://www.sportybet.com" target="_blank">SportyBet</a></li><li><a href="https://www.betpawa.com" target="_blank">Betpawa</a></li><li><a href="#">Advertise Here</a></li></ul></div>
+  </div>
+  <div class="responsibility-note">⚠️ <strong>Responsible Gambling:</strong> Gamble only what you can afford to lose. Gamble responsibly. 18+ only.</div>
+  <div class="fbot">
+    <span class="fcopy">© 2026 Kitanga FC. All rights reserved.</span>
+    <div class="slinks"><div class="slink">📘</div><div class="slink">🐦</div><div class="slink">📸</div><div class="slink">▶️</div></div>
+  </div>
+</footer>
+
+<!-- PLAYER DETAIL MODAL -->
+<div class="player-modal" id="player-detail-modal">
+  <div class="player-modal-content">
+    <button class="player-modal-close" onclick="closePlayerModal()">✕</button>
+    <div class="player-modal-header" id="player-modal-header"></div>
+    <div class="player-modal-body" id="player-modal-body"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-x" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <div class="lightbox-cap" id="lightbox-cap"></div>
+</div>
+
+<!-- WATCH MODAL -->
+<div class="modal-ov" id="wModal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="mt">Watch Match</div>
+    <p class="modal-sub" id="ms">Choose where to watch</p>
+    <div class="wo-list">
+      <a href="https://www.youtube.com/results?search_query=live+football+today" target="_blank" class="wo"><div><div class="wo-name">▶ YouTube</div><div class="wo-sub">Free highlights & live streams</div></div><div class="wo-arr">→</div></a>
+      <a href="https://www.sofascore.com" target="_blank" class="wo"><div><div class="wo-name">📊 SofaScore</div><div class="wo-sub">Live stats, lineups & match tracker</div></div><div class="wo-arr">→</div></a>
+      <a href="https://www.flashscore.com" target="_blank" class="wo"><div><div class="wo-name">⚡ FlashScore</div><div class="wo-sub">Live scores from all leagues</div></div><div class="wo-arr">→</div></a>
+      <a href="https://www.bbc.com/sport/football" target="_blank" class="wo"><div><div class="wo-name">📺 BBC Sport</div><div class="wo-sub">Live commentary & match reports</div></div><div class="wo-arr">→</div></a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// SUPABASE CONFIGURATION
+// ============================================
+const SUPABASE_URL = 'https://qlrohdmpkzlkawffqlug.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscm9oZG1wa3psa2F3ZmZxbHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY3NjAsImV4cCI6MjA5MDY0Mjc2MH0.rBfgxNVpbxeMGRENueegZ52xzGRCfkCE70hTbVaHUWA';
+
+let supabaseClient = null;
+let useCloud = false;
+
+// Initialize Supabase
+try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    useCloud = true;
+    console.log('✅ Supabase connected');
+} catch(e) {
+    console.warn('Supabase not available:', e);
+    useCloud = false;
+}
+
+function updateStatus(connected) {
+    let statusDiv = document.getElementById('supabase-status-indicator');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'supabase-status-indicator';
+        statusDiv.className = 'supabase-status';
+        document.body.appendChild(statusDiv);
+    }
+    if (connected) {
+        statusDiv.innerHTML = '<span class="status-dot connected"></span> Live Data';
+        statusDiv.style.background = 'rgba(0,230,118,.2)';
+        statusDiv.style.border = '1px solid #00E676';
+    } else {
+        statusDiv.innerHTML = '<span class="status-dot disconnected"></span> Local Mode';
+        statusDiv.style.background = 'rgba(0,0,0,.8)';
+        statusDiv.style.border = '1px solid #FF3D57';
+    }
+}
+
+// ============================================
+// DATA SERVICE - READS FROM SUPABASE
+// ============================================
+const DataService = {
+    async getData(table) {
+        if (useCloud && supabaseClient) {
+            try {
+                const { data, error } = await supabaseClient.from(table).select('*');
+                if (!error && data) {
+                    localStorage.setItem(`kfc_${table}`, JSON.stringify(data));
+                    return data;
+                }
+            } catch(e) { console.warn('Supabase fetch failed:', e); }
+        }
+        const localRaw = localStorage.getItem(`kfc_${table}`);
+        return localRaw ? JSON.parse(localRaw) : [];
+    },
+
+    async addReview(review) {
+        const reviewData = {
+            id: Date.now().toString(),
+            author: review.author,
+            match_name: review.match || '',
+            stars: review.stars,
+            text: review.text,
+            date: new Date().toISOString().split('T')[0],
+            approved: false
+        };
+        
+        if (useCloud && supabaseClient) {
+            try {
+                const { data, error } = await supabaseClient.from('reviews').insert([reviewData]).select();
+                if (!error && data) {
+                    return data[0];
+                }
+            } catch(e) { console.warn('Supabase insert failed:', e); }
+        }
+        
+        const reviews = JSON.parse(localStorage.getItem('kfc_reviews') || '[]');
+        reviews.push(reviewData);
+        localStorage.setItem('kfc_reviews', JSON.stringify(reviews));
+        return reviewData;
+    },
+
+    async getApprovedReviews() {
+        const reviews = await this.getData('reviews');
+        return reviews.filter(r => r.approved === true);
+    },
+
+    async getFormation() {
+        const formations = await this.getData('formations');
+        const home = formations.find(f => f.side === 'home') || { formation_name: '4-3-3', positions: {}, show_on_site: true };
+        const away = formations.find(f => f.side === 'away') || { formation_name: '4-4-2', positions: {}, show_on_site: true };
+        return { 
+            home: { ...home, showOnSite: home.show_on_site !== false, formation_name: home.formation_name || '4-3-3' }, 
+            away: { ...away, showOnSite: away.show_on_site !== false, formation_name: away.formation_name || '4-4-2' } 
+        };
+    },
+
+    async getTickerSettings() {
+        const settings = await this.getData('ticker_settings');
+        if (settings.length) {
+            return { show: settings[0].show_ticker, messages: settings[0].messages || [] };
+        }
+        return { show: true, messages: ['🏆 Welcome to Kitanga FC', '⭐ Follow us on social media', '📅 Check our fixtures'] };
+    }
+};
+
+// ============================================
+// RENDER FUNCTIONS
+// ============================================
+
+// Ticker
+async function renderTicker() {
+    const settings = await DataService.getTickerSettings();
+    const ticker = document.getElementById('ticker');
+    if (!settings.show) {
+        ticker.classList.add('hidden');
+    } else {
+        ticker.classList.remove('hidden');
+        const track = document.getElementById('ticker-content');
+        const messages = settings.messages || ['🏆 Welcome to Kitanga FC', '⭐ Follow us on social media', '📅 Check our fixtures'];
+        const allMessages = [...messages, ...messages];
+        track.innerHTML = allMessages.map(msg => `<span class="ti">${msg}</span>`).join('');
+    }
+}
+
+// Leagues - Static data with watch links
+const leaguesData = [
+    { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', country: 'England', url: 'https://www.premierleague.com/matches', tableUrl: 'https://www.premierleague.com/tables' },
+    { name: 'La Liga', flag: '🇪🇸', country: 'Spain', url: 'https://www.laliga.com/en-GB/laliga-ea/schedule-results', tableUrl: 'https://www.laliga.com/en-GB/laliga-ea/standing' },
+    { name: 'Bundesliga', flag: '🇩🇪', country: 'Germany', url: 'https://www.bundesliga.com/en/bundesliga/matchday', tableUrl: 'https://www.bundesliga.com/en/bundesliga/table' },
+    { name: 'Ligue 1', flag: '🇫🇷', country: 'France', url: 'https://www.ligue1.com/fixtures-results', tableUrl: 'https://www.ligue1.com/ranking' },
+    { name: 'Serie A', flag: '🇮🇹', country: 'Italy', url: 'https://www.legaseriea.it/en/matches', tableUrl: 'https://www.legaseriea.it/en/table' }
+];
+
+function renderLeagues() {
+    const container = document.getElementById('leagues-grid');
+    if (!container) return;
+    container.innerHTML = leaguesData.map(league => `
+        <div class="lhc">
+            <div class="lh-head"><div class="lh-flag">${league.flag}</div><div><div class="lh-name">${league.name}</div><div class="lh-sub">${league.country}</div></div></div>
+            <div class="lh-foot" style="display:flex;gap:12px;margin-top:20px">
+                <a href="${league.url}" target="_blank" class="wbf">▶ Watch / Full Scores</a>
+                <a href="${league.tableUrl}" target="_blank" class="tbtn">📊 View Table</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Formation Display
+async function renderFormationDisplay() {
+    const formation = await DataService.getFormation();
+    const showHome = formation.home?.showOnSite !== false;
+    const showAway = formation.away?.showOnSite !== false;
+
+    const section = document.getElementById('formation-display-section');
+    if (!section) return;
+    
+    if (!showHome && !showAway) {
+        section.classList.add('hidden');
+        return;
+    }
+    section.classList.remove('hidden');
+
+    const players = await DataService.getData('players');
+    const PRESETS = {
+        '4-3-3': [{ key: 'GK', row: 0 }, { key: 'LB', row: 1 }, { key: 'CB1', row: 1 }, { key: 'CB2', row: 1 }, { key: 'RB', row: 1 }, { key: 'CM1', row: 2 }, { key: 'CM2', row: 2 }, { key: 'CM3', row: 2 }, { key: 'LW', row: 3 }, { key: 'ST', row: 3 }, { key: 'RW', row: 3 }],
+        '4-4-2': [{ key: 'GK', row: 0 }, { key: 'LB', row: 1 }, { key: 'CB1', row: 1 }, { key: 'CB2', row: 1 }, { key: 'RB', row: 1 }, { key: 'LM', row: 2 }, { key: 'CM1', row: 2 }, { key: 'CM2', row: 2 }, { key: 'RM', row: 2 }, { key: 'ST1', row: 3 }, { key: 'ST2', row: 3 }]
+    };
+
+    const buildSide = (sideData) => {
+        if (!sideData) return '<div style="color:var(--grey);text-align:center;padding:20px">No lineup set</div>';
+        const formName = sideData.formation_name || '4-3-3';
+        const preset = PRESETS[formName] || PRESETS['4-3-3'];
+        const maxRow = Math.max(...preset.map(p => p.row));
+        let rows = [];
+        for (let r = 0; r <= maxRow; r++) {
+            const rowPos = preset.filter(p => p.row === r);
+            rows.push(`<div class="formation-row-display">${rowPos.map(pos => {
+                const playerId = sideData.positions?.[pos.key];
+                const player = players.find(p => p.id === playerId);
+                return `<div class="player-slot ${!playerId ? 'empty' : ''}" ${playerId ? `onclick="openPlayerModalById('${playerId}')"` : ''}>
+                    <div class="pos-name">${pos.key}</div>
+                    <div class="player-name">${player ? player.name.split(' ')[0] : 'Empty'}</div>
+                    <div class="player-number">#${player?.number || ''}</div>
+                </div>`;
+            }).join('')}</div>`);
+        }
+        return rows.join('');
+    };
+
+    const container = document.getElementById('formation-display-container');
+    let html = '';
+    if (showHome) {
+        const formName = formation.home?.formation_name || '4-3-3';
+        html += `<div class="formation-box"><div class="formation-box-title">🏠 HOME TEAM (${formName})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.home)}</div></div></div>`;
+    }
+    if (showAway) {
+        const formName = formation.away?.formation_name || '4-4-2';
+        html += `<div class="formation-box"><div class="formation-box-title">✈️ AWAY TEAM (${formName})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.away)}</div></div></div>`;
+    }
+    container.innerHTML = html;
+}
+
+// Players
+const gradients = ['g1', 'g2', 'g3', 'g4', 'g5'];
+
+async function openPlayerModalById(playerId) {
+    const players = await DataService.getData('players');
+    const player = players.find(p => p.id === playerId);
+    if (!player) return;
+
+    const header = document.getElementById('player-modal-header');
+    const body = document.getElementById('player-modal-body');
+
+    header.innerHTML = `
+        ${player.photo ? `<img src="${player.photo}" class="player-modal-photo" alt="${player.name}">` : `<div class="player-modal-photo" style="background:linear-gradient(135deg,var(--blue-mid),var(--accent));display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 16px">${player.name[0]}</div>`}
+        <div class="player-modal-name">${player.name}</div>
+        <div class="player-modal-number">#${player.number || '—'} · ${player.position || '—'} · ${player.nationality || '—'}</div>
+    `;
+
+    body.innerHTML = `
+        <div class="player-modal-info">
+            <div class="info-item"><div class="info-label">Age</div><div class="info-value">${player.age || '—'}</div></div>
+            <div class="info-item"><div class="info-label">Rating</div><div class="info-value">${player.rating || '—'}/10</div></div>
+            <div class="info-item"><div class="info-label">Nationality</div><div class="info-value">${player.nationality || '—'}</div></div>
+            <div class="info-item"><div class="info-label">Position</div><div class="info-value">${player.position || '—'}</div></div>
+        </div>
+        ${player.bio ? `<div class="player-modal-bio">${player.bio}</div>` : ''}
+        <div class="player-modal-stats">
+            <div class="stat-badge"><div class="stat-number">${player.goals || 0}</div><div class="stat-label">Goals</div></div>
+            <div class="stat-badge"><div class="stat-number">${player.assists || 0}</div><div class="stat-label">Assists</div></div>
+            <div class="stat-badge"><div class="stat-number">${player.appearances || 0}</div><div class="stat-label">Appearances</div></div>
+        </div>
+    `;
+
+    document.getElementById('player-detail-modal').classList.add('open');
+}
+
+function closePlayerModal() {
+    document.getElementById('player-detail-modal').classList.remove('open');
+}
+
+async function renderPlayers() {
+    const players = await DataService.getData('players');
+    const el = document.getElementById('players-grid');
+    if (!el) return;
+    if (!players.length) {
+        el.innerHTML = '<div style="color:var(--grey);font-size:14px;padding:20px;text-align:center">No players in the squad yet.</div>';
+        return;
+    }
+
+    el.innerHTML = players.map((p, i) => {
+        const ini = (p.name || '?')[0] + ((p.name || '').split(' ')[1]?.[0] || '');
+        const g = gradients[i % 5];
+        const statKey = p.position === 'GK' ? `<div class="pl-stat"><strong>${p.appearances || 0}</strong>Apps</div><div class="pl-stat"><strong>${p.goals || 0}</strong>Goals</div>`
+            : `<div class="pl-stat"><strong>${p.goals || 0}</strong>Goals</div><div class="pl-stat"><strong>${p.assists || 0}</strong>Assists</div>`;
+        return `<div class="pl-card" onclick="openPlayerModalById('${p.id}')">
+            <div class="pl-img ${g}">
+                ${p.photo ? `<img src="${p.photo}" class="pl-photo" alt="${p.name}">` : `<div class="pl-av">${ini}</div>`}
+                <div class="pl-pos-badge">${p.position || ''}</div>
+                <div class="pl-num-bg">${p.number || ''}</div>
+            </div>
+            <div class="pl-info">
+                <div class="pl-name">${p.name}</div>
+                <div class="pl-sub">#${p.number || '—'} · ${p.position || '—'} · ${p.nationality || '—'}</div>
+                <div class="pl-stats">${statKey}</div>
+                ${p.rating ? `<div class="pl-rating">⭐ ${p.rating}/10 Rating</div>` : ''}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// Fixtures & Results
+async function renderFixtures() {
+    const fixtures = await DataService.getData('fixtures');
+    const results = await DataService.getData('results');
+    const el = document.getElementById('fixtures-list');
+    if (!el) return;
+    
+    const all = [
+        ...results.map(r => ({ ...r, _type: 'result' })),
+        ...fixtures.map(f => ({ ...f, _type: 'fixture' }))
+    ].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+    if (!all.length) {
+        el.innerHTML = '<div style="color:var(--grey);font-size:14px;padding:20px;text-align:center">No fixtures or results yet.</div>';
+        return;
+    }
+
+    el.innerHTML = all.map(item => {
+        if (item._type === 'result') {
+            const kit = item.home.toLowerCase().includes('kitanga') ? 'home' : 'away';
+            let outcome = 'draw';
+            if (item.hscore !== item.ascore) outcome = kit === 'home' ? (item.hscore > item.ascore ? 'win' : 'loss') : (item.ascore > item.hscore ? 'win' : 'loss');
+            const scoreStr = `${item.hscore}–${item.ascore}`;
+            return `<div class="fx-row">
+                <span class="fx-comp">${item.comp}</span>
+                <span class="fx-teams">${item.home} &nbsp;vs&nbsp; ${item.away}</span>
+                <span class="fx-score ${outcome}">${scoreStr}</span>
+                <span class="fx-date">${item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}</span>
+            </div>`;
+        } else {
+            return `<div class="fx-row">
+                <span class="fx-comp">${item.comp}</span>
+                <span class="fx-teams">${item.home} &nbsp;vs&nbsp; ${item.away}</span>
+                <span class="fx-score upcoming">UPCOMING</span>
+                <span class="fx-date">${item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''} ${item.time ? '· ' + item.time : ''}</span>
+            </div>`;
+        }
+    }).join('');
+}
+
+// Next Match
+async function renderNextMatch() {
+    const fixtures = await DataService.getData('fixtures');
+    const upcoming = fixtures.filter(f => f.status === 'upcoming' && f.date).sort((a, b) => new Date(a.date) - new Date(b.date));
+    const next = upcoming[0];
+    const card = document.getElementById('next-match-card');
+    if (!card) return;
+    if (!next) {
+        card.innerHTML = '<div style="color:var(--grey);width:100%;text-align:center;font-size:14px">No upcoming matches scheduled.</div>';
+        return;
+    }
+    const matchDate = new Date(next.date + 'T' + (next.time || '15:00'));
+    const homeInit = next.home.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+    const awayInit = next.away.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
+    card.innerHTML = `
+        <div class="match-team">
+            <div class="mt-crest">${homeInit}</div>
+            <div class="mt-name">${next.home}</div>
+            <div class="mt-sub">Home</div>
+        </div>
+        <div class="match-vs">
+            <div class="match-info">📅 ${matchDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            <div class="vs-text">VS</div>
+            <div class="match-detail">⏰ ${next.time || 'TBD'} · 📍 ${next.venue || 'TBD'}</div>
+            <div class="countdown" id="cd">
+                <div class="cd-u"><span class="cd-n" id="cd-d">—</span><div class="cd-l">Days</div></div>
+                <div class="cd-u"><span class="cd-n" id="cd-h">—</span><div class="cd-l">Hrs</div></div>
+                <div class="cd-u"><span class="cd-n" id="cd-m">—</span><div class="cd-l">Mins</div></div>
+                <div class="cd-u"><span class="cd-n" id="cd-s">—</span><div class="cd-l">Secs</div></div>
+            </div>
+        </div>
+        <div class="match-team">
+            <div class="mt-crest">${awayInit}</div>
+            <div class="mt-name">${next.away}</div>
+            <div class="mt-sub">Away</div>
+        </div>`;
+
+    function tick() {
+        const diff = matchDate - new Date();
+        if (diff > 0) {
+            const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+            ['cd-d', 'cd-h', 'cd-m', 'cd-s'].forEach((id, i) => { const el = document.getElementById(id); if (el) el.textContent = String([d, h, m, s][i]).padStart(2, '0'); });
+        }
+    }
+    tick();
+    setInterval(tick, 1000);
+}
+
+// Hero Stats
+async function renderHeroStats() {
+    const results = await DataService.getData('results');
+    const players = await DataService.getData('players');
+    const videos = await DataService.getData('videos');
+    const wins = results.filter(r => {
+        const kit = r.home.toLowerCase().includes('kitanga') ? 'home' : 'away';
+        return kit === 'home' ? r.hscore > r.ascore : r.ascore > r.hscore;
+    }).length;
+    const winsEl = document.getElementById('hs-wins');
+    const playersEl = document.getElementById('hs-players');
+    const videosEl = document.getElementById('hs-videos');
+    if (winsEl) winsEl.textContent = wins;
+    if (playersEl) playersEl.textContent = players.length;
+    if (videosEl) videosEl.textContent = videos.length;
+}
+
+// Gallery
+async function renderGallery() {
+    const photos = await DataService.getData('photos');
+    const el = document.getElementById('gallery-grid');
+    if (!el) return;
+    if (!photos.length) {
+        el.innerHTML = '<div class="gal-empty">📸<br>No photos uploaded yet.<br><span style="font-size:12px">Admin can upload photos in the admin panel.</span></div>';
+        return;
+    }
+    el.innerHTML = photos.map(p => `
+        <div class="gal-item" onclick="openLightbox('${p.id}')">
+            <img class="gal-img" src="${p.image_url}" alt="${p.caption || 'Club photo'}" loading="lazy"/>
+            <div class="gal-ov">🔍</div>
+            ${p.caption ? `<div class="gal-cap">${p.caption}</div>` : ''}
+        </div>
+    `).join('');
+}
+
+async function openLightbox(id) {
+    const photos = await DataService.getData('photos');
+    const p = photos.find(photo => photo.id === id);
+    if (!p) return;
+    document.getElementById('lightbox-img').src = p.image_url;
+    document.getElementById('lightbox-cap').textContent = p.caption || '';
+    document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// Videos
+async function renderVideos() {
+    const vids = await DataService.getData('videos');
+    const el = document.getElementById('videos-grid');
+    if (!el) return;
+    if (!vids.length) {
+        el.innerHTML = '<div class="vid-empty">🎬<br>No match videos yet.<br><span style="font-size:12px">Admin can add videos via the admin panel.</span></div>';
+        return;
+    }
+    el.innerHTML = vids.map(v => {
+        const isYT = v.source === 'youtube' || v.yt_id;
+        const thumb = isYT && v.yt_id ? `<img src="https://img.youtube.com/vi/${v.yt_id}/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover" alt="${v.title}"/>` : `<div style="font-size:48px">🎬</div>`;
+        const videoUrl = v.url || (v.yt_id ? `https://youtube.com/watch?v=${v.yt_id}` : '#');
+        return `<div class="vid-card">
+            <div class="vid-thumb" onclick="${isYT ? `window.open('${videoUrl}', '_blank')` : `playUploadedVid('${v.id}')`}">
+                ${thumb}
+                <div class="vid-play"><div class="vid-play-icon">▶</div></div>
+                <div class="vid-badge ${isYT ? '' : 'upload'}">${isYT ? 'YOUTUBE' : 'UPLOAD'}</div>
+            </div>
+            <div class="vid-info">
+                <div class="vid-title">${v.title}</div>
+                <div class="vid-meta">${v.type || 'Full Match'} · ${v.comp || 'League'} · ${v.date || (v.added_at ? v.added_at.split('T')[0] : '')}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function playUploadedVid(id) {
+    const vids = await DataService.getData('videos');
+    const v = vids.find(x => x.id === id);
+    if (!v || !v.src) return;
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh"><video controls autoplay src="${v.src}" style="max-width:100%;max-height:100vh"></video></body></html>`);
+}
+
+// Reviews
+let stars = 5;
+function setStar(n) { stars = n; document.querySelectorAll('.sb').forEach((b, i) => b.classList.toggle('active', i < n)); }
+setStar(5);
+
+async function postReview() {
+    const n = document.getElementById('rn')?.value.trim();
+    const m = document.getElementById('rm')?.value.trim();
+    const t = document.getElementById('rt')?.value.trim();
+    if (!n || !t) { alert('Please fill in your name and review!'); return; }
+
+    await DataService.addReview({ author: n, match: m, stars: stars, text: t });
+    alert('✅ Thank you for your review! Your review is awaiting admin approval.');
+
+    if (document.getElementById('rn')) document.getElementById('rn').value = '';
+    if (document.getElementById('rm')) document.getElementById('rm').value = '';
+    if (document.getElementById('rt')) document.getElementById('rt').value = '';
+    setStar(5);
+}
+
+async function renderReviews() {
+    const reviews = await DataService.getApprovedReviews();
+    const container = document.getElementById('rv-container');
+    if (!container) return;
+    if (!reviews.length) {
+        container.innerHTML = '<div style="color:var(--grey);text-align:center;padding:40px">No reviews yet. Be the first to leave a review!</div>';
+        return;
+    }
+    container.innerHTML = reviews.map(r => `
+        <div class="rv-card">
+            <div class="rv-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+            <p class="rv-text">"${r.text || r.review_text}"</p>
+            <div class="rv-author">
+                <div class="rv-av">${r.author.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}</div>
+                <div><div class="rv-name">${r.author}</div><div class="rv-date">${r.date || r.review_date}</div></div>
+            </div>
+            ${r.match_name ? `<div style="font-size:10px;color:var(--grey);margin-top:8px">⚽ ${r.match_name}</div>` : ''}
+        </div>
+    `).join('');
+}
+
+// Modal Functions
+function openWatchModal(league, match) {
+    const mt = document.getElementById('mt');
+    const ms = document.getElementById('ms');
+    if (mt) mt.textContent = match;
+    if (ms) ms.textContent = league + ' — Choose where to watch';
+    const modal = document.getElementById('wModal');
+    if (modal) modal.classList.add('open');
+}
+function closeModal() { const modal = document.getElementById('wModal'); if (modal) modal.classList.remove('open'); }
+
+// Navigation
+function toggleNav() {
+    const nav = document.getElementById('nav-links');
+    const btn = document.getElementById('hamburger');
+    if (!nav || !btn) return;
+    const isOpen = nav.classList.contains('open');
+    if (isOpen) {
+        nav.classList.remove('open');
+        btn.classList.remove('open');
+    } else {
+        nav.classList.add('open');
+        btn.classList.add('open');
+    }
+}
+
+function closeNav() {
+    const nav = document.getElementById('nav-links');
+    const btn = document.getElementById('hamburger');
+    if (nav) nav.classList.remove('open');
+    if (btn) btn.classList.remove('open');
+}
+
+// Storage listener for admin changes
+window.addEventListener('storage', function(e) {
+    if (e.key && e.key.startsWith('kfc_')) {
+        console.log('Data changed:', e.key, 'Refreshing...');
+        renderPlayers();
+        renderFixtures();
+        renderNextMatch();
+        renderHeroStats();
+        renderGallery();
+        renderVideos();
+        renderReviews();
+        renderFormationDisplay();
+        renderTicker();
+    }
+});
+
+// Initialize
+async function init() {
+    updateStatus(useCloud);
+    await renderTicker();
+    renderLeagues();
+    await renderPlayers();
+    await renderFixtures();
+    await renderNextMatch();
+    await renderHeroStats();
+    await renderGallery();
+    await renderVideos();
+    await renderReviews();
+    await renderFormationDisplay();
+
+    window.addEventListener('scroll', () => {
+        let cur = '';
+        document.querySelectorAll('section[id]').forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+        document.querySelectorAll('.nav-links a').forEach(a => { 
+            if (a.getAttribute('href') === '#' + cur) a.style.color = 'var(--accent)';
+            else if (a.getAttribute('href') !== '#') a.style.color = '';
+        });
+    });
+}
+
+// Close nav when clicking outside
+document.addEventListener('click', function(e) {
+    const nav = document.getElementById('nav-links');
+    const btn = document.getElementById('hamburger');
+    if (nav && btn && nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) closeNav();
+});
+
+init();
+</script>
+</body>
+</html>
