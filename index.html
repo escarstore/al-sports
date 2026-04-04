@@ -147,21 +147,91 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,14,43,.97)
 .cd-n{font-family:'Bebas Neue',sans-serif;font-size:28px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:4px;display:block;border:1px solid rgba(0,194,255,.2);min-width:50px}
 .cd-l{font-size:9px;letter-spacing:2px;color:var(--grey);margin-top:4px}
 
-/* FORMATION DISPLAY */
-.formation-display-section{background:var(--card2);padding:0 4% 68px 4%}
-.formation-display-section.hidden{display:none}
-.formation-compare{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px}
-.formation-box{background:rgba(0,0,0,.3);border-radius:16px;padding:20px}
-.formation-box-title{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;color:var(--accent);text-align:center}
-.formation-pitch-display{background:linear-gradient(135deg,#0a4a2a,#0a3a1a);border-radius:16px;padding:20px;min-height:380px}
-.formation-rows{display:flex;flex-direction:column;gap:20px}
-.formation-row-display{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-.player-slot{width:70px;height:70px;border-radius:50%;background:rgba(0,0,0,.7);border:2px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);font-size:9px;text-align:center;padding:5px}
-.player-slot:hover{transform:scale(1.05);background:rgba(0,194,255,.2)}
-.player-slot.empty{opacity:.5;border-color:var(--grey)}
-.player-slot .pos-name{font-weight:700;font-size:10px}
-.player-slot .player-name{font-size:8px;color:var(--accent);margin-top:3px}
-.player-slot .player-number{font-size:7px;color:var(--grey)}
+/* Formation Display Styles */
+.formation-display-section {
+    background: var(--card2);
+    padding: 0 4% 68px 4%;
+}
+.formation-display-section.hidden {
+    display: none;
+}
+.formation-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 24px;
+}
+@media (max-width: 768px) {
+    .formation-compare {
+        grid-template-columns: 1fr;
+    }
+}
+.formation-box {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+}
+.formation-box-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--accent);
+    text-align: center;
+}
+.formation-pitch-display {
+    background: linear-gradient(135deg, #0a4a2a, #0a3a1a);
+    border-radius: 16px;
+    padding: 20px;
+    min-height: 380px;
+}
+.formation-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.formation-row-display {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.player-slot {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 9px;
+    text-align: center;
+    padding: 5px;
+}
+.player-slot:hover {
+    transform: scale(1.05);
+    background: rgba(0, 194, 255, 0.2);
+}
+.player-slot.empty {
+    opacity: 0.5;
+    border-color: var(--grey);
+}
+.player-slot .pos-name {
+    font-weight: 700;
+    font-size: 10px;
+}
+.player-slot .player-name {
+    font-size: 8px;
+    color: var(--accent);
+    margin-top: 3px;
+}
+.player-slot .player-number {
+    font-size: 7px;
+    color: var(--grey);
+}
 
 /* FIXTURES & RESULTS */
 #fixtures{background:var(--dark);padding:68px 4%}
@@ -706,31 +776,36 @@ async function renderFormationDisplay() {
     section.classList.remove('hidden');
 
     const players = await DataService.getData('players');
+    
+    // Formation presets for display
     const PRESETS = {
-        '4-3-3': [{ key: 'GK', row: 0 }, { key: 'LB', row: 1 }, { key: 'CB1', row: 1 }, { key: 'CB2', row: 1 }, { key: 'RB', row: 1 }, { key: 'CM1', row: 2 }, { key: 'CM2', row: 2 }, { key: 'CM3', row: 2 }, { key: 'LW', row: 3 }, { key: 'ST', row: 3 }, { key: 'RW', row: 3 }],
-        '4-4-2': [{ key: 'GK', row: 0 }, { key: 'LB', row: 1 }, { key: 'CB1', row: 1 }, { key: 'CB2', row: 1 }, { key: 'RB', row: 1 }, { key: 'LM', row: 2 }, { key: 'CM1', row: 2 }, { key: 'CM2', row: 2 }, { key: 'RM', row: 2 }, { key: 'ST1', row: 3 }, { key: 'ST2', row: 3 }]
+        '4-3-3': [['GK'], ['LB', 'CB1', 'CB2', 'RB'], ['CM1', 'CM2', 'CM3'], ['LW', 'ST', 'RW']],
+        '4-4-2': [['GK'], ['LB', 'CB1', 'CB2', 'RB'], ['LM', 'CM1', 'CM2', 'RM'], ['ST1', 'ST2']],
+        '4-2-3-1': [['GK'], ['LB', 'CB1', 'CB2', 'RB'], ['CDM1', 'CDM2'], ['LW', 'CAM', 'RW'], ['ST']],
+        '3-5-2': [['GK'], ['CB1', 'CB2', 'CB3'], ['LWB', 'CM1', 'CM2', 'CM3', 'RWB'], ['ST1', 'ST2']]
     };
 
-    const buildSide = (sideData) => {
+    function buildSide(sideData) {
         if (!sideData) return '<div style="color:var(--grey);text-align:center;padding:20px">No lineup set</div>';
         const formName = sideData.formation_name || '4-3-3';
-        const preset = PRESETS[formName] || PRESETS['4-3-3'];
-        const maxRow = Math.max(...preset.map(p => p.row));
-        let rows = [];
-        for (let r = 0; r <= maxRow; r++) {
-            const rowPos = preset.filter(p => p.row === r);
-            rows.push(`<div class="formation-row-display">${rowPos.map(pos => {
-                const playerId = sideData.positions?.[pos.key];
-                const player = players.find(p => p.id === playerId);
-                return `<div class="player-slot ${!playerId ? 'empty' : ''}" ${playerId ? `onclick="openPlayerModalById('${playerId}')"` : ''}>
-                    <div class="pos-name">${pos.key}</div>
-                    <div class="player-name">${player ? player.name.split(' ')[0] : 'Empty'}</div>
-                    <div class="player-number">#${player?.number || ''}</div>
-                </div>`;
-            }).join('')}</div>`);
-        }
-        return rows.join('');
-    };
+        const rows = PRESETS[formName] || PRESETS['4-3-3'];
+        const positions = sideData.positions || {};
+        
+        return rows.map(row => `
+            <div class="formation-row-display">
+                ${row.map(posKey => {
+                    const playerId = positions[posKey];
+                    const player = players.find(p => p.id === playerId);
+                    const displayName = posKey.replace(/[0-9]/g, '');
+                    return `<div class="player-slot ${!playerId ? 'empty' : ''}" ${playerId ? `onclick="openPlayerModalById('${playerId}')"` : ''}>
+                        <div class="pos-name">${displayName}</div>
+                        <div class="player-name">${player ? player.name.split(' ')[0] : 'Empty'}</div>
+                        <div class="player-number">${player ? '#' + (player.number || '') : ''}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `).join('');
+    }
 
     const container = document.getElementById('formation-display-container');
     let html = '';
