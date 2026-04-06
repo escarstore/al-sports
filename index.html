@@ -876,20 +876,44 @@ async function renderVideos() {
     const vids = await DataService.getData('videos');
     const el = document.getElementById('videos-grid');
     if (!el) return;
-    if (!vids.length) { el.innerHTML = '<div class="vid-empty">🎬<br>No match videos yet.<br><span style="font-size:12px">Admin can add videos via the admin panel.</span></div>'; return; }
-    el.innerHTML = vids.slice(0, 3).map(v => {
-        const isYT = v.source === 'youtube' || (v.yt_id && !v.tiktok_id);
-        const isTikTok = v.source === 'tiktok' || v.tiktok_id;
+    
+    console.log('Public site - videos:', vids); // Debug
+    
+    if (!vids.length) { 
+        el.innerHTML = '<div class="vid-empty">🎬<br>No match videos yet.</div>'; 
+        return; 
+    }
+    
+    el.innerHTML = vids.slice(0, 6).map(v => {
+        const isYT = v.source === 'youtube' || v.yt_id;
+        const isTikTok = v.source === 'tiktok' || v.tiktok_url || v.tiktok_id;
+        
         let thumb = '';
-        let embedUrl = '';
+        let badgeText = 'VIDEO';
+        
         if (isYT && v.yt_id) {
-            thumb = `https://img.youtube.com/vi/${v.yt_id}/mqdefault.jpg`;
-            embedUrl = `https://www.youtube.com/embed/${v.yt_id}`;
-        } else if (isTikTok && v.tiktok_id) {
-            thumb = `https://www.tiktok.com/embed/v2/${v.tiktok_id}`;
-            embedUrl = `https://www.tiktok.com/@user/video/${v.tiktok_id}`;
+            thumb = `<img src="https://img.youtube.com/vi/${v.yt_id}/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover">`;
+            badgeText = 'YOUTUBE';
+        } else if (isTikTok) {
+            thumb = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;color:#25F4EE;font-size:48px;">🎵</div>`;
+            badgeText = 'TIKTOK';
+        } else {
+            thumb = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:#fff;font-size:48px;">📹</div>`;
         }
-        return `<div class="vid-card"><div class="vid-thumb" onclick="window.open('${v.url}', '_blank')"><img src="${thumb}" style="width:100%;height:100%;object-fit:cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%23333\' width=\'100\' height=\'100\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'50\' text-anchor=\'middle\' dy=\'.3em\'%3E${isTikTok ? 'TikTok' : 'Video'}%3C/text%3E%3C/svg%3E'"><div class="vid-play"><div class="vid-play-icon">▶</div></div><div class="vid-badge ${isTikTok ? 'tiktok' : ''}">${isTikTok ? 'TIKTOK' : 'YOUTUBE'}</div></div><div class="vid-info"><div class="vid-title">${v.title}</div><div class="vid-meta">${v.type || 'Full Match'} · ${v.date || ''}</div></div></div>`;
+        
+        return `<div class="vid-card">
+            <div class="vid-thumb" onclick="window.open('${v.url}', '_blank')" style="cursor:pointer;position:relative;height:170px;overflow:hidden;background:#000;">
+                ${thumb}
+                <div class="vid-play" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <div class="vid-play-icon" style="font-size:20px;">▶</div>
+                </div>
+                <div class="vid-badge" style="position:absolute;top:10px;left:10px;padding:3px 8px;border-radius:3px;font-size:10px;font-weight:bold;background:#FF0000;color:#fff;">${badgeText}</div>
+            </div>
+            <div class="vid-info" style="padding:15px;">
+                <div class="vid-title" style="font-weight:700;margin-bottom:5px;">${v.title}</div>
+                <div class="vid-meta" style="font-size:11px;color:var(--grey);">${v.type || 'Full Match'} · ${v.date || ''}</div>
+            </div>
+        </div>`;
     }).join('');
 }
 
