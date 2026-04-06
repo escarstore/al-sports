@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<title>KITANGA FC — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0A1F6E;--blue-mid:#1338BE;--accent:#00C2FF;--gold:#FFB800;
+  --red:#FF3D57;--green:#00E676;--white:#FFF;--grey:#8A9BB5;
+  --dark:#070E2B;--card:#0D1E4F;--card2:#091540;--border:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);min-height:100vh}
+
+/* LOGIN */
+#login-screen{
+  position:fixed;inset:0;z-index:999;
+  background:radial-gradient(ellipse at 30% 50%,rgba(19,56,190,.3),transparent 60%),
+             linear-gradient(160deg,#070E2B,#0A1F6E 50%,#070E2B);
+  display:flex;align-items:center;justify-content:center;
+}
+.login-box{
+  background:var(--card);border:1px solid rgba(0,194,255,.3);
+  border-radius:14px;padding:48px 44px;width:400px;max-width:94%;
+  text-align:center;
+  box-shadow:0 0 60px rgba(0,194,255,.1);
+}
+.login-crest{
+  width:72px;height:72px;border-radius:50% 50% 45% 45%;
+  background:linear-gradient(135deg,var(--blue-mid),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:26px;
+  margin:0 auto 16px;
+}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;}
+.login-sub{font-size:13px;color:var(--grey);margin-bottom:32px}
+.login-field{margin-bottom:16px;text-align:left}
+.login-field label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--grey);display:block;margin-bottom:6px}
+.login-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:12px 16px;color:var(--white);font-family:'Barlow',sans-serif;font-size:14px;outline:none}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;background:var(--accent);color:var(--dark);border:none;border-radius:6px;padding:14px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;cursor:pointer;margin-top:8px}
+.login-err{color:var(--red);font-size:13px;margin-top:10px;display:none}
+#app{display:none;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;top:0;left:-280px;bottom:0;width:280px;
+  background:#050C20;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:1000;
+  transition:left 0.3s ease;overflow-y:auto;
+}
+.sidebar.open{left:0;}
+.sidebar-logo{padding:24px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sb-crest{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue-mid),var(--accent));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px}
+.sb-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px}
+.sb-role{font-size:10px;color:var(--accent)}
+.sidebar-nav{padding:16px 0;flex:1}
+.nav-section{padding:8px 20px 4px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;color:rgba(255,255,255,.25)}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--grey);border-left:3px solid transparent}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.04)}
+.nav-item.active{color:var(--accent);background:rgba(0,194,255,.08);border-left-color:var(--accent)}
+.nav-icon{font-size:16px;width:20px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+.logout-btn{width:100%;background:rgba(255,61,87,.1);border:1px solid rgba(255,61,87,.3);color:var(--red);border-radius:5px;padding:9px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer}
+
+/* MENU TOGGLE */
+.menu-toggle{
+  position:fixed;bottom:20px;left:20px;z-index:1001;
+  background:var(--accent);color:var(--dark);
+  width:50px;height:50px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;cursor:pointer;border:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.menu-toggle.hidden{display:none;}
+@media (min-width:769px){
+  .sidebar{left:0;}
+  .menu-toggle{display:none;}
+  .main{margin-left:280px;}
+}
+.main{margin-left:0;min-height:100vh;transition:margin-left 0.3s;}
+.topbar{background:#050C20;border-bottom:1px solid var(--border);padding:0 16px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.view-site-btn{background:rgba(0,194,255,.1);border:1px solid rgba(0,194,255,.3);color:var(--accent);padding:6px 12px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none}
+.mobile-menu-btn{background:var(--accent);border:none;color:var(--dark);width:36px;height:36px;border-radius:8px;font-size:18px;cursor:pointer;display:none;}
+@media (max-width:768px){.mobile-menu-btn{display:flex;align-items:center;justify-content:center;}}
+.content{padding:16px}
+.page{display:none}
+.page.active{display:block}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:15px}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent)}
+.stat-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--grey)}
+.sec-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.sec-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sec-head-title{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px}
+.sec-body{padding:16px}
+.btn{padding:8px 16px;border:none;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-accent{background:var(--accent);color:var(--dark)}
+.btn-red{background:rgba(255,61,87,.15);color:var(--red);border:1px solid rgba(255,61,87,.3)}
+.btn-grey{background:rgba(255,255,255,.07);color:var(--white);border:1px solid var(--border)}
+.btn-green{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.btn-sm{padding:5px 10px;font-size:10px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;color:var(--grey)}
+.field input,.field select,.field textarea{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:8px 12px;color:var(--white);font-family:'Barlow',sans-serif;font-size:13px;outline:none;width:100%}
+.data-table{width:100%;border-collapse:collapse;overflow-x:auto;display:block}
+.data-table thead,.data-table tbody{display:block}
+.data-table tr{display:flex;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.04)}
+.data-table th,.data-table td{flex:1;padding:10px 6px;text-align:left;min-width:70px}
+.data-table th{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--grey);border-bottom:1px solid var(--border)}
+.data-table td{font-size:12px}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px}
+.badge-win{background:#0a3d1f;color:#4ade80}
+.badge-loss{background:#3d0a0a;color:#f87171}
+.badge-upcoming{background:rgba(0,194,255,.1);color:var(--accent)}
+.player-photo{width:35px;height:35px;border-radius:50%;object-fit:cover}
+.modal-ov{position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid rgba(0,194,255,.25);border-radius:12px;padding:24px;max-width:90%;width:500px;max-height:85vh;overflow-y:auto;position:relative}
+.modal-x{position:absolute;top:10px;right:15px;background:none;border:none;color:var(--grey);font-size:18px;cursor:pointer}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:16px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:#000;padding:10px 16px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;z-index:1200;transform:translateY(80px);opacity:0;transition:all .35s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{background:var(--red);color:#fff}
+.formation-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.pos-slot{width:65px;height:65px;border-radius:50%;background:rgba(0,0,0,.7);border:2px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:9px;text-align:center;padding:4px}
+.pos-slot .pos-name{font-weight:700;font-size:10px;color:var(--accent)}
+.pos-slot .pos-player{font-size:8px;color:var(--white)}
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.gal-item{position:relative;background:var(--card2);border-radius:8px;overflow:hidden;aspect-ratio:1;cursor:pointer}
+.gal-img{width:100%;height:100%;object-fit:cover}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.video-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.video-thumb{height:130px;background:linear-gradient(135deg,#0d2068,#1338be);display:flex;align-items:center;justify-content:center;position:relative}
+.video-thumb img{width:100%;height:100%;object-fit:cover}
+.ticker-messages-list{display:flex;flex-direction:column;gap:8px}
+.ticker-message-item{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ticker-message-item input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:4px;padding:8px;color:white}
+.review-item{background:rgba(255,255,255,.03);border-radius:8px;padding:12px;margin-bottom:10px}
+.review-header{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.review-author{font-weight:700;color:var(--accent)}
+.review-stars{color:var(--gold)}
+.review-text{margin:8px 0}
+.upload-zone{border:2px dashed rgba(0,194,255,.3);border-radius:8px;padding:30px;text-align:center;cursor:pointer;margin-bottom:16px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-crest">KFC</div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">KITANGA FC — Staff Access Only</div>
+    <div class="login-field"><label>Email</label><input class="login-input" id="l-email" type="email" placeholder="Enter your email"/></div>
+    <div class="login-field"><label>Password</label><input class="login-input" id="l-pass" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" onclick="doLogin()">Login →</button>
+    <div class="login-err" id="l-err"></div>
+    <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;justify-content:space-between">
+        <a href="index.html" style="color:var(--accent);font-size:12px">← View Main Site</a>
+        <a href="#" onclick="resetPassword()" style="color:var(--grey);font-size:12px">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+  
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="sb-crest">KFC</div><div><div class="sb-name">KITANGA FC</div><div class="sb-role">ADMIN PANEL</div></div></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span><span>Dashboard</span></div>
+      <div class="nav-section">Club Management</div>
+      <div class="nav-item" data-page="players"><span class="nav-icon">👕</span><span>Players</span></div>
+      <div class="nav-item" data-page="fixtures"><span class="nav-icon">📅</span><span>Fixtures</span></div>
+      <div class="nav-item" data-page="results"><span class="nav-icon">⚽</span><span>Match Results</span></div>
+      <div class="nav-item" data-page="formation"><span class="nav-icon">🎯</span><span>Formation</span></div>
+      <div class="nav-section">Media & Content</div>
+      <div class="nav-item" data-page="gallery"><span class="nav-icon">📸</span><span>Photo Gallery</span></div>
+      <div class="nav-item" data-page="videos"><span class="nav-icon">🎬</span><span>Match Videos</span></div>
+      <div class="nav-item" data-page="reviews"><span class="nav-icon">💬</span><span>Fan Reviews</span></div>
+      <div class="nav-section">Monetization</div>
+      <div class="nav-item" data-page="sponsors"><span class="nav-icon">🤝</span><span>Sponsors</span></div>
+      <div class="nav-item" data-page="inquiries"><span class="nav-icon">💬</span><span>Sponsor Proposals</span></div>
+      <div class="nav-item" data-page="ads"><span class="nav-icon">📢</span><span>Advertisements</span></div>
+      <div class="nav-item" data-page="analytics"><span class="nav-icon">📊</span><span>Ad Analytics</span></div>
+      <div class="nav-section">Site Settings</div>
+      <div class="nav-item" data-page="ticker"><span class="nav-icon">📢</span><span>Ticker Control</span></div>
+      <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span>Settings</span></div>
+    </nav>
+    <div class="sidebar-footer"><button class="logout-btn" onclick="doLogout()">🚪 Logout</button></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <a href="https://escarstore.github.io/kitanga-fc/" target="_blank" class="view-site-btn" id="viewSiteBtn">🌐 View Site</a>
+      </div>
+    </div>
+    <div class="content">
+      
+      <!-- DASHBOARD PAGE -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num" id="stat-players">0</div><div class="stat-label">Players</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-fixtures">0</div><div class="stat-label">Fixtures</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-results">0</div><div class="stat-label">Results</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-sponsors">0</div><div class="stat-label">Sponsors</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-ads">0</div><div class="stat-label">Active Ads</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-inquiries">0</div><div class="stat-label">Proposals</div></div>
+        </div>
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">⚡ Quick Actions</div></div><div class="sec-body" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-accent" onclick="openPlayerModal()">+ Add Player</button>
+          <button class="btn btn-accent" onclick="openFixtureModal()">+ Add Fixture</button>
+          <button class="btn btn-accent" onclick="openResultModal()">+ Add Result</button>
+          <button class="btn btn-accent" onclick="openSponsorModal()">+ Add Sponsor</button>
+          <button class="btn btn-accent" onclick="openAdModal()">+ Add Ad</button>
+          <button class="btn btn-accent" onclick="openVideoModal()">+ Add Video</button>
+        </div></div>
+      </div>
+
+      <!-- PLAYERS PAGE -->
+      <div class="page" id="page-players">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">👕 Squad Management</div><button class="btn btn-accent" onclick="openPlayerModal()">+ Add Player</button></div>
+        <div class="sec-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Photo</th><th>Player</th><th>Position</th><th>Goals</th><th>Assists</th><th>Apps</th><th>Rating</th><th>Actions</th></tr></thead><tbody id="players-tbody"><tr><td colspan="8" style="text-align:center;padding:40px">Loading players...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- FIXTURES PAGE -->
+      <div class="page" id="page-fixtures">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">📅 Fixtures & Schedule</div><button class="btn btn-accent" onclick="openFixtureModal()">+ Add Fixture</button></div>
+        <div class="sec-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Date</th><th>Match</th><th>Competition</th><th>Venue</th><th>Status</th><th>Actions</th></tr></thead><tbody id="fixtures-tbody"><tr><td colspan="6" style="text-align:center;padding:40px">Loading fixtures...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- RESULTS PAGE -->
+      <div class="page" id="page-results">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">⚽ Match Results</div><button class="btn btn-accent" onclick="openResultModal()">+ Add Result</button></div>
+        <div class="sec-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Date</th><th>Match</th><th>Score</th><th>Competition</th><th>Outcome</th><th>Actions</th></tr></thead><tbody id="results-tbody"><tr><td colspan="6" style="text-align:center;padding:40px">Loading results...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- FORMATION PAGE -->
+      <div class="page" id="page-formation">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🎯 Team Formation Editor</div></div>
+        <div class="sec-body" id="formation-editor-container"><div style="text-align:center;padding:40px">Loading formation...</div></div></div>
+      </div>
+
+      <!-- GALLERY PAGE -->
+      <div class="page" id="page-gallery">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">📸 Photo Gallery</div><button class="btn btn-accent" onclick="document.getElementById('photo-file-input').click()">+ Upload Photo</button></div>
+        <div class="sec-body"><input type="file" id="photo-file-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this.files)"/><div class="gal-grid" id="photo-gallery-grid"></div></div></div>
+      </div>
+
+      <!-- VIDEOS PAGE -->
+      <div class="page" id="page-videos">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🎬 Match Videos</div><button class="btn btn-accent" onclick="openVideoModal()">+ Add Video</button></div>
+        <div class="sec-body"><div class="video-grid" id="video-grid"></div></div></div>
+      </div>
+
+      <!-- REVIEWS PAGE -->
+      <div class="page" id="page-reviews">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">💬 Fan Reviews Moderation</div></div>
+        <div class="sec-body" id="reviews-moderation-list"></div></div>
+      </div>
+
+      <!-- SPONSORS PAGE -->
+      <div class="page" id="page-sponsors">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🤝 Sponsor Management</div><button class="btn btn-accent" onclick="openSponsorModal()">+ Add Sponsor</button></div>
+        <div class="sec-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Logo</th><th>Name</th><th>Package</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead><tbody id="sponsors-tbody"><tr><td colspan="6" style="text-align:center;padding:40px">Loading sponsors...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- SPONSOR INQUIRIES PAGE -->
+      <div class="page" id="page-inquiries">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">💬 Sponsor Proposals</div><button class="btn btn-accent" onclick="exportInquiriesCSV()">📥 Export CSV</button></div>
+        <div class="sec-body" id="sponsor-inquiries-list"><div style="text-align:center;padding:40px">Loading proposals...</div></div></div>
+      </div>
+
+      <!-- ADS PAGE -->
+      <div class="page" id="page-ads">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">📢 Advertisement Management</div><button class="btn btn-accent" onclick="openAdModal()">+ Add Ad Campaign</button></div>
+        <div class="sec-body" style="padding:0;overflow-x:auto"><table class="data-table"><thead><tr><th>Ad</th><th>Type</th><th>Position</th><th>Clicks/Impressions</th><th>Budget</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ads-tbody"><tr><td colspan="7" style="text-align:center;padding:40px">Loading ads...</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- ANALYTICS PAGE -->
+      <div class="page" id="page-analytics">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">📊 Ad Performance Analytics</div></div>
+        <div class="sec-body">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-num" id="total-impressions">0</div><div class="stat-label">Total Impressions</div></div>
+            <div class="stat-card"><div class="stat-num" id="total-clicks">0</div><div class="stat-label">Total Clicks</div></div>
+            <div class="stat-card"><div class="stat-num" id="total-ctr">0%</div><div class="stat-label">CTR</div></div>
+            <div class="stat-card"><div class="stat-num" id="total-revenue">$0</div><div class="stat-label">Est. Revenue</div></div>
+          </div>
+          <div id="ad-performance-list"></div>
+        </div></div>
+      </div>
+
+      <!-- TICKER CONTROL PAGE -->
+      <div class="page" id="page-ticker">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">📢 Ticker Control</div></div>
+        <div class="sec-body">
+          <div class="field"><label><input type="checkbox" id="ticker-show" onchange="saveTickerSettings()"> Show Ticker on Site</label></div>
+          <div class="field"><label>Ticker Speed (seconds)</label><input type="number" id="ticker-speed" value="35" min="10" max="60" step="5" onchange="saveTickerSettings()"></div>
+          <div class="field"><label>Background Color</label><input type="color" id="ticker-bg-color" value="#00C2FF" onchange="saveTickerSettings()"></div>
+          <div class="field"><label>Text Color</label><input type="color" id="ticker-text-color" value="#070E2B" onchange="saveTickerSettings()"></div>
+          <div><label>Messages</label><div id="ticker-messages-list" class="ticker-messages-list"></div>
+          <button class="btn btn-accent" style="margin-top:16px" onclick="addTickerMessage()">+ Add Message</button>
+          <button class="btn btn-green" style="margin-top:16px;margin-left:10px" onclick="saveTickerSettings()">💾 Save</button>
+          <button class="btn btn-grey" style="margin-top:16px;margin-left:10px" onclick="previewTicker()">👁️ Preview</button></div>
+        </div></div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🏟️ Club Information</div></div>
+        <div class="sec-body"><div class="form-grid"><div class="field"><label>Club Name</label><input id="club-name" value="KITANGA FC"/></div>
+        <div class="field"><label>Home Ground</label><input id="club-ground" value="Kitanga Community Stadium"/></div>
+        <div class="field"><label>Email</label><input id="club-email" value="info@kitangafc.com"/></div></div>
+        <button class="btn btn-accent" onclick="saveClubInfo()">Save Club Info</button></div></div>
+        <div class="sec-card"><div class="sec-head"><div class="sec-head-title" style="color:var(--red)">⚠️ Danger Zone</div></div>
+        <div class="sec-body"><button class="btn btn-red" onclick="clearData('players')">Clear All Players</button>
+        <button class="btn btn-red" onclick="clearData('fixtures')">Clear All Fixtures</button>
+        <button class="btn btn-red" onclick="clearData('results')">Clear All Results</button></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-ov" id="player-modal"><div class="modal"><button class="modal-x" onclick="closeModal('player-modal')">✕</button><div class="modal-title">Add Player</div><input type="hidden" id="player-edit-id"/><div class="form-grid"><div class="field"><label>Full Name</label><input id="p-name"/></div><div class="field"><label>Jersey Number</label><input id="p-num" type="number"/></div><div class="field"><label>Position</label><select id="p-pos"><option value="GK">GK</option><option value="CB">CB</option><option value="LB">LB</option><option value="RB">RB</option><option value="CM">CM</option><option value="CAM">CAM</option><option value="LW">LW</option><option value="RW">RW</option><option value="ST">ST</option></select></div><div class="field"><label>Nationality</label><input id="p-nat"/></div><div class="field"><label>Goals</label><input id="p-goals" type="number" value="0"/></div><div class="field"><label>Assists</label><input id="p-assists" type="number" value="0"/></div><div class="field"><label>Appearances</label><input id="p-apps" type="number" value="0"/></div><div class="field"><label>Age</label><input id="p-age" type="number"/></div><div class="field"><label>Rating</label><input id="p-rating" type="number" step="0.1"/></div><div class="field"><label>Profile Photo</label><input type="file" id="p-photo" accept="image/*" onchange="previewPlayerPhoto(this)"/><div id="p-photo-preview" style="width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.1)"></div></div></div><div class="field"><label>Bio</label><textarea id="p-bio" rows="2"></textarea></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn btn-grey" onclick="closeModal('player-modal')">Cancel</button><button class="btn btn-accent" onclick="savePlayer()">Save Player</button></div></div></div>
+
+<div class="modal-ov" id="fixture-modal"><div class="modal"><button class="modal-x" onclick="closeModal('fixture-modal')">✕</button><div class="modal-title">Add Fixture</div><input type="hidden" id="fixture-edit-id"/><div class="form-grid"><div class="field"><label>Home Team</label><input id="f-home" value="KITANGA FC"/></div><div class="field"><label>Away Team</label><input id="f-away"/></div><div class="field"><label>Date</label><input id="f-date" type="date"/></div><div class="field"><label>Time</label><input id="f-time" type="time" value="15:00"/></div><div class="field"><label>Competition</label><select id="f-comp"><option>League</option><option>Cup</option><option>Friendly</option></select></div><div class="field"><label>Venue</label><input id="f-venue"/></div><div class="field"><label>Status</label><select id="f-status"><option value="upcoming">Upcoming</option><option value="played">Played</option></select></div></div><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-grey" onclick="closeModal('fixture-modal')">Cancel</button><button class="btn btn-accent" onclick="saveFixture()">Save Fixture</button></div></div></div>
+
+<div class="modal-ov" id="result-modal"><div class="modal"><button class="modal-x" onclick="closeModal('result-modal')">✕</button><div class="modal-title">Add Result</div><input type="hidden" id="result-edit-id"/><div class="form-grid"><div class="field"><label>Home Team</label><input id="r-home" value="KITANGA FC"/></div><div class="field"><label>Away Team</label><input id="r-away"/></div><div class="field"><label>Home Score</label><input id="r-hscore" type="number" value="0"/></div><div class="field"><label>Away Score</label><input id="r-ascore" type="number" value="0"/></div><div class="field"><label>Date</label><input id="r-date" type="date"/></div><div class="field"><label>Competition</label><select id="r-comp"><option>League</option><option>Cup</option><option>Friendly</option></select></div></div><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-grey" onclick="closeModal('result-modal')">Cancel</button><button class="btn btn-accent" onclick="saveResult()">Save Result</button></div></div></div>
+
+<!-- VIDEO MODAL -->
+<div class="modal-ov" id="video-modal"><div class="modal"><button class="modal-x" onclick="closeModal('video-modal')">✕</button><div class="modal-title">Add Video</div><div class="form-grid"><div class="field"><label>Title</label><input id="v-title" placeholder="Video title"/></div><div class="field"><label>Platform</label><select id="v-platform" onchange="toggleVideoPlatform()"><option value="youtube">YouTube</option><option value="tiktok">TikTok</option></select></div><div class="field"><label>Video URL</label><input id="v-url" placeholder="https://youtube.com/watch?v=..."/><small style="color:var(--grey)">Paste YouTube or TikTok video URL</small></div><div class="field"><label>Date</label><input id="v-date" type="date"/></div><div class="field"><label>Type</label><select id="v-type"><option>Full Match</option><option>Highlights</option><option>Goals</option><option>Interview</option><option>Training</option></select></div></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn btn-grey" onclick="closeModal('video-modal')">Cancel</button><button class="btn btn-accent" onclick="saveVideo()">Save Video</button></div></div></div>
+
+<div class="modal-ov" id="sponsor-modal"><div class="modal"><button class="modal-x" onclick="closeModal('sponsor-modal')">✕</button><div class="modal-title">Add/Edit Sponsor</div><input type="hidden" id="sponsor-edit-id"/><div class="form-grid"><div class="field"><label>Sponsor Name</label><input id="s-name"/></div><div class="field"><label>Package</label><select id="s-package"><option>Bronze</option><option>Gold</option><option>Platinum</option></select></div><div class="field"><label>Monthly Fee ($)</label><input id="s-fee" type="number" step="0.01"/></div><div class="field"><label>Status</label><select id="s-status"><option>Active</option><option>Pending</option><option>Expired</option></select></div><div class="field"><label>Website URL</label><input id="s-url"/></div><div class="field"><label>Sponsor Logo</label><input type="file" id="s-logo" accept="image/*"/><div id="s-logo-preview"></div></div></div><div class="field"><label>Notes</label><textarea id="s-notes" rows="2"></textarea></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn btn-grey" onclick="closeModal('sponsor-modal')">Cancel</button><button class="btn btn-accent" onclick="saveSponsor()">Save Sponsor</button></div></div></div>
+
+<div class="modal-ov" id="ad-modal"><div class="modal"><button class="modal-x" onclick="closeModal('ad-modal')">✕</button><div class="modal-title">Add Advertisement</div><input type="hidden" id="ad-edit-id"/><div class="form-grid"><div class="field"><label>Ad Title</label><input id="ad-title"/></div><div class="field"><label>Ad Type</label><select id="ad-type" onchange="toggleAdType()"><option value="image">Image Banner</option><option value="html">HTML Code</option></select></div><div class="field"><label>Position</label><select id="ad-position"><option value="top_banner">Top Banner</option><option value="sidebar">Sidebar</option></select></div><div class="field" id="ad-image-field"><label>Ad Image</label><input type="file" id="ad-image" accept="image/*"/></div><div class="field" id="ad-code-field" style="display:none"><label>Ad Code</label><textarea id="ad-code" rows="2" placeholder="Paste HTML/AdSense code"></textarea></div><div class="field"><label>Link URL</label><input id="ad-link"/></div><div class="field"><label>Daily Budget ($)</label><input id="ad-budget" type="number" step="0.01"/></div><div class="field"><label>Advertiser Name</label><input id="advertiser-name"/></div><div class="field"><label>Payment Status</label><select id="payment-status"><option>Pending</option><option>Paid</option></select></div></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn btn-grey" onclick="closeModal('ad-modal')">Cancel</button><button class="btn btn-accent" onclick="saveAd()">Save Ad</button></div></div></div>
+
+<div class="modal-ov" id="ticker-preview-modal"><div class="modal"><button class="modal-x" onclick="closeModal('ticker-preview-modal')">✕</button><div class="modal-title">Ticker Preview</div><div id="ticker-preview" style="padding:12px;border-radius:8px;overflow:hidden;"><div id="preview-track" style="display:flex;gap:50px;white-space:nowrap;"></div></div><div style="margin-top:16px;text-align:center"><button class="btn btn-accent" onclick="closeModal('ticker-preview-modal')">Close</button></div></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Supabase Configuration
+const SUPABASE_URL = 'https://qlrohdmpkzlkawffqlug.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscm9oZG1wa3psa2F3ZmZxbHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY3NjAsImV4cCI6MjA5MDY0Mjc2MH0.rBfgxNVpbxeMGRENueegZ52xzGRCfkCE70hTbVaHUWA';
+
+let supabaseClient = null;
+let currentUser = null;
+let inquirySubscription = null;
+
+try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase initialized');
+} catch(e) { console.warn('Supabase not available:', e); }
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// Authentication
+async function doLogin() {
+    const email = document.getElementById('l-email').value.trim();
+    const password = document.getElementById('l-pass').value;
+    if (!email || !password) { showErr('Please enter email and password'); return; }
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) { showErr('❌ Invalid email or password'); return; }
+        if (data.user) {
+            currentUser = data.user;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('menuToggle').classList.remove('hidden');
+            loadAllData();
+            subscribeToInquiries();
+            toast('✅ Logged in successfully');
+        }
+    } catch(e) { showErr('❌ Login failed: ' + e.message); }
+}
+
+function showErr(msg) { const e = document.getElementById('l-err'); e.textContent = msg; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 3000); }
+function resetPassword() { const email = document.getElementById('l-email').value.trim(); if (!email) { showErr('Please enter your email address'); return; } supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href }); showErr('✅ Password reset email sent!'); }
+async function doLogout() { await supabaseClient.auth.signOut(); currentUser = null; document.getElementById('app').style.display = 'none'; document.getElementById('login-screen').style.display = 'flex'; document.getElementById('menuToggle').classList.add('hidden'); toast('✅ Logged out'); }
+async function checkAuth() { const { data: { session } } = await supabaseClient.auth.getSession(); if (session) { currentUser = session.user; document.getElementById('login-screen').style.display = 'none'; document.getElementById('app').style.display = 'block'; document.getElementById('menuToggle').classList.remove('hidden'); loadAllData(); subscribeToInquiries(); toast('✅ Welcome back!'); } }
+
+// Mobile Sidebar
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+// Real-time subscription for new sponsor inquiries
+function subscribeToInquiries() {
+    if (!supabaseClient) return;
+    if (inquirySubscription) return;
+    
+    inquirySubscription = supabaseClient
+        .channel('sponsor_inquiries_channel')
+        .on('postgres_changes', 
+            { event: 'INSERT', schema: 'public', table: 'sponsor_inquiries' },
+            (payload) => {
+                const newInquiry = payload.new;
+                toast(`📬 New sponsor proposal from ${newInquiry.name}!`, false);
+                renderSponsorInquiries();
+                updateStats();
+                if (Notification.permission === 'granted') {
+                    new Notification(`New Sponsor Proposal from ${newInquiry.name}`, {
+                        body: `${newInquiry.company || 'Individual'} - ${newInquiry.package || 'Package not specified'}`,
+                        icon: '/favicon.ico'
+                    });
+                }
+            }
+        )
+        .subscribe();
+    
+    if (Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
+
+// Navigation - FIXED with all page mappings
+function goTo(page) {
+    console.log('Navigating to:', page);
+    
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    
+    // Show selected page
+    const targetPage = document.getElementById(`page-${page}`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        console.log('Showing page:', `page-${page}`);
+    } else {
+        console.error('Page not found:', `page-${page}`);
+    }
+    
+    // Update active nav item
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    const activeNav = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (activeNav) activeNav.classList.add('active');
+    
+    // Update title
+    const titles = { 
+        dashboard: 'Dashboard', players: 'Players', fixtures: 'Fixtures', 
+        results: 'Match Results', formation: 'Formation', gallery: 'Photo Gallery',
+        videos: 'Match Videos', reviews: 'Fan Reviews', sponsors: 'Sponsors',
+        inquiries: 'Sponsor Proposals', ads: 'Advertisements', analytics: 'Ad Analytics', 
+        ticker: 'Ticker Control', settings: 'Settings'
+    };
+    document.getElementById('topbar-title').textContent = titles[page] || page;
+    
+    // Load data for specific pages
+    if (page === 'players') renderPlayers();
+    if (page === 'fixtures') renderFixtures();
+    if (page === 'results') renderResults();
+    if (page === 'formation') renderFormation();
+    if (page === 'gallery') renderGallery();
+    if (page === 'videos') renderVideos();
+    if (page === 'reviews') renderReviews();
+    if (page === 'sponsors') renderSponsors();
+    if (page === 'inquiries') renderSponsorInquiries();
+    if (page === 'ads') renderAds();
+    if (page === 'analytics') renderAdAnalytics();
+    if (page === 'ticker') renderTickerControl();
+    if (page === 'dashboard') updateStats();
+    
+    // Close sidebar on mobile
+    if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+}
+
+window.goTo = goTo;
+
+// Setup navigation click handlers
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const page = item.getAttribute('data-page');
+        if (page) goTo(page);
+    });
+});
+
+// Data Service
+const DataService = {
+    async getData(table) {
+        try { const { data, error } = await supabaseClient.from(table).select('*'); if (error) throw error; return data || []; } catch(e) { console.warn('Fetch failed:', e); return []; }
+    },
+    async addItem(table, item) {
+        try { const { data, error } = await supabaseClient.from(table).insert([item]).select(); if (error) throw error; if (data && data.length) { toast(`✅ Added to ${table}`); return data[0]; } } catch(e) { toast(`❌ Failed`, true); return null; }
+        return null;
+    },
+    async updateItem(table, id, updates) {
+        try { const { data, error } = await supabaseClient.from(table).update(updates).eq('id', id).select(); if (error) throw error; if (data && data.length) { toast(`✅ Updated`); return data[0]; } } catch(e) { toast(`❌ Update failed`, true); return null; }
+        return null;
+    },
+    async deleteItem(table, id) {
+        try { const { error } = await supabaseClient.from(table).delete().eq('id', id); if (error) throw error; toast(`✅ Deleted`); return true; } catch(e) { toast(`❌ Delete failed`, true); return false; }
+    },
+    async uploadImage(file, folder) {
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+            const { data, error } = await supabaseClient.storage.from('club-media').upload(fileName, file, { upsert: true });
+            if (error) throw error;
+            const { data: { publicUrl } } = supabaseClient.storage.from('club-media').getPublicUrl(fileName);
+            return publicUrl;
+        } catch(e) {
+            return new Promise((resolve) => { const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(file); });
+        }
+    }
+};
+
+function toast(msg, err = false) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); setTimeout(() => t.classList.add('show'), 10); setTimeout(() => t.classList.remove('show'), 2800); }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Formation Presets
+const FORMATION_PRESETS = { '4-3-3': { rows: [['GK'], ['LB', 'CB1', 'CB2', 'RB'], ['CM1', 'CM2', 'CM3'], ['LW', 'ST', 'RW']] }, '4-4-2': { rows: [['GK'], ['LB', 'CB1', 'CB2', 'RB'], ['LM', 'CM1', 'CM2', 'RM'], ['ST1', 'ST2']] } };
+
+// TikTok and YouTube Video ID Extraction
+function getVideoId(url, platform) {
+    if (platform === 'tiktok') {
+        const match = url.match(/(?:tiktok\.com\/@[\w.]+\/video\/|tiktok\.com\/t\/)(\d+)/);
+        return match ? match[1] : null;
+    } else {
+        let match = url.match(/(?:youtu\.be\/|v=|embed\/)([^&\n?#]+)/);
+        if (match) return match[1];
+        match = url.match(/(?:youtube\.com\/shorts\/)([^&\n?#]+)/);
+        return match ? match[1] : null;
+    }
+}
+
+function toggleVideoPlatform() {
+    const platform = document.getElementById('v-platform').value;
+    const urlInput = document.getElementById('v-url');
+    if (platform === 'tiktok') {
+        urlInput.placeholder = 'https://tiktok.com/@username/video/1234567890';
+    } else {
+        urlInput.placeholder = 'https://youtube.com/watch?v=...';
+    }
+}
+
+// Players
+let currentPhotoData = null;
+function previewPlayerPhoto(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = e => { currentPhotoData = e.target.result; document.getElementById('p-photo-preview').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`; }; reader.readAsDataURL(input.files[0]); } }
+async function openPlayerModal(id = null) { let player = null; if (id) { const players = await DataService.getData('players'); player = players.find(p => p.id === id); } document.getElementById('player-edit-id').value = id || ''; document.getElementById('p-name').value = player?.name || ''; document.getElementById('p-num').value = player?.number || ''; document.getElementById('p-pos').value = player?.position || 'GK'; document.getElementById('p-nat').value = player?.nationality || ''; document.getElementById('p-goals').value = player?.goals || 0; document.getElementById('p-assists').value = player?.assists || 0; document.getElementById('p-apps').value = player?.appearances || 0; document.getElementById('p-age').value = player?.age || ''; document.getElementById('p-rating').value = player?.rating || ''; document.getElementById('p-bio').value = player?.bio || ''; currentPhotoData = player?.photo || null; const preview = document.getElementById('p-photo-preview'); if (player?.photo) preview.innerHTML = `<img src="${player.photo}" style="width:100%;height:100%;object-fit:cover">`; else preview.innerHTML = '<span>No photo</span>'; openModal('player-modal'); }
+async function savePlayer() { const name = document.getElementById('p-name').value.trim(); if (!name) { toast('Player name required', true); return; } let photoUrl = currentPhotoData; const data = { id: document.getElementById('player-edit-id').value || uid(), name, number: parseInt(document.getElementById('p-num').value) || 0, position: document.getElementById('p-pos').value, nationality: document.getElementById('p-nat').value, goals: parseInt(document.getElementById('p-goals').value) || 0, assists: parseInt(document.getElementById('p-assists').value) || 0, appearances: parseInt(document.getElementById('p-apps').value) || 0, age: parseInt(document.getElementById('p-age').value) || null, rating: parseFloat(document.getElementById('p-rating').value) || null, bio: document.getElementById('p-bio').value, photo: photoUrl }; const eid = document.getElementById('player-edit-id').value; let result; if (eid) { result = await DataService.updateItem('players', eid, data); } else { result = await DataService.addItem('players', data); } if (result) { currentPhotoData = null; closeModal('player-modal'); await renderPlayers(); updateStats(); } }
+async function deletePlayer(id, name) { if (confirm(`Delete ${name}?`)) { await DataService.deleteItem('players', id); await renderPlayers(); updateStats(); } }
+async function renderPlayers() { const players = await DataService.getData('players'); const posColor = { GK: 'badge-upcoming', CB: 'badge-win', LB: 'badge-win', RB: 'badge-win', CM: 'badge-upcoming', ST: 'badge-win' }; document.getElementById('players-tbody').innerHTML = players.map(p => `<tr><td>${p.photo ? `<img src="${p.photo}" class="player-photo">` : `<div style="width:35px;height:35px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center">${p.name[0]}</div>`}</td><td><strong>${p.name}</strong><br><span style="font-size:10px">#${p.number}</span></td><td><span class="badge ${posColor[p.position] || ''}">${p.position}</span></td><td>${p.goals}</td><td>${p.assists}</td><td>${p.appearances}</td><td><span style="color:var(--gold)">${p.rating || '—'}</span></td><td><button class="btn btn-grey btn-sm" onclick="openPlayerModal('${p.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deletePlayer('${p.id}','${p.name}')">🗑️</button></td>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:30px">No players yet</td></tr>'; }
+
+// Fixtures
+async function openFixtureModal(id = null) { let fixture = null; if (id) { const fixtures = await DataService.getData('fixtures'); fixture = fixtures.find(f => f.id === id); } document.getElementById('fixture-edit-id').value = id || ''; document.getElementById('f-home').value = fixture?.home || 'KITANGA FC'; document.getElementById('f-away').value = fixture?.away || ''; document.getElementById('f-date').value = fixture?.date || ''; document.getElementById('f-time').value = fixture?.time || '15:00'; document.getElementById('f-comp').value = fixture?.comp || 'League'; document.getElementById('f-venue').value = fixture?.venue || 'Kitanga Stadium'; document.getElementById('f-status').value = fixture?.status || 'upcoming'; openModal('fixture-modal'); }
+async function saveFixture() { const home = document.getElementById('f-home').value.trim(); const away = document.getElementById('f-away').value.trim(); if (!home || !away) { toast('Both teams required', true); return; } const data = { id: document.getElementById('fixture-edit-id').value || uid(), home, away, date: document.getElementById('f-date').value, time: document.getElementById('f-time').value, comp: document.getElementById('f-comp').value, venue: document.getElementById('f-venue').value, status: document.getElementById('f-status').value }; const eid = document.getElementById('fixture-edit-id').value; let result; if (eid) { result = await DataService.updateItem('fixtures', eid, data); } else { result = await DataService.addItem('fixtures', data); } if (result) { closeModal('fixture-modal'); await renderFixtures(); updateStats(); } }
+async function deleteFixture(id, label) { if (confirm(`Delete ${label}?`)) { await DataService.deleteItem('fixtures', id); await renderFixtures(); updateStats(); } }
+async function renderFixtures() { const fixtures = await DataService.getData('fixtures'); document.getElementById('fixtures-tbody').innerHTML = fixtures.map(f => `<tr><td>${f.date ? new Date(f.date).toLocaleDateString() : 'TBD'} ${f.time || ''}</td><td><strong>${f.home}</strong> vs <strong>${f.away}</strong></td><td>${f.comp}</td><td>${f.venue || '—'}</td><td><span class="badge badge-upcoming">${f.status}</span></td><td><button class="btn btn-grey btn-sm" onclick="openFixtureModal('${f.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deleteFixture('${f.id}','${f.home} vs ${f.away}')">🗑️</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px">No fixtures yet</td></tr>'; }
+
+// Results
+async function openResultModal(id = null) { let result = null; if (id) { const results = await DataService.getData('results'); result = results.find(r => r.id === id); } document.getElementById('result-edit-id').value = id || ''; document.getElementById('r-home').value = result?.home || 'KITANGA FC'; document.getElementById('r-away').value = result?.away || ''; document.getElementById('r-hscore').value = result?.hscore || 0; document.getElementById('r-ascore').value = result?.ascore || 0; document.getElementById('r-date').value = result?.date || ''; document.getElementById('r-comp').value = result?.comp || 'League'; openModal('result-modal'); }
+async function saveResult() { const home = document.getElementById('r-home').value.trim(); const away = document.getElementById('r-away').value.trim(); if (!home || !away) { toast('Both teams required', true); return; } const data = { id: document.getElementById('result-edit-id').value || uid(), home, away, hscore: parseInt(document.getElementById('r-hscore').value), ascore: parseInt(document.getElementById('r-ascore').value), date: document.getElementById('r-date').value, comp: document.getElementById('r-comp').value }; const eid = document.getElementById('result-edit-id').value; let result; if (eid) { result = await DataService.updateItem('results', eid, data); } else { result = await DataService.addItem('results', data); } if (result) { closeModal('result-modal'); await renderResults(); updateStats(); } }
+async function deleteResult(id, label) { if (confirm(`Delete ${label}?`)) { await DataService.deleteItem('results', id); await renderResults(); updateStats(); } }
+function getOutcome(r) { const kit = r.home.toLowerCase().includes('kitanga') ? 'home' : 'away'; if (r.hscore === r.ascore) return 'draw'; if (kit === 'home') return r.hscore > r.ascore ? 'win' : 'loss'; return r.ascore > r.hscore ? 'win' : 'loss'; }
+async function renderResults() { const results = await DataService.getData('results'); const badgeClass = { win: 'badge-win', loss: 'badge-loss', draw: 'badge-upcoming' }; document.getElementById('results-tbody').innerHTML = results.map(r => { const outcome = getOutcome(r); return `<tr><td>${r.date ? new Date(r.date).toLocaleDateString() : '—'}</td><td><strong>${r.home}</strong> vs <strong>${r.away}</strong></td><td><span class="badge ${badgeClass[outcome]}">${r.hscore}–${r.ascore}</span></td><td>${r.comp}</td><td><span class="badge ${badgeClass[outcome]}">${outcome.toUpperCase()}</span></td><td><button class="btn btn-grey btn-sm" onclick="openResultModal('${r.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deleteResult('${r.id}','${r.home} vs ${r.away}')">🗑️</button></td></tr>`; }).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px">No results yet</td></tr>'; }
+
+// Formation
+async function renderFormation() { const formations = await DataService.getData('formations'); const home = formations.find(f => f.side === 'home') || { formation_name: '4-3-3', positions: {} }; const away = formations.find(f => f.side === 'away') || { formation_name: '4-4-2', positions: {} }; const players = await DataService.getData('players'); function buildSide(sideName, sideData) { const preset = FORMATION_PRESETS[sideData.formation_name] || FORMATION_PRESETS['4-3-3']; const positions = sideData.positions || {}; return preset.rows.map(row => `<div class="formation-row">${row.map(posKey => { const playerId = positions[posKey]; const player = players.find(p => p.id === playerId); return `<div class="pos-slot" onclick="assignPlayerToPosition('${sideName}','${posKey}')"><div class="pos-name">${posKey}</div><div class="pos-player">${player ? player.name.split(' ')[0] : 'Empty'}</div><div class="pos-number">${player ? '#' + (player.number || '') : ''}</div></div>`; }).join('')}</div>`).join(''); } document.getElementById('formation-editor-container').innerHTML = `<div style="display:flex;flex-wrap:wrap;gap:20px"><div style="flex:1;min-width:250px"><div style="font-family:Bebas Neue;font-size:20px;margin-bottom:10px;color:var(--accent)">🏠 HOME</div><div style="background:linear-gradient(135deg,#0a4a2a,#0a3a1a);border-radius:16px;padding:15px">${buildSide('home', home)}</div></div><div style="flex:1;min-width:250px"><div style="font-family:Bebas Neue;font-size:20px;margin-bottom:10px;color:var(--accent)">✈️ AWAY</div><div style="background:linear-gradient(135deg,#0a4a2a,#0a3a1a);border-radius:16px;padding:15px">${buildSide('away', away)}</div></div></div>`; }
+async function assignPlayerToPosition(side, position) { const players = await DataService.getData('players'); if (!players.length) { toast('No players available', true); return; } let formations = await DataService.getData('formations'); let sideData = formations.find(f => f.side === side); if (!sideData) sideData = { id: uid(), side, formation_name: '4-3-3', positions: {} }; const currentPositions = sideData.positions || {}; let playerList = players.map((p, i) => `${i+1}. ${p.name} (#${p.number})`).join('\n'); const selected = prompt(`Assign to ${side} ${position}:\n\n${playerList}\n\nEnter number (or empty to clear):`); if (selected === null) return; if (selected.trim() === '') { delete currentPositions[position]; toast(`Cleared ${position}`); } else { const idx = parseInt(selected)-1; if (players[idx]) { currentPositions[position] = players[idx].id; toast(`Assigned ${players[idx].name} to ${position}`); } else { toast('Invalid selection', true); return; } } if (sideData.id && sideData.id !== 'undefined') { await DataService.updateItem('formations', sideData.id, { positions: currentPositions }); } else { await DataService.addItem('formations', { ...sideData, positions: currentPositions }); } await renderFormation(); }
+
+// Gallery
+async function handlePhotoUpload(files) { if (!files || files.length === 0) return; for (let i = 0; i < files.length; i++) { const file = files[i]; if (!file.type.startsWith('image/')) { toast(`❌ ${file.name} is not an image`, true); continue; } const imageUrl = await DataService.uploadImage(file, 'gallery'); const photoData = { id: uid(), image_url: imageUrl, caption: file.name, uploaded_at: new Date().toISOString() }; await DataService.addItem('photos', photoData); } toast(`✅ ${files.length} photos uploaded`); await renderGallery(); updateStats(); }
+async function deletePhoto(id) { if (confirm('Delete this photo?')) { await DataService.deleteItem('photos', id); await renderGallery(); updateStats(); } }
+async function renderGallery() { const photos = await DataService.getData('photos'); const grid = document.getElementById('photo-gallery-grid'); if (grid) grid.innerHTML = photos.map(p => `<div class="gal-item"><img class="gal-img" src="${p.image_url}"/><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);padding:5px;display:flex;justify-content:center"><button class="btn btn-red btn-sm" onclick="deletePhoto('${p.id}')">Delete</button></div></div>`).join('') || '<div style="text-align:center;padding:30px;color:var(--grey)">No photos yet</div>'; }
+
+// Videos with TikTok support
+async function openVideoModal() { 
+    document.getElementById('v-title').value = ''; 
+    document.getElementById('v-url').value = ''; 
+    document.getElementById('v-date').value = ''; 
+    document.getElementById('v-platform').value = 'youtube'; 
+    toggleVideoPlatform(); 
+    openModal('video-modal'); 
+}
+async function saveVideo() { 
+    const title = document.getElementById('v-title').value.trim(); 
+    const url = document.getElementById('v-url').value.trim(); 
+    const platform = document.getElementById('v-platform').value; 
+    if (!title) { toast('Title required', true); return; } 
+    if (!url) { toast('Video URL required', true); return; } 
+    const videoId = getVideoId(url, platform); 
+    if (!videoId) { toast(`Invalid ${platform === 'tiktok' ? 'TikTok' : 'YouTube'} URL`, true); return; } 
+    const data = { id: uid(), title, url, source: platform, date: document.getElementById('v-date').value, type: document.getElementById('v-type').value }; 
+    if (platform === 'tiktok') { data.tiktok_id = videoId; } else { data.yt_id = videoId; } 
+    const result = await DataService.addItem('videos', data); 
+    if (result) { closeModal('video-modal'); await renderVideos(); updateStats(); } 
+}
+async function deleteVideo(id, title) { if (confirm(`Delete "${title}"?`)) { await DataService.deleteItem('videos', id); await renderVideos(); updateStats(); } }
+async function renderVideos() { const videos = await DataService.getData('videos'); const grid = document.getElementById('video-grid'); if (grid) grid.innerHTML = videos.map(v => { const isYT = v.source === 'youtube' || v.yt_id; const isTikTok = v.source === 'tiktok' || v.tiktok_id; let thumb = ''; if (isYT && v.yt_id) thumb = `https://img.youtube.com/vi/${v.yt_id}/mqdefault.jpg`; else if (isTikTok && v.tiktok_id) thumb = `https://www.tiktok.com/embed/v2/${v.tiktok_id}`; return `<div class="video-card"><div class="video-thumb"><img src="${thumb}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Crect fill=\'%23333\' width=\'100\' height=\'100\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'50\' text-anchor=\'middle\' dy=\'.3em\'%3E${isTikTok ? 'TikTok' : 'Video'}%3C/text%3E%3C/svg%3E'"><div class="vid-info"><div class="vid-title">${v.title}</div><div class="vid-meta">${v.type || 'Full Match'} · ${v.date || ''}</div><div class="video-actions"><button class="btn btn-red btn-sm" onclick="deleteVideo('${v.id}','${v.title}')">Delete</button></div></div></div>`; }).join('') || '<div style="text-align:center;padding:30px;color:var(--grey)">No videos yet</div>'; }
+
+// Reviews
+async function renderReviews() { const reviews = await DataService.getData('reviews'); const container = document.getElementById('reviews-moderation-list'); if (container) container.innerHTML = reviews.map(r => `<div class="review-item"><div class="review-header"><div class="review-author">${r.author}</div><div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div><span class="badge ${r.approved ? 'badge-win' : 'badge-loss'}">${r.approved ? 'Approved' : 'Pending'}</span></div><div class="review-text">"${r.text}"</div><div class="review-actions">${!r.approved ? `<button class="btn btn-green btn-sm" onclick="approveReview('${r.id}')">✓ Approve</button>` : ''}<button class="btn btn-red btn-sm" onclick="deleteReview('${r.id}')">🗑️ Delete</button></div></div>`).join('') || '<div style="text-align:center;padding:30px;color:var(--grey)">No reviews yet</div>'; }
+async function approveReview(id) { await DataService.updateItem('reviews', id, { approved: true }); await renderReviews(); toast('✅ Review approved'); }
+async function deleteReview(id) { if (confirm('Delete this review?')) { await DataService.deleteItem('reviews', id); await renderReviews(); toast('🗑️ Review deleted'); } }
+
+// Sponsors
+async function renderSponsors() { const sponsors = await DataService.getData('sponsors'); const tbody = document.getElementById('sponsors-tbody'); if (!tbody) return; tbody.innerHTML = sponsors.map(s => `<tr><td>${s.logo_url ? `<img src="${s.logo_url}" style="width:35px;height:35px;border-radius:50%">` : '📷'}</td><td><strong>${s.name}</strong></td><td><span class="badge ${s.package === 'Gold' ? 'badge-win' : 'badge-upcoming'}">${s.package}</span></td><td>$${s.monthly_fee}</td><td><span class="badge ${s.status === 'Active' ? 'badge-win' : 'badge-loss'}">${s.status}</span></td><td><button class="btn btn-grey btn-sm" onclick="openSponsorModal('${s.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deleteSponsor('${s.id}')">🗑️</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:30px">No sponsors yet</td>'; }
+async function openSponsorModal(id = null) { let sponsor = null; if (id) { const sponsors = await DataService.getData('sponsors'); sponsor = sponsors.find(s => s.id === id); } document.getElementById('sponsor-edit-id').value = id || ''; document.getElementById('s-name').value = sponsor?.name || ''; document.getElementById('s-package').value = sponsor?.package || 'Bronze'; document.getElementById('s-fee').value = sponsor?.monthly_fee || ''; document.getElementById('s-status').value = sponsor?.status || 'Active'; document.getElementById('s-url').value = sponsor?.website_url || ''; document.getElementById('s-notes').value = sponsor?.notes || ''; openModal('sponsor-modal'); }
+async function saveSponsor() { const id = document.getElementById('sponsor-edit-id').value || uid(); let logoUrl = null; const logoFile = document.getElementById('s-logo').files[0]; if (logoFile) { logoUrl = await DataService.uploadImage(logoFile, 'sponsors'); } const data = { id, name: document.getElementById('s-name').value, logo_url: logoUrl, website_url: document.getElementById('s-url').value, package: document.getElementById('s-package').value, monthly_fee: parseFloat(document.getElementById('s-fee').value) || 0, status: document.getElementById('s-status').value, notes: document.getElementById('s-notes').value }; const existing = await DataService.getData('sponsors'); const exists = existing.find(s => s.id === id); let result; if (exists) { result = await DataService.updateItem('sponsors', id, data); } else { result = await DataService.addItem('sponsors', data); } if (result) { closeModal('sponsor-modal'); await renderSponsors(); updateStats(); toast('✅ Sponsor saved!'); } }
+async function deleteSponsor(id) { if (confirm('Delete this sponsor?')) { await DataService.deleteItem('sponsors', id); await renderSponsors(); updateStats(); toast('🗑️ Sponsor deleted'); } }
+
+// Sponsor Inquiries with WhatsApp
+async function renderSponsorInquiries() {
+    const inquiries = await DataService.getData('sponsor_inquiries');
+    const container = document.getElementById('sponsor-inquiries-list');
+    if (!container) return;
+    if (!inquiries.length) { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--grey)">📭 No sponsor proposals yet</div>'; return; }
+    inquiries.sort((a, b) => new Date(b.date) - new Date(a.date));
+    container.innerHTML = inquiries.map(i => `
+        <div class="sec-card" style="margin-bottom:15px; border-left: 4px solid ${i.status === 'New' ? 'var(--accent)' : i.status === 'Contacted' ? 'var(--green)' : 'var(--grey)'}">
+            <div class="sec-body">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div><div style="font-size:16px; font-weight:700;">${i.name}</div><div style="font-size:12px; color:var(--grey);">${i.company || 'Individual'}</div></div>
+                    <div><span class="badge ${i.status === 'New' ? 'badge-upcoming' : i.status === 'Contacted' ? 'badge-win' : 'badge-loss'}">${i.status || 'New'}</span></div>
+                </div>
+                <div style="margin:12px 0; display:flex; gap:15px; flex-wrap:wrap; font-size:13px;">
+                    <div>📧 ${i.email}</div>
+                    ${i.phone ? `<div>📱 ${i.phone}</div>` : ''}
+                    <div>📦 ${i.package || 'Not specified'}</div>
+                    <div>📅 ${new Date(i.date).toLocaleString()}</div>
+                </div>
+                <div style="margin:12px 0; padding:12px; background:rgba(255,255,255,.05); border-radius:8px;"><strong>Message:</strong><br>${i.message || 'No message provided'}</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn btn-accent btn-sm" onclick="whatsAppInquiry('${i.name}', '${i.phone || i.email}', '${i.package || ''}')">📱 Send WhatsApp</button>
+                    <button class="btn btn-green btn-sm" onclick="emailInquiry('${i.email}', '${i.name}')">📧 Send Email</button>
+                    <button class="btn btn-green btn-sm" onclick="markInquiryStatus('${i.id}', 'Contacted')">✓ Mark Contacted</button>
+                    <button class="btn btn-red btn-sm" onclick="deleteInquiry('${i.id}')">🗑️ Delete</button>
+                </div>
+                <div style="margin-top:10px; font-size:10px; color:var(--grey);">ID: ${i.id.substring(0,8)}... | Status: ${i.status || 'New'}</div>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('stat-inquiries').textContent = inquiries.length;
+    const newCount = inquiries.filter(i => i.status === 'New').length;
+    if (newCount > 0) toast(`📬 You have ${newCount} new sponsor proposal${newCount > 1 ? 's' : ''}!`, false);
+}
+
+function whatsAppInquiry(name, contact, packageType) {
+    const phoneNumber = contact.includes('@') ? '256750162429' : contact.replace(/\D/g, '');
+    const message = `Hello ${name},%0A%0AThank you for your sponsorship proposal to Kitanga FC for the ${packageType} package.%0A%0AI would like to discuss this further with you.%0A%0AWhen would be a good time to connect?%0A%0ABest regards,%0AKitanga FC Sponsorship Team`;
+    if (phoneNumber && phoneNumber.length >= 10) { window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank'); }
+    else { navigator.clipboard.writeText(message.replace(/%0A/g, '\n')); alert('No phone number available. Message copied to clipboard.'); }
+}
+
+function emailInquiry(email, name) {
+    const subject = `Kitanga FC Sponsorship - Response to Your Proposal`;
+    const body = `Hello ${name},\n\nThank you for your sponsorship proposal to Kitanga FC.\n\nI would like to discuss this further with you. Please let me know when you're available for a quick call.\n\nBest regards,\nKitanga FC Sponsorship Team`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+async function markInquiryStatus(id, status) { await DataService.updateItem('sponsor_inquiries', id, { status: status }); await renderSponsorInquiries(); toast('✅ Marked as ' + status); }
+async function deleteInquiry(id) { if (confirm('Delete this inquiry?')) { await DataService.deleteItem('sponsor_inquiries', id); await renderSponsorInquiries(); toast('🗑️ Deleted'); } }
+function exportInquiriesCSV() { alert('CSV export - would download all inquiries'); }
+
+// Ads
+function toggleAdType() { const type = document.getElementById('ad-type').value; const imageField = document.getElementById('ad-image-field'); const codeField = document.getElementById('ad-code-field'); if (type === 'image') { imageField.style.display = 'block'; codeField.style.display = 'none'; } else { imageField.style.display = 'none'; codeField.style.display = 'block'; } }
+async function renderAds() { const ads = await DataService.getData('ads'); const tbody = document.getElementById('ads-tbody'); if (!tbody) return; tbody.innerHTML = ads.map(ad => `<tr><td><strong>${ad.title}</strong></td><td>${ad.type === 'image' ? '🖼️' : '📝'}</td><td>${ad.position}</td><td>${ad.clicks || 0}/${ad.impressions || 0}</td><td>$${ad.daily_budget}</td><td><span class="badge ${ad.status === 'Active' ? 'badge-win' : 'badge-loss'}">${ad.status}</span></td><td><button class="btn btn-grey btn-sm" onclick="openAdModal('${ad.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deleteAd('${ad.id}')">🗑️</button> <button class="btn btn-accent btn-sm" onclick="toggleAdStatus('${ad.id}')">${ad.status === 'Active' ? '⏸' : '▶'}</button></td></tr>`).join('') || '<tr><td colspan="7" style="text-align:center;padding:30px">No ads yet</td>'; }
+function calculateCTR(ad) { if (!ad.impressions || ad.impressions === 0) return 0; return ((ad.clicks || 0) / ad.impressions * 100).toFixed(2); }
+async function openAdModal(id = null) { let ad = null; if (id) { const ads = await DataService.getData('ads'); ad = ads.find(a => a.id === id); } document.getElementById('ad-edit-id').value = id || ''; document.getElementById('ad-title').value = ad?.title || ''; document.getElementById('ad-type').value = ad?.type || 'image'; document.getElementById('ad-position').value = ad?.position || 'top_banner'; document.getElementById('ad-link').value = ad?.link_url || ''; document.getElementById('ad-budget').value = ad?.daily_budget || ''; document.getElementById('advertiser-name').value = ad?.advertiser_name || ''; document.getElementById('payment-status').value = ad?.payment_status || 'Pending'; if (ad?.code) document.getElementById('ad-code').value = ad.code; toggleAdType(); openModal('ad-modal'); }
+async function saveAd() { const id = document.getElementById('ad-edit-id').value || uid(); let imageUrl = null; const imageFile = document.getElementById('ad-image').files[0]; if (imageFile) { imageUrl = await DataService.uploadImage(imageFile, 'ads'); } const data = { id, title: document.getElementById('ad-title').value, type: document.getElementById('ad-type').value, position: document.getElementById('ad-position').value, image_url: imageUrl, code: document.getElementById('ad-code').value, link_url: document.getElementById('ad-link').value, daily_budget: parseFloat(document.getElementById('ad-budget').value) || 0, status: 'Active', advertiser_name: document.getElementById('advertiser-name').value, payment_status: document.getElementById('payment-status').value, impressions: 0, clicks: 0 }; const existing = await DataService.getData('ads'); const exists = existing.find(a => a.id === id); let result; if (exists) { result = await DataService.updateItem('ads', id, data); } else { result = await DataService.addItem('ads', data); } if (result) { closeModal('ad-modal'); await renderAds(); updateStats(); toast('✅ Ad saved!'); } }
+async function deleteAd(id) { if (confirm('Delete this ad?')) { await DataService.deleteItem('ads', id); await renderAds(); updateStats(); toast('🗑️ Ad deleted'); } }
+async function toggleAdStatus(id) { const ads = await DataService.getData('ads'); const ad = ads.find(a => a.id === id); const newStatus = ad.status === 'Active' ? 'Paused' : 'Active'; await DataService.updateItem('ads', id, { status: newStatus }); await renderAds(); toast(`Ad ${newStatus}`); }
+async function renderAdAnalytics() { const ads = await DataService.getData('ads'); const totalImpressions = ads.reduce((sum, ad) => sum + (ad.impressions || 0), 0); const totalClicks = ads.reduce((sum, ad) => sum + (ad.clicks || 0), 0); const totalCTR = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : 0; const estimatedRevenue = ads.reduce((sum, ad) => { if (ad.payment_status === 'Paid') return sum + (ad.daily_budget || 0) * 30; return sum; }, 0); document.getElementById('total-impressions').textContent = totalImpressions; document.getElementById('total-clicks').textContent = totalClicks; document.getElementById('total-ctr').textContent = totalCTR + '%'; document.getElementById('total-revenue').textContent = '$' + estimatedRevenue; const performanceList = document.getElementById('ad-performance-list'); if (performanceList) { performanceList.innerHTML = ads.map(ad => `<div class="fx-row"><span class="fx-comp">${ad.title}</span><span class="fx-teams">${ad.clicks || 0} clicks</span><span class="fx-score ${ad.status === 'Active' ? 'win' : 'loss'}">${ad.status}</span><span class="fx-date">CTR: ${calculateCTR(ad)}%</span></div>`).join(''); } }
+
+// Ticker
+async function renderTickerControl() { 
+    let settings = await DataService.getData('ticker_settings'); 
+    if (!settings.length) settings = [{ show_ticker: true, messages: ['🏆 Welcome to Kitanga FC'], speed: 35, bg_color: '#00C2FF', text_color: '#070E2B' }]; 
+    const current = settings[0]; 
+    document.getElementById('ticker-show').checked = current.show_ticker; 
+    document.getElementById('ticker-speed').value = current.speed || 35; 
+    document.getElementById('ticker-bg-color').value = current.bg_color || '#00C2FF'; 
+    document.getElementById('ticker-text-color').value = current.text_color || '#070E2B'; 
+    const container = document.getElementById('ticker-messages-list'); 
+    if (container) container.innerHTML = (current.messages || []).map((msg, i) => `<div class="ticker-message-item"><input type="text" value="${msg.replace(/"/g, '&quot;')}" id="ticker-msg-${i}"><button class="btn btn-red btn-sm" onclick="removeTickerMessage(${i})">Remove</button><button class="btn btn-grey btn-sm" onclick="moveMessageUp(${i})">↑</button><button class="btn btn-grey btn-sm" onclick="moveMessageDown(${i})">↓</button></div>`).join(''); 
+}
+async function saveTickerSettings() { 
+    const show = document.getElementById('ticker-show').checked; 
+    const speed = parseInt(document.getElementById('ticker-speed').value) || 35; 
+    const bgColor = document.getElementById('ticker-bg-color').value; 
+    const textColor = document.getElementById('ticker-text-color').value; 
+    const messages = []; 
+    const container = document.getElementById('ticker-messages-list'); 
+    if (container) { 
+        const inputs = container.querySelectorAll('input[type="text"]'); 
+        inputs.forEach(input => { if (input.value.trim()) messages.push(input.value.trim()); }); 
+    } 
+    const settings = { show_ticker: show, messages: messages, speed: speed, bg_color: bgColor, text_color: textColor }; 
+    let existing = await DataService.getData('ticker_settings'); 
+    let result; 
+    if (existing.length) { result = await DataService.updateItem('ticker_settings', existing[0].id, settings); } 
+    else { result = await DataService.addItem('ticker_settings', { id: uid(), ...settings }); } 
+    if (result) toast('✅ Ticker settings saved'); 
+}
+function moveMessageUp(idx) { const container = document.getElementById('ticker-messages-list'); if (idx > 0 && container.children[idx]) { const parent = container; const child1 = parent.children[idx]; const child2 = parent.children[idx - 1]; parent.insertBefore(child1, child2); toast('⬆️ Moved - click Save'); } }
+function moveMessageDown(idx) { const container = document.getElementById('ticker-messages-list'); if (idx < container.children.length - 1 && container.children[idx]) { const parent = container; const child1 = parent.children[idx]; const child2 = parent.children[idx + 1]; parent.insertBefore(child2, child1); toast('⬇️ Moved - click Save'); } }
+function previewTicker() { 
+    const messages = []; 
+    const container = document.getElementById('ticker-messages-list'); 
+    if (container) { 
+        const inputs = container.querySelectorAll('input[type="text"]'); 
+        inputs.forEach(input => { if (input.value.trim()) messages.push(input.value.trim()); }); 
+    } 
+    const bgColor = document.getElementById('ticker-bg-color').value; 
+    const textColor = document.getElementById('ticker-text-color').value; 
+    const speed = parseInt(document.getElementById('ticker-speed').value) || 35; 
+    const previewTrack = document.getElementById('preview-track'); 
+    const previewContainer = document.getElementById('ticker-preview'); 
+    previewContainer.style.background = bgColor; 
+    const allMessages = [...messages, ...messages]; 
+    previewTrack.innerHTML = allMessages.map(msg => `<span style="color: ${textColor}; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;">${msg}</span>`).join(''); 
+    previewTrack.style.animation = `tMove ${speed}s linear infinite`; 
+    openModal('ticker-preview-modal'); 
+}
+async function addTickerMessage() { 
+    const container = document.getElementById('ticker-messages-list'); 
+    const idx = container.children.length; 
+    const newMsgDiv = document.createElement('div'); 
+    newMsgDiv.className = 'ticker-message-item'; 
+    newMsgDiv.innerHTML = `<input type="text" value="New message" id="ticker-msg-${idx}"><button class="btn btn-red btn-sm" onclick="removeTickerMessage(${idx})">Remove</button><button class="btn btn-grey btn-sm" onclick="moveMessageUp(${idx})">↑</button><button class="btn btn-grey btn-sm" onclick="moveMessageDown(${idx})">↓</button>`; 
+    container.appendChild(newMsgDiv); 
+    toast('➕ New message added - click Save'); 
+}
+async function removeTickerMessage(idx) { 
+    const container = document.getElementById('ticker-messages-list'); 
+    if (container && container.children[idx]) { container.removeChild(container.children[idx]); toast('🗑️ Removed - click Save'); } 
+}
+
+// Settings & Stats
+async function saveClubInfo() { toast('✅ Club info saved'); }
+function loadClubInfo() { }
+async function clearData(table) { if (confirm(`Delete ALL ${table}?`)) { const items = await DataService.getData(table); for (const item of items) await DataService.deleteItem(table, item.id); toast(`🗑️ All ${table} cleared`); loadAllData(); } }
+async function updateStats() { 
+    const players = await DataService.getData('players'); 
+    const fixtures = await DataService.getData('fixtures'); 
+    const results = await DataService.getData('results'); 
+    const sponsors = await DataService.getData('sponsors'); 
+    const ads = await DataService.getData('ads'); 
+    const inquiries = await DataService.getData('sponsor_inquiries'); 
+    document.getElementById('stat-players').textContent = players.length; 
+    document.getElementById('stat-fixtures').textContent = fixtures.length; 
+    document.getElementById('stat-results').textContent = results.length; 
+    document.getElementById('stat-sponsors').textContent = sponsors.length; 
+    document.getElementById('stat-ads').textContent = ads.filter(a => a.status === 'Active').length; 
+    document.getElementById('stat-inquiries').textContent = inquiries.length; 
+}
+async function addDefaultData() { 
+    if ((await DataService.getData('players')).length === 0) { 
+        await DataService.addItem('players', { id: uid(), name: 'Nicholas', number: 1, position: 'GK', nationality: 'Kenyan', goals: 0, assists: 0, appearances: 0, rating: 0 }); 
+        await DataService.addItem('players', { id: uid(), name: 'Hamza', number: 7, position: 'LB', nationality: 'Kenyan', goals: 0, assists: 0, appearances: 0, rating: 0 }); 
+    } 
+    if ((await DataService.getData('fixtures')).length === 0) { 
+        await DataService.addItem('fixtures', { id: uid(), home: 'KITANGA FC', away: 'Riverside FC', date: new Date(Date.now() + 7*86400000).toISOString().split('T')[0], time: '15:00', comp: 'League', venue: 'Kitanga Stadium', status: 'upcoming' }); 
+    } 
+    if ((await DataService.getData('ticker_settings')).length === 0) { 
+        await DataService.addItem('ticker_settings', { id: uid(), show_ticker: true, messages: ['🏆 Welcome to Kitanga FC'], speed: 35, bg_color: '#00C2FF', text_color: '#070E2B' }); 
+    } 
+}
+async function loadAllData() { 
+    await addDefaultData(); 
+    await renderPlayers(); 
+    await renderFixtures(); 
+    await renderResults(); 
+    await renderFormation(); 
+    await renderGallery(); 
+    await renderVideos(); 
+    await renderReviews(); 
+    await renderSponsors(); 
+    await renderSponsorInquiries(); 
+    await renderAds(); 
+    await renderTickerControl(); 
+    await updateStats(); 
+    loadClubInfo(); 
+    if (currentUser) toast('✅ Connected to cloud'); 
+}
+
+document.querySelectorAll('.modal-ov').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+document.getElementById('viewSiteBtn').addEventListener('click', function(e) { window.open('https://escarstore.github.io/kitanga-fc/', '_blank'); });
+checkAuth();
+</script>
+</body>
+</html>
