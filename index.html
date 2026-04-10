@@ -3,7 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-<title>KITANGA FC — Official Website</title>
+<title>Kitanga FC — Football Predictions, Live Scores & Betting Tips</title>
+<meta name="description" content="Kitanga FC: AI-powered football predictions, live international scores, match previews, expert betting tips and club news. 18+ Gamble responsibly.">
+<meta name="keywords" content="football predictions, betting tips, live scores, Premier League, La Liga, Champions League, Kitanga FC, Uganda football">
+<meta name="author" content="Kitanga FC">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Kitanga FC — Football Predictions & Live Scores">
+<meta property="og:description" content="AI-powered football predictions, live scores and expert betting tips. Free to use. 18+ only.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://escarstore.github.io/kitanga-fc/">
+<meta property="og:image" content="https://escarstore.github.io/kitanga-fc/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kitanga FC — Football Predictions & Live Scores">
+<meta name="twitter:description" content="AI-powered football predictions, live scores and expert betting tips.">
+<link rel="canonical" href="https://escarstore.github.io/kitanga-fc/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2250%22 fill=%22%230A1F6E%22/><text y=%22.9em%22 font-size=%2265%22 x=%2250%22 text-anchor=%22middle%22 fill=%22%2300C2FF%22 font-family=%22Arial Black%22>K</text></svg>" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -409,6 +423,57 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .gal-img,.pl-photo,.news-card-img,.sponsor-logo-img{width:100%;height:100%;object-fit:cover}
 .sp-logo-box{width:80px;height:80px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sp-logo-box img{width:100%;height:100%;object-fit:contain;padding:6px}
+
+/* ABOUT SECTION */
+#about{background:var(--card);padding:68px 4%}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px;align-items:center}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr}}
+.about-badge{display:inline-block;background:rgba(0,194,255,.12);border:1px solid rgba(0,194,255,.3);color:var(--accent);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.about-text{font-size:14px;color:rgba(255,255,255,.8);line-height:1.8;margin-bottom:12px}
+.about-contact-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:24px}
+.contact-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.contact-item:last-child{border-bottom:none}
+.contact-icon{width:40px;height:40px;border-radius:10px;background:rgba(0,194,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.contact-label{font-size:10px;color:var(--grey);font-weight:700;letter-spacing:2px}
+.contact-value{font-size:13px;color:var(--white);margin-top:2px}
+.contact-value a{color:var(--accent);text-decoration:none}
+.social-row{display:flex;gap:12px;margin-top:16px}
+.social-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;transition:var(--transition)}
+.social-btn:hover{transform:translateY(-2px)}
+.social-fb{background:#1877F2;color:#fff}
+.social-wa{background:#25D366;color:#fff}
+.social-tw{background:#1DA1F2;color:#fff}
+.social-yt{background:#FF0000;color:#fff}
+.social-ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff}
+
+/* LEGAL PAGES MODAL */
+.legal-modal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.97);overflow-y:auto;display:none;padding:0}
+.legal-modal.open{display:block;animation:legalFadeIn .3s ease}
+@keyframes legalFadeIn{from{opacity:0}to{opacity:1}}
+.legal-content{max-width:800px;margin:0 auto;padding:40px 24px 80px}
+.legal-header{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid var(--accent)}
+.legal-close{background:rgba(255,255,255,.1);border:1px solid var(--border);border-radius:8px;padding:8px 16px;color:var(--white);cursor:pointer;font-size:13px}
+.legal-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--accent)}
+.legal-content h2{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:2px;color:var(--accent);margin:28px 0 10px;text-transform:uppercase}
+.legal-content p,.legal-content li{font-size:14px;color:rgba(255,255,255,.75);line-height:1.8;margin-bottom:10px}
+.legal-content ul{padding-left:20px}
+.legal-content a{color:var(--accent)}
+.legal-last-updated{font-size:11px;color:var(--grey);margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* IMPROVED FOOTER */
+.footer-legal{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)}
+.footer-legal a{font-size:11px;color:var(--grey);text-decoration:none;transition:var(--transition)}
+.footer-legal a:hover{color:var(--accent)}
+.social-links-footer{display:flex;gap:12px;margin-top:14px}
+.slink-real{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;transition:var(--transition)}
+.slink-real:hover{transform:translateY(-2px)}
+
+/* PREDICTION ACCURACY BADGE */
+.accuracy-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);border-radius:20px;padding:6px 16px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--green);margin-bottom:16px}
+
+/* AFFILIATE NOTICE */
+.affiliate-notice{background:rgba(255,184,0,.07);border:1px solid rgba(255,184,0,.2);border-radius:10px;padding:14px 18px;margin:20px 0;font-size:12px;color:rgba(255,255,255,.6);line-height:1.6}
+.affiliate-notice strong{color:var(--gold)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -434,6 +499,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('videos');if(el)el.scrollIntoView({behavior:'smooth'});})();">Videos</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('football-bot');if(el)el.scrollIntoView({behavior:'smooth'});})();">⚽ Bot</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('reviews');if(el)el.scrollIntoView({behavior:'smooth'});})();">Fan Zone</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('about');if(el)el.scrollIntoView({behavior:'smooth'});})();">About</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('sponsorship');if(el)el.scrollIntoView({behavior:'smooth'});})();" class="nav-watch">Partner →</a></li>
     </ul>
   </div>
@@ -456,12 +522,12 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 <div id="kfc-toast-el" class="kfc-toast"></div>
 <section id="hero">
   <div class="hero-content">
-    <div class="hero-tag">Official Club Website</div>
+    <div class="hero-tag">AI Football Predictions & Live Scores</div>
     <h1 class="hero-title">KITANGA<br><span>FC</span></h1>
-    <p class="hero-sub">Passion. Pride. Power. Your home for Kitanga FC news, fixtures, and squad updates.</p>
+    <p class="hero-sub">Your trusted source for AI-powered football predictions, live international scores, match previews and expert betting tips — free, every day.</p>
     <div class="hero-btns">
-      <a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('leagues');if(el)el.scrollIntoView({behavior:'smooth'});})();" class="btn-p">▶ Watch Live Football</a>
-      <a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('fixtures');if(el)el.scrollIntoView({behavior:'smooth'});})();" class="btn-s">Our Fixtures</a>
+      <a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('predictions');if(el)el.scrollIntoView({behavior:'smooth'});})();" class="btn-p">⚙ Today's Predictions</a>
+      <a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('club-news');if(el)el.scrollIntoView({behavior:'smooth'});})();" class="btn-s">📝 Latest News</a>
     </div>
     <div class="hero-stats" id="hero-stats">
       <div><div class="hs-num" id="hs-wins">—</div><div class="hs-lbl">Wins</div></div>
@@ -521,17 +587,17 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   <div class="st">Live <span>Football News</span></div>
   <div class="news-grid" id="news-grid"><div class="pred-loading"><div class="pred-spinner"></div>Fetching latest football news...</div></div>
   <div id="news-refresh-row" style="text-align:center;margin-top:16px;display:none">
-    <button class="btn-s" onclick="fetchLiveNews(true)" style="font-size:12px;padding:8px 20px">🔄 Refresh News</button>
+    <button class="btn-s" onclick="fetchLiveNews(true)" style="font-size:12px;padding:8px 20px">Refresh News</button>
   </div>
 </section>
 
 <!-- AI MATCH PREDICTIONS -->
 <section id="predictions">
   <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;flex-wrap:wrap">
-    <div style="background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 12px;border-radius:3px">⚡ AI POWERED</div>
+    <div style="background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 12px;border-radius:3px">  AI POWERED</div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold)">Match Predictions</div>
   </div>
-  <div style="text-align:center;font-size:13px;color:var(--grey);max-width:480px;margin:0 auto 8px">Our bot analyses live form data to predict match outcomes. Use our affiliate partners to place your bets.</div>
+  <div style="text-align:center;font-size:13px;color:var(--grey);max-width:480px;margin:0 auto 8px">Our bot analyses live form data to predict match outcomes. Use our bet partners to place your bets.</div>
   <div class="pred-grid" id="predictions-grid"><div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div></div>
   <div class="affiliate-disclaimer" style="margin-top:20px">⚠️ 18+ only. AI predictions are for entertainment. Always gamble responsibly.</div>
 </section>
@@ -578,7 +644,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   <div style="text-align:center;padding:40px 0 20px">
     <div style="font-size:48px;margin-bottom:12px">👕</div>
     <p style="color:var(--grey);font-size:14px;margin-bottom:24px">Click below to view our full squad and player profiles.</p>
-    <button class="btn-p" onclick="openFullPlayersModal()" style="padding:14px 36px;font-size:15px;letter-spacing:2px">👕 View Full Squad</button>
+    <button class="btn-p" onclick="openFullPlayersModal()" style="padding:14px 36px;font-size:15px;letter-spacing:2px"> View Full Squad</button>
   </div>
 </section>
 
@@ -586,7 +652,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 <div class="players-modal" id="fullPlayersModal">
   <div class="players-modal-content">
     <div class="players-modal-header">
-      <div class="players-modal-title">👕 Full Squad</div>
+      <div class="players-modal-title"> Full Squad</div>
       <button class="players-modal-close" onclick="closeFullPlayersModal()">✕</button>
     </div>
     <div class="players-modal-grid" id="fullPlayersGrid"></div>
@@ -669,8 +735,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     </select>
     <textarea id="contact-message" placeholder="Tell us about your business..." class="fi" rows="3"></textarea>
     <div style="display:flex; gap:15px; margin-top:15px;">
-      <button class="btn-p" onclick="submitSponsorInquiry()" style="flex:1">📧 Send Proposal</button>
-      <button class="btn-p" onclick="sendViaWhatsApp()" style="flex:1; background:#25D366;">📱 Send via WhatsApp</button>
+      <button class="btn-p" onclick="submitSponsorInquiry()" style="flex:1">Send Proposal</button>
+      <button class="btn-p" onclick="sendViaWhatsApp()" style="flex:1; background:#25D366;">Send via WhatsApp</button>
     </div>
   </div>
 </section>
@@ -693,29 +759,283 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <div id="chatKeyBar" class="chat-key-bar"><span>⚠️ Set your Gemini API key to activate the bot</span><button class="chat-keybtn" onclick="promptApiKey()">🔑 Set Key</button></div>
     <div class="chat-msgs" id="chatMsgs" style="height:340px"></div>
     <div class="chat-irow" style="padding:14px 16px;gap:10px">
-      <input class="chat-inp" id="chatInp" placeholder="e.g. Who won last night? What is Mbappe's form? Predict Arsenal vs Man City..." onkeydown="if(event.key==='Enter')sendChat()" style="border-radius:8px;padding:12px 16px">
+      <input class="chat-inp" id="chatInp" placeholder="e.g. Who is on form?..." onkeydown="if(event.key==='Enter')sendChat()" style="border-radius:8px;padding:12px 16px">
       <button class="chat-send" onclick="sendChat()" style="width:44px;height:44px;border-radius:8px;font-size:18px">➤</button>
     </div>
     <div style="padding:8px 16px 12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="quickAsk('Who are the top scorers in the Premier League this season?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer">⚽ Top Scorers</button>
-      <button onclick="quickAsk('What are the latest football transfer news?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer">🔄 Transfers</button>
-      <button onclick="quickAsk('What matches are happening today?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer">📅 Today\'s Matches</button>
-      <button onclick="quickAsk('Predict this weekend\'s biggest Premier League match')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer">🎯 Predictions</button>
+      <button onclick="quickAsk('Who are the top scorers in the Premier League this season?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer"> Top Scorers</button>
+      <button onclick="quickAsk('What are the latest football transfer news?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer"> Transfers</button>
+      <button onclick="quickAsk('What matches are happening today?')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer"> Today\'s Matches</button>
+      <button onclick="quickAsk('Predict this weekend\'s biggest Premier League match')" style="background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--grey);cursor:pointer"> Predictions</button>
     </div>
   </div>
 </section>
 
+
+<!-- ABOUT US SECTION -->
+<section id="about">
+  <div class="sl">Who We Are</div>
+  <div class="st">About <span>Kitanga FC</span></div>
+  <div class="about-grid">
+    <div>
+      <span class="about-badge"> ABOUT THE SITE</span>
+      <p class="about-text"><strong style="color:var(--white)">Kitanga FC</strong> is an independent football platform combining real club football with AI-powered international match analysis and predictions.</p>
+      <p class="about-text">We publish daily AI-generated predictions for Premier League, La Liga, Champions League, Bundesliga and Serie A matches — free for every visitor. Our predictions are powered by live data and machine learning analysis of form, injuries and head-to-head statistics.</p>
+      <p class="about-text">The site also serves as the official home of <strong style="color:var(--white)">Kitanga FC</strong>, a community football club based in Uganda, Maganjo, Kawanda, sharing fixtures, results, squad news, match photos & videos.</p>
+      <div class="affiliate-notice">
+        <strong>Disclosure:</strong> Links on this site are licensed. This helps us keep the site free. We only partner with licensed, reputable betting companies. Always gamble responsibly. 18+ only.
+      </div>
+      <div class="social-row">
+        <a href="https://facebook.com" target="_blank" class="social-btn social-fb"> Facebook</a>
+        <a href="https://wa.me/256750162429" target="_blank" class="social-btn social-wa"> WhatsApp</a>
+        <a href="https://twitter.com" target="_blank" class="social-btn social-tw"> X/Twitter</a>
+      </div>
+    </div>
+    <div class="about-contact-box">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:16px;color:var(--accent)">Contact Us</div>
+      <div class="contact-item">
+        <div class="contact-icon">📩</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div>
+          <div class="contact-label">WhatsApp</div>
+          <div class="contact-value"><a href="https://wa.me/256750162429" target="_blank">+256 750 162 429</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌍</div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">Uganda 🇺🇬</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">⏰</div>
+        <div>
+          <div class="contact-label">Response Time</div>
+          <div class="contact-value">Usually within 24 hours</div>
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <a href="https://wa.me/256750162429?text=Hello%20Kitanga%20FC!" target="_blank" class="btn-p" style="width:100%;text-align:center;display:block;padding:12px"> Message Us on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL MODALS -->
+<div class="legal-modal" id="modal-privacy">
+  <div class="legal-content">
+    <div class="legal-header">
+      <button class="legal-close" onclick="closeLegal('privacy')">← Back</button>
+      <div class="legal-title">Privacy Policy</div>
+    </div>
+    <p><strong>Last updated: April 2026</strong></p>
+    <p>Kitanga FC is committed to protecting your privacy. This policy explains how we collect, use and protect your information when you use kitangafc.com.</p>
+    <h2>Information We Collect</h2>
+    <ul>
+      <li>Fan reviews you voluntarily submit (name, review text)</li>
+      <li>Sponsorship inquiry details you submit via our contact form</li>
+      <li>Anonymous usage data via browser cookies (no personally identifying data)</li>
+    </ul>
+    <h2>How We Use Your Information</h2>
+    <ul>
+      <li>Fan reviews: displayed publicly on the site after admin approval</li>
+      <li>Contact form data: used only to respond to your inquiry</li>
+      <li>We do not sell, rent or share your personal information with third parties</li>
+    </ul>
+    <h2>Third-Party Services</h2>
+    <p>This site uses Google Fonts for typography, and links to third-party betting sites. Each has its own privacy policy.</p>
+    <h2>Links</h2>
+    <p>Some links on this site are licensed from betting operators. We are transparent about this relationship.</p>
+    <h2>Cookies</h2>
+    <p>We use essential cookies for site functionality. No tracking cookies are used for advertising. You can disable cookies in your browser settings.</p>
+    <h2>Data Retention</h2>
+    <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
+    <h2>Your Rights</h2>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <h2>Changes to This Policy</h2>
+    <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
+    <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: dealexander2001@gmail.com</p>
+  </div>
+</div>
+
+<div class="legal-modal" id="modal-terms">
+  <div class="legal-content">
+    <div class="legal-header">
+      <button class="legal-close" onclick="closeLegal('terms')">← Back</button>
+      <div class="legal-title">Terms & Conditions</div>
+    </div>
+    <p><strong>Last updated: April 2026</strong></p>
+    <p>By accessing and using Kitanga FC, you agree to the following terms. Please read them carefully.</p>
+    <h2>1. Acceptance of Terms</h2>
+    <p>By using this site you confirm you are at least 18 years old and agree to these terms. If you do not agree, please do not use this site.</p>
+    <h2>2. Predictions & Betting Information</h2>
+    <ul>
+      <li>Most of the predictions on this site are AI-generated. <strong>Gamble responsibly</strong></li>
+      <li>We do not guarantee the accuracy of any prediction</li>
+      <li>Predictions should not be treated as financial or betting advice</li>
+      <li>You bet entirely at your own risk. We accept no liability for any losses</li>
+      <li>You must be 18+ and betting must be legal in your jurisdiction</li>
+    </ul>
+    <h2>3. Relationships</h2>
+    <p>This site participates with licensed betting operators. This does not influence our content or increase prices for users. We only partner with reputable, licensed operators.</p>
+    <h2>4. Responsible Gambling</h2>
+    <p>We are committed to promoting responsible gambling. Only gamble what you can afford to lose. If you or someone you know has a gambling problem, seek help immediately:</p>
+    <ul>
+      <li>GamCare: gamcare.org.uk</li>
+      <li>BeGambleAware: begambleaware.org</li>
+      <li>GamStop: gamstop.co.uk</li>
+    </ul>
+    <h2>5. Intellectual Property</h2>
+    <p>All content on this site — including text, predictions, design, code and images — is the property of Kitanga FC. You may not reproduce or distribute content without written permission.</p>
+    <h2>6. Limitation of Liability</h2>
+    <p>Kitanga FC shall not be liable for any direct, indirect, incidental or consequential damages arising from your use of this site or any betting decisions made based on our content.</p>
+    <h2>7. Changes to Terms</h2>
+    <p>We reserve the right to update these terms at any time. Continued use of the site after changes means you accept the updated terms.</p>
+    <h2>8. Contact</h2>
+    <p>Questions? Contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a></p>
+    <p class="legal-last-updated">Last updated: April 10, 2026</p>
+  </div>
+</div>
+
+<div class="legal-modal" id="modal-responsible">
+  <div class="legal-content">
+    <div class="legal-header">
+      <button class="legal-close" onclick="closeLegal('responsible')">← Back</button>
+      <div class="legal-title">Responsible Gambling</div>
+    </div>
+    <div style="background:rgba(255,61,87,.1);border:1px solid rgba(255,61,87,.3);border-radius:10px;padding:16px;margin-bottom:24px">
+      <strong style="color:var(--red)">⚠️ Important:</strong> <span style="color:rgba(255,255,255,.8)">Gambling can be addictive. Only gamble with money you can afford to lose. Never chase losses. If gambling is affecting your life, seek help immediately.</span>
+    </div>
+    <h2>Our Commitment</h2>
+    <p>At Kitanga FC, we take responsible gambling seriously. We are committed to providing a safe environment and ensuring that gambling remains a form of entertainment, not a source of financial distress.</p>
+    <h2>Who Should Not Gamble</h2>
+    <ul>
+      <li>Anyone under 18 years of age</li>
+      <li>Anyone experiencing financial difficulties</li>
+      <li>Anyone with a history of problem gambling</li>
+      <li>Anyone using gambling to escape stress or emotions</li>
+    </ul>
+    <h2>Signs of Problem Gambling</h2>
+    <ul>
+      <li>Spending more than you can afford</li>
+      <li>Hiding your gambling from family or friends</li>
+      <li>Chasing losses to try to win back money</li>
+      <li>Borrowing money to gamble</li>
+      <li>Neglecting work, family or other responsibilities</li>
+    </ul>
+    <h2>Tools to Stay in Control</h2>
+    <ul>
+      <li><strong>Deposit limits:</strong> Set limits on how much you deposit</li>
+      <li><strong>Time limits:</strong> Set reminders and session limits</li>
+      <li><strong>Self-exclusion:</strong> Block yourself from betting sites</li>
+      <li><strong>Reality checks:</strong> Regular pop-ups showing time and money spent</li>
+    </ul>
+    <h2>Get Help Now</h2>
+    <div style="display:grid;gap:12px;margin-top:8px">
+      <a href="https://www.gamcare.org.uk" target="_blank" style="background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);border-radius:8px;padding:14px;text-decoration:none;color:var(--white);display:block"><strong style="color:var(--green)">GamCare</strong><br><span style="font-size:12px;color:var(--grey)">gamcare.org.uk | Free support and counselling</span></a>
+      <a href="https://www.begambleaware.org" target="_blank" style="background:rgba(0,194,255,.08);border:1px solid rgba(0,194,255,.2);border-radius:8px;padding:14px;text-decoration:none;color:var(--white);display:block"><strong style="color:var(--accent)">BeGambleAware</strong><br><span style="font-size:12px;color:var(--grey)">begambleaware.org | Information and support</span></a>
+      <a href="https://www.gamstop.co.uk" target="_blank" style="background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.2);border-radius:8px;padding:14px;text-decoration:none;color:var(--white);display:block"><strong style="color:var(--gold)">GamStop</strong><br><span style="font-size:12px;color:var(--grey)">gamstop.co.uk | Self-exclusion from UK gambling sites</span></a>
+    </div>
+    <p class="legal-last-updated">Kitanga FC promotes responsible gambling. 18+ only. If you are in crisis, call a local helpline immediately.</p>
+  </div>
+</div>
+
+<div class="legal-modal" id="modal-affiliate">
+  <div class="legal-content">
+    <div class="legal-header">
+      <button class="legal-close" onclick="closeLegal('affiliate')">← Back</button>
+      <div class="legal-title">Disclosure</div>
+    </div>
+    <p><strong>Last updated: April 2026</strong></p>
+    <p>This disclosure is made in compliance with advertising standards and betting affiliate regulations.</p>
+    <h2>What is an Affiliate?</h2>
+    <p>Kitanga FC participates in affiliate marketing programs with licensed betting operators. This means we earn a commission when a user clicks our links and completes a qualifying action (such as registering and depositing with a betting site).</p>
+    <h2>Our Affiliate Partners</h2>
+    <p>We currently work with or intend to work with the following licensed operators:</p>
+    <ul>
+      <li>Betway (betway.com/affiliates)</li>
+      <li>SportyBet (sportybet.com)</li>
+      <li>Betpawa (betpawa.com)</li>
+      <li>1xBet</li>
+    </ul>
+    <h2>Does This Affect Our Content?</h2>
+    <p>No. Our predictions and analysis are generated independently by AI based on match data. Relationships do not influence which teams we predict to win or what tips we provide. We always aim to give honest, data-driven predictions.</p>
+    <h2>Cost to You</h2>
+    <p>Clicking our links costs you nothing extra.</p>
+    <h2>Your Responsibility</h2>
+    <p>You are responsible for ensuring that online betting is legal in your jurisdiction. Always gamble responsibly. Only bet what you can afford to lose.</p>
+    <h2>Contact</h2>
+    <p>For questions, contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a></p>
+    <p class="legal-last-updated">Last updated: April 10, 2026</p>
+  </div>
+</div>
+
 <footer>
   <div class="fg">
-    <div class="fb"><div class="cl">KFC</div><div class="fb-name">KITANGA FC</div><p class="fb-tag">Official home of Kitanga FC. Live scores, fixtures, squad & world football — all in one place.</p><p style="font-size:11px;color:var(--grey);margin-top:12px">📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6b5b6a9a8b5a9b486adafb2a7a8a1a7a0a5e8a5a9ab">[email&#160;protected]</a></p></div>
-    <div class="fc"><h4>Club</h4><ul><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('next-match');if(el)el.scrollIntoView({behavior:'smooth'});})();">Next Match</a></li><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('fixtures');if(el)el.scrollIntoView({behavior:'smooth'});})();">Fixtures</a></li><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('players');if(el)el.scrollIntoView({behavior:'smooth'});})();">Squad</a></li><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('gallery');if(el)el.scrollIntoView({behavior:'smooth'});})();">Gallery</a></li><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('videos');if(el)el.scrollIntoView({behavior:'smooth'});})();">Videos</a></li></ul></div>
-    <div class="fc"><h4>Leagues</h4><ul><li><a href="https://www.premierleague.com" target="_blank">Premier League</a></li><li><a href="https://www.laliga.com" target="_blank">La Liga</a></li><li><a href="https://www.bundesliga.com" target="_blank">Bundesliga</a></li><li><a href="https://www.ligue1.com" target="_blank">Ligue 1</a></li></ul></div>
-    <div class="fc"><h4>Partners</h4><ul><li><a href="https://www.betway.com" target="_blank">Betway</a></li><li><a href="https://www.bwin.com" target="_blank">Bwin</a></li><li><a href="https://www.sportybet.com" target="_blank">SportyBet</a></li><li><a href="https://www.betpawa.com" target="_blank">Betpawa</a></li><li><a href="javascript:void(0)" onclick="closeNav();(function(){var el=document.getElementById('sponsorship');if(el)el.scrollIntoView({behavior:'smooth'});})();">Advertise Here</a></li></ul></div>
+    <div class="fb">
+      <div class="cl">KFC</div>
+      <div class="fb-name">KITANGA FC</div>
+      <p class="fb-tag">AI-powered football predictions, live scores, club news and expert betting tips — free every day. Uganda's football platform.</p>
+      <p style="font-size:12px;color:var(--grey);margin-top:10px"> <a href="mailto:dealexander2001@gmail.com" style="color:var(--accent)">dealexander2001@gmail.com</a></p>
+      <p style="font-size:12px;color:var(--grey);margin-top:6px"> <a href="https://wa.me/256750162429" target="_blank" style="color:var(--accent)">+256 750 162 429</a></p>
+      <p style="font-size:12px;color:var(--grey);margin-top:6px"> Uganda 🇺🇬</p>
+      <div class="social-links-footer" style="margin-top:14px">
+        <a href="https://facebook.com" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook">📘</a>
+        <a href="https://wa.me/256750162429" target="_blank" class="slink-real" style="background:#25D366" title="WhatsApp">💬</a>
+        <a href="https://twitter.com" target="_blank" class="slink-real" style="background:#1DA1F2" title="Twitter/X">🐦</a>
+        <a href="https://youtube.com" target="_blank" class="slink-real" style="background:#FF0000" title="YouTube">▶️</a>
+        <a href="https://instagram.com" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram">📸</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Club</h4>
+      <ul>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('next-match');if(el)el.scrollIntoView({behavior:'smooth'});})();">Next Match</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('fixtures');if(el)el.scrollIntoView({behavior:'smooth'});})();">Fixtures</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('players');if(el)el.scrollIntoView({behavior:'smooth'});})();">Squad</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('gallery');if(el)el.scrollIntoView({behavior:'smooth'});})();">Gallery</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('about');if(el)el.scrollIntoView({behavior:'smooth'});})();">About Us</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Predictions</h4>
+      <ul>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('predictions');if(el)el.scrollIntoView({behavior:'smooth'});})();">Today's Tips</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('club-news');if(el)el.scrollIntoView({behavior:'smooth'});})();">Football News</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('leagues');if(el)el.scrollIntoView({behavior:'smooth'});})();">Live Scores</a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('football-bot');if(el)el.scrollIntoView({behavior:'smooth'});})();">AI Football Bot</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Betting Partners</h4>
+      <ul>
+        <li><a href="https://www.betway.com" target="_blank" rel="sponsored">Betway </a></li>
+        <li><a href="https://www.sportybet.com" target="_blank" rel="sponsored">SportyBet </a></li>
+        <li><a href="https://www.betpawa.com" target="_blank" rel="sponsored">Betpawa </a></li>
+        <li><a href="https://www.1xbet.com" target="_blank" rel="sponsored">1xBet </a></li>
+        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('sponsorship');if(el)el.scrollIntoView({behavior:'smooth'});})();">Advertise Here</a></li>
+      </ul>
+    </div>
   </div>
-  <div class="responsibility-note">⚠️ <strong>Responsible Gambling:</strong> Gamble only what you can afford to lose. Gamble responsibly. 18+ only.</div>
-  <div class="fbot">
-    <span class="fcopy">© 2026 Kitanga FC. All rights reserved.</span>
-    <div class="slinks"><div class="slink">📘</div><div class="slink">🐦</div><div class="slink">📸</div><div class="slink">▶️</div></div>
+  <div class="responsibility-note" style="text-align:center;padding:16px 4%;font-size:12px;background:rgba(255,61,87,.05);border-top:1px solid rgba(255,61,87,.15);border-bottom:1px solid rgba(255,61,87,.15)">
+    ⚠️ <strong>Responsible Gambling:</strong> Gambling involves risk. Only bet what you can afford to lose. Never chase losses. 18+ only. If you have a gambling problem, visit <a href="https://www.gamcare.org.uk" target="_blank" style="color:var(--accent)">GamCare.org.uk</a> or <a href="https://www.begambleaware.org" target="_blank" style="color:var(--accent)">BeGambleAware.org</a>
+  </div>
+  <div class="fbot" style="flex-direction:column;align-items:center;gap:10px;padding:20px 4%">
+    <div class="footer-legal">
+      <a href="javascript:void(0)" onclick="openLegal('privacy')">Privacy Policy</a>
+      <a href="javascript:void(0)" onclick="openLegal('terms')">Terms & Conditions</a>
+      <a href="javascript:void(0)" onclick="openLegal('responsible')">Responsible Gambling</a>
+      <a href="javascript:void(0)" onclick="openLegal('affiliate')">Affiliate Disclosure</a>
+      <a href="mailto:dealexander2001@gmail.com">Contact Us</a>
+    </div>
+    <span class="fcopy" style="font-size:11px;color:var(--grey)">© 2026 Kitanga FC. All rights reserved. | AI Predictions. 18+</span>
   </div>
 </footer>
 
@@ -1671,6 +1991,21 @@ async function sendChat() {
         console.error('Chat error:', err);
     }
 }
+
+// ── LEGAL MODALS ───────────────────────────────────
+function openLegal(page) {
+    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('open'));
+    const modal = document.getElementById('modal-' + page);
+    if (modal) { modal.classList.add('open'); modal.scrollTop = 0; }
+}
+function closeLegal(page) {
+    const modal = document.getElementById('modal-' + page);
+    if (modal) modal.classList.remove('open');
+}
+// Close legal modal on back button
+window.addEventListener('popstate', function() {
+    document.querySelectorAll('.legal-modal').forEach(m => m.classList.remove('open'));
+});
 
 // ── INITIALIZE ─────────────────────────────────────
 async function init() {
