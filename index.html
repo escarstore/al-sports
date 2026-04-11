@@ -166,6 +166,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,14,43,.97)
 .chat-key-bar.show{display:flex}
 .chat-keybtn{background:var(--gold);color:#000;border:none;border-radius:4px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer}
 
+
+/* ══ PITCH FORMATION — SofaScore style ══ */
+.pitch-compare{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
+@media(max-width:768px){.pitch-compare{grid-template-columns:1fr}}
+.pitch-team-block{background:rgba(0,0,0,.2);border-radius:16px;overflow:hidden}
+.pitch-team-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+.pitch-team-name{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:2px}
+.pitch-formation-label{font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;color:var(--accent);background:rgba(0,194,255,.1);border:1px solid rgba(0,194,255,.25);padding:3px 10px;border-radius:20px}
+.pitch-field{background:repeating-linear-gradient(to bottom,#2d7a2d 0px,#2d7a2d 40px,#317531 40px,#317531 80px);padding:16px 12px;position:relative;min-height:480px;display:flex;flex-direction:column;justify-content:space-evenly}
+.pitch-field::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(255,255,255,.2)}
+.pitch-field::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;border:1px solid rgba(255,255,255,.2)}
+.pitch-row{display:flex;justify-content:space-evenly;align-items:center;padding:4px 0;position:relative;z-index:1}
+.pitch-player{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .2s;min-width:58px}
+.pitch-player:hover{transform:scale(1.1)}
+.pitch-player-avatar{width:48px;height:48px;border-radius:50%;border:3px solid rgba(255,255,255,.75);overflow:hidden;background:linear-gradient(135deg,#1338be,#2255e8);display:flex;align-items:center;justify-content:center;font-family:"Bebas Neue",sans-serif;font-size:17px;color:#fff;position:relative;box-shadow:0 3px 12px rgba(0,0,0,.5)}
+.pitch-player-avatar img{width:100%;height:100%;object-fit:cover}
+.pitch-player-avatar.empty{background:rgba(255,255,255,.1);border-style:dashed;border-color:rgba(255,255,255,.3)}
+.pitch-rating-badge{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);background:#111;color:#fbbf24;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;white-space:nowrap;border:1px solid rgba(255,184,0,.3)}
+.pitch-player-name{font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:700;color:#fff;text-align:center;background:rgba(0,0,0,.65);padding:2px 6px;border-radius:4px;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pitch-player-num{font-size:9px;color:rgba(255,255,255,.55);text-align:center;margin-top:-2px}
+.pitch-player.pos-gk .pitch-player-avatar{border-color:#fbbf24;background:linear-gradient(135deg,#92400e,#d97706)}
+.pitch-player.pos-def .pitch-player-avatar{border-color:#93c5fd;background:linear-gradient(135deg,#1e3a5f,#1d4ed8)}
+.pitch-player.pos-mid .pitch-player-avatar{border-color:#6ee7b7;background:linear-gradient(135deg,#064e3b,#059669)}
+.pitch-player.pos-fwd .pitch-player-avatar{border-color:#fca5a5;background:linear-gradient(135deg,#7f1d1d,#dc2626)}
+
 /* SPONSOR STRIP */
 .sp-strip{background:var(--dark);padding:24px 4%;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
 .sp-lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;color:var(--accent);text-align:center;margin-bottom:20px}
@@ -756,7 +781,6 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       </div>
       <div id="botOnlineDot" style="margin-left:auto;width:10px;height:10px;border-radius:50%;background:var(--grey)"></div>
     </div>
-    <div id="chatKeyBar" class="chat-key-bar"><span>⚠️ Set your Gemini API key to activate the bot</span><button class="chat-keybtn" onclick="promptApiKey()">🔑 Set Key</button></div>
     <div class="chat-msgs" id="chatMsgs" style="height:340px"></div>
     <div class="chat-irow" style="padding:14px 16px;gap:10px">
       <input class="chat-inp" id="chatInp" placeholder="e.g. Who is on form?..." onkeydown="if(event.key==='Enter')sendChat()" style="border-radius:8px;padding:12px 16px">
@@ -786,9 +810,9 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
         <strong>Disclosure:</strong> Links on this site are licensed. This helps us keep the site free. We only partner with licensed, reputable betting companies. Always gamble responsibly. 18+ only.
       </div>
       <div class="social-row">
-        <a href="https://facebook.com" target="_blank" class="social-btn social-fb"> Facebook</a>
-        <a href="https://wa.me/256750162429" target="_blank" class="social-btn social-wa"> WhatsApp</a>
-        <a href="https://twitter.com" target="_blank" class="social-btn social-tw"> X/Twitter</a>
+        <a href="https://facebook.com" target="_blank" class="social-btn social-fb"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook</a>
+        <a href="https://wa.me/256750162429" target="_blank" class="social-btn social-wa"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
+        <a href="https://twitter.com" target="_blank" class="social-btn social-tw"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X / Twitter</a>
       </div>
     </div>
     <div class="about-contact-box">
@@ -797,7 +821,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
         <div class="contact-icon">📩</div>
         <div>
           <div class="contact-label">Email</div>
-          <div class="contact-value"><a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a></div>
+          <div class="contact-value"><a href="/cdn-cgi/l/email-protection#630706020f061b020d0706115153535223040e020a0f4d000c0e"><span class="__cf_email__" data-cfemail="bcd8d9ddd0d9c4ddd2d8d9ce8e8c8c8dfcdbd1ddd5d092dfd3d1">[email&#160;protected]</span></a></div>
         </div>
       </div>
       <div class="contact-item">
@@ -822,7 +846,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
         </div>
       </div>
       <div style="margin-top:18px">
-        <a href="https://wa.me/256750162429?text=Hello%20Kitanga%20FC!" target="_blank" class="btn-p" style="width:100%;text-align:center;display:block;padding:12px"> Message Us on WhatsApp</a>
+        <a href="https://wa.me/256750162429?text=Hello%20Kitanga%20FC!" target="_blank" class="btn-p" style="width:100%;text-align:center;display:block;padding:12px"> Message Us on<svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
       </div>
     </div>
   </div>
@@ -858,10 +882,10 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
-    <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: dealexander2001@gmail.com</p>
+    <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">[email&#160;protected]</a></p>
   </div>
 </div>
 
@@ -899,7 +923,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>7. Changes to Terms</h2>
     <p>We reserve the right to update these terms at any time. Continued use of the site after changes means you accept the updated terms.</p>
     <h2>8. Contact</h2>
-    <p>Questions? Contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a></p>
+    <p>Questions? Contact us at <a href="/cdn-cgi/l/email-protection#c9adaca8a5acb1a8a7adacbbfbf9f9f889aea4a8a0a5e7aaa6a4"><span class="__cf_email__" data-cfemail="2440414548415c454a40415616141415644349454d480a474b49">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a></p>
     <p class="legal-last-updated">Last updated: April 10, 2026</p>
   </div>
 </div>
@@ -972,7 +996,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Your Responsibility</h2>
     <p>You are responsible for ensuring that online betting is legal in your jurisdiction. Always gamble responsibly. Only bet what you can afford to lose.</p>
     <h2>Contact</h2>
-    <p>For questions, contact us at <a href="mailto:dealexander2001@gmail.com">dealexander2001@gmail.com</a></p>
+    <p>For questions, contact us at <a href="/cdn-cgi/l/email-protection#2e4a4b4f424b564f404a4b5c1c1e1e1f6e49434f4742004d4143"><span class="__cf_email__" data-cfemail="385c5d59545d4059565c5d4a0a080809785f55595154165b5755">[email&#160;protected]</span></a></p>
     <p class="legal-last-updated">Last updated: April 10, 2026</p>
   </div>
 </div>
@@ -983,15 +1007,15 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <div class="cl">KFC</div>
       <div class="fb-name">KITANGA FC</div>
       <p class="fb-tag">AI-powered football predictions, live scores, club news and expert betting tips — free every day. Uganda's football platform.</p>
-      <p style="font-size:12px;color:var(--grey);margin-top:10px"> <a href="mailto:dealexander2001@gmail.com" style="color:var(--accent)">dealexander2001@gmail.com</a></p>
+      <p style="font-size:12px;color:var(--grey);margin-top:10px"> <a href="/cdn-cgi/l/email-protection#1470717578716c757a70716626242425547379757d783a777b79" style="color:var(--accent)"><span class="__cf_email__" data-cfemail="7f1b1a1e131a071e111b1a0d4d4f4f4e3f18121e1613511c1012">[email&#160;protected]</span></a></p>
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> <a href="https://wa.me/256750162429" target="_blank" style="color:var(--accent)">+256 750 162 429</a></p>
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> Uganda 🇺🇬</p>
       <div class="social-links-footer" style="margin-top:14px">
-        <a href="https://facebook.com" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook">📘</a>
-        <a href="https://wa.me/256750162429" target="_blank" class="slink-real" style="background:#25D366" title="WhatsApp">💬</a>
-        <a href="https://twitter.com" target="_blank" class="slink-real" style="background:#1DA1F2" title="Twitter/X">🐦</a>
-        <a href="https://youtube.com" target="_blank" class="slink-real" style="background:#FF0000" title="YouTube">▶️</a>
-        <a href="https://instagram.com" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram">📸</a>
+        <a href="https://facebook.com" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://wa.me/256750162429" target="_blank" class="slink-real" style="background:#25D366" title="WhatsApp"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+        <a href="https://twitter.com" target="_blank" class="slink-real" style="background:#1DA1F2" title="X / Twitter"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://youtube.com" target="_blank" class="slink-real" style="background:#FF0000" title="YouTube"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="https://instagram.com" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
     <div class="fc">
@@ -1033,7 +1057,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <a href="javascript:void(0)" onclick="openLegal('terms')">Terms & Conditions</a>
       <a href="javascript:void(0)" onclick="openLegal('responsible')">Responsible Gambling</a>
       <a href="javascript:void(0)" onclick="openLegal('affiliate')">Affiliate Disclosure</a>
-      <a href="mailto:dealexander2001@gmail.com">Contact Us</a>
+      <a href="/cdn-cgi/l/email-protection#187c7d79747d6079767c7d6a2a282829587f75797174367b7775">Contact Us</a>
     </div>
     <span class="fcopy" style="font-size:11px;color:var(--grey)">© 2026 Kitanga FC. All rights reserved. | AI Predictions. 18+</span>
   </div>
@@ -1048,7 +1072,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Supabase Configuration
 const SUPABASE_URL = 'https://qlrohdmpkzlkawffqlug.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscm9oZG1wa3psa2F3ZmZxbHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY3NjAsImV4cCI6MjA5MDY0Mjc2MH0.rBfgxNVpbxeMGRENueegZ52xzGRCfkCE70hTbVaHUWA';
@@ -1206,41 +1230,71 @@ const bettingOffers = [
     { logo: "🏆", name: "SportyBet", offer: "100% Welcome Bonus up to <strong>$100</strong>!", url: "https://www.sportybet.com" },
     { logo: "🔥", name: "Betpawa", offer: "Double your first deposit up to <strong>$50</strong>!", url: "https://www.betpawa.com" }
 ];
-function renderBetting() {
-    const container = document.getElementById('betting-grid');
-    if (!container) return;
-    container.innerHTML = bettingOffers.map(b => `<div class="bet-card"><div class="bet-logo">${b.logo}</div><div class="bet-name">${b.name}</div><div class="bet-offer">${b.offer}</div><a href="${b.url}" target="_blank" class="bet-cta" rel="sponsored">Claim Offer →</a><div class="bet-terms">T&Cs apply. 18+.</div></div>`).join('');
-}
+// Formation Display — SofaScore pitch style
+async function renderFormationDisplay() {
+    const formation = await DataService.getFormation();
+    const showHome = formation.home?.showOnSite !== false;
+    const showAway = formation.away?.showOnSite !== false;
+    const section = document.getElementById('formation-display-section');
+    if (!section) return;
+    if (!showHome && !showAway) { section.classList.add('hidden'); return; }
+    section.classList.remove('hidden');
 
-// Sponsors
-async function renderSponsors() {
-    const sponsors = await DataService.getData('sponsors');
-    const activeSponsors = sponsors.filter(s => s.status === 'Active');
-    const container = document.getElementById('sponsor-logos');
-    if (!container) return;
-    if (!activeSponsors.length) { container.innerHTML = '<div class="sponsor-item"><div class="sponsor-name">Become a Sponsor</div><div class="sponsor-category">Contact us</div></div>'; return; }
-    container.innerHTML = activeSponsors.map(function(s) {
-        var logo = s.logo_url ? '<div class="sp-logo-box"><img src="'+s.logo_url+'" alt="'+s.name+'"></div>' : '<div class="sp-logo-box" style="font-size:28px">🤝</div>';
-        var click = s.website_url ? 'window.open("'+s.website_url+'","_blank")' : '';
-        return '<div class="sponsor-item" style="cursor:pointer" onclick="'+click+'">'+logo+'<div class="sponsor-name">'+s.name+'</div><div class="sponsor-category">'+s.package+' Sponsor</div></div>';
-    }).join('');
-}
+    const players = await DataService.getData('players');
+    const PRESETS = {
+        '4-3-3':  [['GK'],['LB','CB1','CB2','RB'],['CM1','CM2','CM3'],['LW','ST','RW']],
+        '4-4-2':  [['GK'],['LB','CB1','CB2','RB'],['LM','CM1','CM2','RM'],['ST1','ST2']],
+        '4-2-3-1':[['GK'],['LB','CB1','CB2','RB'],['CDM1','CDM2'],['LAM','CAM','RAM'],['ST']],
+        '3-5-2':  [['GK'],['CB1','CB2','CB3'],['LWB','CM1','CM2','CM3','RWB'],['ST1','ST2']],
+        '5-3-2':  [['GK'],['LWB','CB1','CB2','CB3','RWB'],['CM1','CM2','CM3'],['ST1','ST2']],
+        '4-1-4-1':[['GK'],['LB','CB1','CB2','RB'],['CDM'],['LM','CM1','CM2','RM'],['ST']]
+    };
+    const POS_CLASS = {GK:'pos-gk',LB:'pos-def',RB:'pos-def',CB1:'pos-def',CB2:'pos-def',CB3:'pos-def',LWB:'pos-def',RWB:'pos-def',CM1:'pos-mid',CM2:'pos-mid',CM3:'pos-mid',LM:'pos-mid',RM:'pos-mid',CDM:'pos-mid',CDM1:'pos-mid',CDM2:'pos-mid',LAM:'pos-mid',CAM:'pos-mid',RAM:'pos-mid',LW:'pos-fwd',RW:'pos-fwd',ST:'pos-fwd',ST1:'pos-fwd',ST2:'pos-fwd'};
 
-// Ads
+    function buildPitch(sideData) {
+        if (!sideData) return '';
+        const rows = PRESETS[sideData.formation_name] || PRESETS['4-3-3'];
+        const pos = sideData.positions || {};
+        return [...rows].reverse().map(function(row) {
+            return '<div class="pitch-row">' + row.map(function(posKey) {
+                const pid = pos[posKey];
+                const pl = players.find(function(p){ return p.id === pid; });
+                const displayPos = posKey.replace(/[0-9]/g,'');
+                const pcls = POS_CLASS[posKey] || 'pos-mid';
+                const initials = pl ? (pl.name||'').split(' ').map(function(w){return w[0]||'';}).join('').toUpperCase().slice(0,2) : displayPos;
+                const rating = pl && pl.rating ? '<div class="pitch-rating-badge">⭐'+pl.rating+'</div>' : '';
+                const avatar = pl && pl.photo ? '<img src="'+pl.photo+'" alt="'+pl.name+'">'+rating : '<span>'+initials+'</span>'+rating;
+                const click = pid ? ' onclick="openPlayerModalById("'+pid+'")"' : '';
+                return '<div class="pitch-player '+pcls+'"'+click+'>'+
+                    '<div class="pitch-player-avatar'+(pid?'':' empty')+'">'+avatar+'</div>'+
+                    '<div class="pitch-player-name">'+(pl ? pl.name.split(' ')[0] : displayPos)+'</div>'+
+                    (pl && pl.number ? '<div class="pitch-player-num">#'+pl.number+'</div>' : '')+
+                '</div>';
+            }).join('')+'</div>';
+        }).join('');
+    }
+
+    const container = document.getElementById('formation-display-container');
+    let out = '<div class="pitch-compare">';
+    if (showHome) out += '<div class="pitch-team-block"><div class="pitch-team-header"><div class="pitch-team-name">🏠 Home</div><div class="pitch-formation-label">'+(formation.home?.formation_name||'4-3-3')+'</div></div><div class="pitch-field">'+buildPitch(formation.home)+'</div></div>';
+    if (showAway) out += '<div class="pitch-team-block"><div class="pitch-team-header"><div class="pitch-team-name">✈️ Away</div><div class="pitch-formation-label">'+(formation.away?.formation_name||'4-4-2')+'</div></div><div class="pitch-field">'+buildPitch(formation.away)+'</div></div>';
+    out += '</div>';
+    container.innerHTML = out;
+}
 async function renderTopAd() {
     const ads = await DataService.getData('ads');
-    const activeTopAd = ads.find(ad => ad.status === 'Active' && ad.position === 'top_banner');
+    const activeTopAd = ads.find(function(ad){ return ad.status==='Active' && ad.position==='top_banner'; });
+    const banner = document.querySelector('.ad-banner-top');
     const container = document.getElementById('top-ad-container');
     if (!container) return;
-    if (!activeTopAd) { if(container)container.innerHTML=''; return; }
-    const banner=document.querySelector('.ad-banner-top');
-    if(banner){banner.style.display='block';banner.classList.add('has-ad');}
+    if (!activeTopAd) { if(banner) banner.style.display='none'; return; }
+    if(banner){ banner.style.display='block'; banner.classList.add('has-ad'); }
     let html2='';
-    if (activeTopAd.type === 'image' && activeTopAd.image_url) {
-        html2=`<a href="${activeTopAd.link_url||'#'}" target="_blank" onclick="trackAdClick('${activeTopAd.id}')"><img src="${activeTopAd.image_url}" alt="${activeTopAd.title}"></a>`;
+    if (activeTopAd.type==='image' && activeTopAd.image_url) {
+        html2='<a href="'+(activeTopAd.link_url||'#')+'" target="_blank"><img src="'+activeTopAd.image_url+'" alt="'+activeTopAd.title+'"></a>';
         trackAdImpression(activeTopAd.id);
     } else if (activeTopAd.code) { html2=activeTopAd.code; }
-    if(activeTopAd.description) html2+=`<div class="ad-desc"><span class="ad-desc-inner">📢 ${activeTopAd.description} &nbsp;&nbsp;|&nbsp;&nbsp; 📢 ${activeTopAd.description}</span></div>`;
+    if(activeTopAd.description) html2+='<div class="ad-desc"><span class="ad-desc-inner">📢 '+activeTopAd.description+'</span></div>';
     container.innerHTML=html2;
 }
 async function trackAdImpression(adId) {
@@ -2019,23 +2073,17 @@ async function init() {
     await renderNextMatch();
     await renderHeroStats();
     await renderGallery();
+    
     await renderVideos();
     await renderReviews();
     await renderFormationDisplay();
     fetchLiveNews();
     fetchAIPredictions();
-    // Init bot
-    if (getGeminiKey()) {
-        botReady();
-        addChatMsg('bot', "👋 Hi! I'm your Kitanga FC Football Bot. Ask me about scores, transfers, predictions — anything football!");
-    } else {
-        const bar = document.getElementById('chatKeyBar');
-        if (bar) bar.classList.add('show');
-        addChatMsg('bot', "👋 Hi! I'm the Kitanga FC Football Bot. Set your Gemini API key above to start chatting about football — scores, transfers, tactics, anything!");
-    }
+    botReady();
+    addChatMsg('bot', '\u{1F44B} Hi! I\'m your Kitanga FC Football Bot. Ask me about live scores, transfers, predictions and anything football! \u26BD');
     document.addEventListener('click', function(e) {
-        const nav = document.getElementById('nav-links');
-        const btn = document.getElementById('hamburger');
+        var nav = document.getElementById('nav-links');
+        var btn = document.getElementById('hamburger');
         if (nav && nav.classList.contains('open') && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
             nav.classList.remove('open');
             btn.classList.remove('open');
