@@ -530,7 +530,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   <div class="sp-lbl">OFFICIAL PARTNERS & SPONSORS</div>
   <div class="sp-logos" id="sponsor-logos"></div>
   <div class="sponsor-cta">
-    <a href="javascript:void(0)" onclick="scrollToSection('sponsorship')" class="sponsor-link">🤝 Become a Sponsor →</a>
+    <a href="javascript:void(0)" onclick="scrollToSection('sponsorship')" class="sponsor-link"> Become a Sponsor →</a>
   </div>
 </div>
 
@@ -578,7 +578,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   </div>
   <div style="text-align:center;font-size:13px;color:var(--grey);max-width:480px;margin:0 auto 8px">Our bot analyses live form data to predict match outcomes. Use our bet partners to place your bets.</div>
   <div class="pred-grid" id="predictions-grid"><div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div></div>
-  <div class="affiliate-disclaimer" style="margin-top:20px">⚠️ 18+ only. AI predictions are for entertainment. Always gamble responsibly.</div>
+  <div class="affiliate-disclaimer" style="margin-top:20px">⚠️ 18+ only. AI predictions. Always gamble responsibly.</div>
 </section>
 
 <!-- LEAGUES HUB -->
@@ -1140,15 +1140,23 @@ async function renderTicker() {
     }
 }
 
+// Leagues (dynamic from Supabase)
+const leaguesData = [
+    { name: 'Premier League', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', country: 'England', url: 'https://www.premierleague.com/matches', tableUrl: 'https://www.premierleague.com/tables' },
+    { name: 'La Liga', flag: '🇪🇸', country: 'Spain', url: 'https://www.laliga.com/en-GB/laliga-ea/schedule-results', tableUrl: 'https://www.laliga.com/en-GB/laliga-ea/standing' },
+    { name: 'Bundesliga', flag: '🇩🇪', country: 'Germany', url: 'https://www.bundesliga.com/en/bundesliga/matchday', tableUrl: 'https://www.bundesliga.com/en/bundesliga/table' },
+    { name: 'Ligue 1', flag: '🇫🇷', country: 'France', url: 'https://www.ligue1.com/fixtures-results', tableUrl: 'https://www.ligue1.com/ranking' },
+    { name: 'Serie A', flag: '🇮🇹', country: 'Italy', url: 'https://www.legaseriea.it/en/matches', tableUrl: 'https://www.legaseriea.it/en/table' }
+];
 async function renderLeagues() {
-    let leagues = await DataService.getData('leagues');
     const container = document.getElementById('leagues-grid');
     if (!container) return;
-    if (!leagues.length) leagues = [
-        { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', name: 'Premier League', country: 'England', url: 'https://www.premierleague.com/matches', tableUrl: 'https://www.premierleague.com/tables' },
-        { flag: '🇪🇸', name: 'La Liga', country: 'Spain', url: 'https://www.laliga.com/en-GB/laliga-ea/schedule-results', tableUrl: 'https://www.laliga.com/en-GB/laliga-ea/standing' }
-    ];
-    container.innerHTML = leagues.slice(0, 6).map(l => `<div class="lhc"><div class="lh-head"><div class="lh-flag">${l.flag || '🌍'}</div><div><div class="lh-name">${escapeHtml(l.name)}</div><div class="lh-sub">${escapeHtml(l.country || 'International')}</div></div></div><div class="lh-foot"><a href="${l.url || '#'}" target="_blank" class="wbf">▶ Watch / Full Scores</a><a href="${l.tableUrl || l.table_url || '#'}" target="_blank" class="tbtn">📊 View Table</a></div></div>`).join('');
+    let leagues = await DataService.getData('leagues');
+    if (!leagues||!leagues.length) leagues = leaguesData;
+    container.innerHTML = leagues.map(l => {
+        const tUrl=l.tableUrl||l.table_url||'#';
+        return `<div class="lhc"><div class="lh-head"><div class="lh-flag">${l.flag||'🌍'}</div><div><div class="lh-name">${l.name}</div><div class="lh-sub">${l.country}</div></div></div><div class="lh-foot"><a href="${l.url}" target="_blank" class="wbf">▶ Watch / Full Scores</a><a href="${tUrl}" target="_blank" class="tbtn">📊 View Table</a></div></div>`;
+    }).join('');
 }
 
 function renderBetting() {
@@ -1435,7 +1443,7 @@ async function fetchAIPredictions() {
     const grid = document.getElementById('predictions-grid');
     if (!grid) return;
     const key = getGeminiKey();
-    if (!key) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px">🎯</div><div>Set your Gemini API key in admin panel to enable AI predictions</div></div>'; return; }
+    if (!key) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px"></div><div>Loading data....</div></div>'; return; }
     grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div>';
     const predPrompt = 'List 4 upcoming international club football matches (Premier League, La Liga, Champions League, Bundesliga, Serie A). Return ONLY JSON: [{"home":"Arsenal","away":"Man City","comp":"Premier League","date":"2026-04-12","home_win_pct":45,"draw_pct":25,"away_win_pct":30,"prediction":"AWAY WIN","analysis":"2-sentence expert reason","confidence":"HIGH","tip":"Both Teams to Score"}]';
     const result = await callGemini(predPrompt, true, 2000);
