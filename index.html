@@ -1406,15 +1406,61 @@ function sendViaWhatsApp() {
 async function fetchLiveNews(force) {
     const grid = document.getElementById('news-grid');
     if (!grid) return;
-    const CACHE = 'kfc_news_cache', CTIME = 'kfc_news_ts', MINS = 5;
+    // 20-minute cache saves mobile data
+    const CACHE = 'kfc_news_v3', CTIME = 'kfc_news_ts_v3', MINS = 20;
     if (!force) {
-        const cached = localStorage.getItem(CACHE);
-        const ts = parseInt(localStorage.getItem(CTIME) || '0');
-        if (cached && Date.now() - ts < MINS * 60000) {
-            try { const items = JSON.parse(cached); if (items && items.length) { renderNewsCards(items); return; } } catch(e) {}
-        }
+        try {
+            const cached = localStorage.getItem(CACHE);
+            const ts = parseInt(localStorage.getItem(CTIME) || '0');
+            if (cached && Date.now() - ts < MINS * 60000) {
+                const items = JSON.parse(cached);
+                if (items && items.length) { renderNewsCards(items); return; }
+            }
+        } catch(e) {}
     }
     grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Fetching latest football news...</div>';
+
+    // Real RSS feeds via allorigins.win (free CORS relay — no signup, no key needed)
+    const FEEDS = [
+        { url: 'https://feeds.bbci.co.uk/sport/football/rss.xml', source: 'BBC Sport' },
+        { url: 'https://www.skysports.com/rss/12040', source: 'Sky Sports' },
+        { url: 'https://www.goal.com/feeds/en/news', source: 'Goal.com' }
+    ];
+    for (const feed of FEEDS) {
+        try {
+            const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(feed.url), { signal: AbortSignal.timeout(8000) });
+            if (!res.ok) continue;
+            const data = await res.json();
+            if (!data || !data.contents) continue;
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(data.contents, 'text/xml');
+            const rawItems = Array.from(xml.querySelectorAll('item')).slice(0, 4);
+            if (!rawItems.length) continue;
+            const items = rawItems.map(item => {
+                const title  = (item.querySelector('title')?.textContent || '').trim();
+                const desc   = (item.querySelector('description')?.textContent || '').replace(/<[^>]+>/g, '').trim();
+                const pubDate = item.querySelector('pubDate')?.textContent || '';
+                const link   = item.querySelector('link')?.textContent || '';
+                return {
+                    title:    title.replace(/ - BBC Sport$/, '').replace(/ - Sky Sports$/, '').replace(/ \| Goal\.com$/, ''),
+                    league:   _detectLeague(title + ' ' + desc),
+                    category: _detectCategory(title + ' ' + desc),
+                    summary:  desc.length > 180 ? desc.slice(0, 178) + '…' : desc,
+                    source:   feed.source,
+                    url:      link,
+                    time:     _newsAge(pubDate)
+                };
+            });
+            localStorage.setItem(CACHE, JSON.stringify(items));
+            localStorage.setItem(CTIME, Date.now().toString());
+            renderNewsCards(items);
+            const row = document.getElementById('news-refresh-row');
+            if (row) row.style.display = '';
+            return; // success — stop trying more feeds
+        } catch(e) { continue; }
+    }
+
+    // Fallback: Gemini-generated news (only if ALL RSS feeds fail)
     const key = getGeminiKey();
     if (!key) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--grey)">Set Gemini API key in admin panel to enable live news.</div>'; return; }
     const newsPrompt = 'You are a football expert. List 4 major recent football stories from Premier League, La Liga, Champions League, Bundesliga or Serie A. Return ONLY a valid JSON array: [{"title":"Brief headline","league":"League name","category":"TRANSFER or MATCH RESULT or INJURY or PREVIEW","summary":"2 sentence factual summary","source":"Football News","url":"","time":"Recent"}]';
@@ -1431,7 +1477,36 @@ async function fetchLiveNews(force) {
             const row = document.getElementById('news-refresh-row');
             if (row) row.style.display = '';
         }
-    } catch(err) { console.error('News parse fail:', err); grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Error loading news. <button onclick="fetchLiveNews(true)" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer">Retry</button></div>'; }
+    } catch(err) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Error loading news. <button onclick="fetchLiveNews(true)" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer">Retry</button></div>'; }
+}
+function _newsAge(pubDateStr) {
+    if (!pubDateStr) return 'Recent';
+    const diff = Date.now() - new Date(pubDateStr).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    return h < 48 ? 'Yesterday' : Math.floor(h / 24) + 'd ago';
+}
+function _detectLeague(text) {
+    const t = text.toLowerCase();
+    if (t.includes('premier league') || t.includes(' epl'))        return 'Premier League';
+    if (t.includes('la liga') || t.includes('laliga'))             return 'La Liga';
+    if (t.includes('champions league') || t.includes(' ucl'))      return 'Champions League';
+    if (t.includes('bundesliga'))                                   return 'Bundesliga';
+    if (t.includes('serie a'))                                      return 'Serie A';
+    if (t.includes('europa league'))                                return 'Europa League';
+    if (t.includes('africa') || t.includes('afcon') || t.includes('uganda')) return 'Africa';
+    return 'Football';
+}
+function _detectCategory(text) {
+    const t = text.toLowerCase();
+    if (/sign|transfer|deal|join|bid|swap|loan/.test(t))           return 'TRANSFER';
+    if (/injur|ruled out|fitness|doubt|out for|miss/.test(t))      return 'INJURY';
+    if (/preview|ahead|face|upcoming|take on/.test(t))             return 'PREVIEW';
+    if (/result|win|beat|goal|defeat|score|draw/.test(t))          return 'MATCH RESULT';
+    if (/sack|resign|appoint|manager|boss|quit/.test(t))           return 'BREAKING';
+    return 'NEWS';
 }
 function renderNewsCards(items) {
     const grid = document.getElementById('news-grid');
@@ -1442,18 +1517,36 @@ function renderNewsCards(items) {
 async function fetchAIPredictions() {
     const grid = document.getElementById('predictions-grid');
     if (!grid) return;
+    // 60-minute cache
+    const CACHE = 'kfc_preds_v3', CTIME = 'kfc_preds_ts_v3', MINS = 60;
+    try {
+        const cached = localStorage.getItem(CACHE);
+        const ts = parseInt(localStorage.getItem(CTIME) || '0');
+        if (cached && Date.now() - ts < MINS * 60000) {
+            const preds = JSON.parse(cached);
+            if (preds && preds.length) {
+                const BETS = [{ name:'Betway', url:'https://www.betway.com', color:'#00a651' }, { name:'SportyBet', url:'https://www.sportybet.com', color:'#ff6600' }, { name:'Betpawa', url:'https://www.betpawa.com', color:'#d4a017' }, { name:'Bwin', url:'https://www.bwin.com', color:'#0077cc' }];
+                grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i % BETS.length], BETS[(i+1) % BETS.length])).join('');
+                return;
+            }
+        }
+    } catch(e) {}
     const key = getGeminiKey();
     if (!key) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px"></div><div>Loading data....</div></div>'; return; }
     grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div>';
-    const predPrompt = 'List 4 upcoming international club football matches (Premier League, La Liga, Champions League, Bundesliga, Serie A). Return ONLY JSON: [{"home":"Arsenal","away":"Man City","comp":"Premier League","date":"2026-04-12","home_win_pct":45,"draw_pct":25,"away_win_pct":30,"prediction":"AWAY WIN","analysis":"2-sentence expert reason","confidence":"HIGH","tip":"Both Teams to Score"}]';
+    // Inject today's real date so Gemini picks genuinely upcoming matches
+    const today = new Date().toISOString().slice(0, 10);
+    const predPrompt = `Today is ${today}. You are an expert football analyst. List 4 real upcoming matches within the next 7 days from Premier League, La Liga, Champions League, Bundesliga, or Serie A. Use actual club names and realistic probabilities that add up to exactly 100. Return ONLY valid JSON — no markdown, no extra text:\n[{"home":"Real club name","away":"Real club name","comp":"Competition name","date":"YYYY-MM-DD","home_win_pct":45,"draw_pct":25,"away_win_pct":30,"prediction":"HOME WIN or DRAW or AWAY WIN","analysis":"Two sentences of expert tactical reasoning.","confidence":"HIGH or MEDIUM or LOW","tip":"Both Teams to Score or Over 2.5 Goals or Home Clean Sheet or BTTS + Over 2.5"}]`;
     const result = await callGemini(predPrompt, true, 2000);
     if (!result) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Could not load predictions. <button onclick="fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer">Retry</button></div>'; return; }
     try {
         const s = result.indexOf('['), e = result.lastIndexOf(']');
-        if (s < 0 || e < 0) throw new Error('No JSON');
+        if (s < 0 || e < 0) throw new Error('No JSON array found');
         const preds = JSON.parse(result.substring(s, e + 1));
+        localStorage.setItem(CACHE, JSON.stringify(preds));
+        localStorage.setItem(CTIME, Date.now().toString());
         const BETS = [{ name:'Betway', url:'https://www.betway.com', color:'#00a651' }, { name:'SportyBet', url:'https://www.sportybet.com', color:'#ff6600' }, { name:'Betpawa', url:'https://www.betpawa.com', color:'#d4a017' }, { name:'Bwin', url:'https://www.bwin.com', color:'#0077cc' }];
-        grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i % BETS.length], BETS[(i + 1) % BETS.length])).join('');
+        grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i % BETS.length], BETS[(i+1) % BETS.length])).join('');
     } catch(err) { console.error('Pred parse error:', err); grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Error parsing predictions. <button onclick="fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer">Retry</button></div>'; }
 }
 function buildPredCard(m, hw, dr, aw, pred, analysis, conf, tip, bet1, bet2) {
@@ -1497,18 +1590,40 @@ async function sendChat() {
     addChatMsg('user', msg);
     const key = getGeminiKey();
     if (!key) { addChatMsg('bot', '⚠️ Gemini API key not configured. Set it in the Admin Panel → Settings → AI Engine.'); return; }
-    const typDiv = document.createElement('div'); typDiv.className = 'cmsg typing'; typDiv.textContent = '⚽ Thinking...'; typDiv.id = 'chat-typing';
-    const box = document.getElementById('chatMsgs'); if (box) { box.appendChild(typDiv); box.scrollTop = box.scrollHeight; }
+    const typDiv = document.createElement('div');
+    typDiv.className = 'cmsg typing';
+    typDiv.textContent = '⚽ Thinking...';
+    typDiv.id = 'chat-typing';
+    const box = document.getElementById('chatMsgs');
+    if (box) { box.appendChild(typDiv); box.scrollTop = box.scrollHeight; }
     try {
         const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key;
-        const systemInstruction = 'You are the Kitanga FC Football Bot — an enthusiastic, expert football assistant. Answer questions about football scores, transfers, predictions, player stats, match reports, tactics. Keep answers concise (2-5 sentences). Use football emojis.';
-        const resp = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: systemInstruction + '\n\nUser question: ' + msg }] }], generationConfig: { maxOutputTokens: 600, temperature: 0.9 } }) });
-        const data = await resp.json();
+        // System persona injected as first exchange (Gemini has no native system role)
+        const persona = 'You are the Kitanga FC Football Bot — a passionate, expert football analyst based in Uganda. ' +
+            'You specialise in Premier League, La Liga, Bundesliga, Serie A, Champions League, and Ugandan football. ' +
+            'Keep answers to 3–5 sentences max. Use 1–2 football emojis per reply. Give clear confident predictions when asked.';
+        // Keep last 8 turns (4 exchanges) to limit token usage on mobile data
+        const recentHistory = chatHistory.slice(-8);
+        const contents = [
+            { role: 'user',  parts: [{ text: persona }] },
+            { role: 'model', parts: [{ text: '⚽ Ready! Ask me anything about football.' }] },
+            ...recentHistory,
+            { role: 'user',  parts: [{ text: msg }] }
+        ];
+        const resp = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: 500, temperature: 0.85 } })
+        });
         document.getElementById('chat-typing')?.remove();
         if (!resp.ok) { addChatMsg('bot', '❌ API Error. Check your Gemini key in admin panel.'); return; }
-        const reply = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('\n').trim() || 'Sorry, no response. Try again!';
+        const data = await resp.json();
+        const reply = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('\n').trim() || '⚽ No response. Try again!';
         addChatMsg('bot', reply);
-    } catch(err) { document.getElementById('chat-typing')?.remove(); addChatMsg('bot', '❌ Connection error. Check your Gemini API key.'); }
+        // Save exchange to history for context in the next message
+        chatHistory.push({ role: 'user',  parts: [{ text: msg   }] });
+        chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+    } catch(err) { document.getElementById('chat-typing')?.remove(); addChatMsg('bot', '❌ Connection error. Check your internet connection.'); }
 }
 
 // Legal Modals
