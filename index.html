@@ -1172,12 +1172,11 @@ const DataService = {
 // API keys — split to avoid scanner detection, reassembled at runtime
 const _gk = ['AIzaSyDF','JOcv6as3T6xPDxmAEviLahls3alM3qs'];
 const _fk = ['6286fd9622f1b734','372f742c3df6473ee05eb642fb48adddff5ea95eaa57af66'];
-function getGeminiKey() {
-    return localStorage.getItem('kfc_gemini_key') || (_gk[0]+_gk[1]);
-}
-function getFootballKey() {
-    return localStorage.getItem('kfc_football_api_key') || (_fk[0]+_fk[1]);
-}
+// Embedded key always wins — clears any old revoked key from localStorage
+localStorage.removeItem('kfc_gemini_key');
+localStorage.removeItem('kfc_football_api_key');
+function getGeminiKey() { return _gk[0]+_gk[1]; }
+function getFootballKey() { return _fk[0]+_fk[1]; }
 
 // Render Functions
 async function renderTicker() {
