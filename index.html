@@ -1520,10 +1520,15 @@ async function fetchLiveNews(force) {
             try {
                 const res = await _fetchWithTimeout(proxy(feedUrl), 7000);
                 if (!res.ok) continue;
-                const data = await res.json();
-                // allorigins wraps in {contents:...}, corsproxy returns raw text
-                const text = data?.contents || (typeof data === 'string' ? data : null);
-                if (text) return text;
+                const raw = await res.text();
+                if (!raw || raw.length < 100) continue;
+                // allorigins returns JSON: {"contents":"<xml...>"}
+                // corsproxy + codetabs return raw XML directly
+                let text = raw;
+                if (raw.trimStart().startsWith('{')) {
+                    try { text = JSON.parse(raw)?.contents || raw; } catch(e) {}
+                }
+                if (text && text.includes('<item>')) return text;
             } catch(e) { continue; }
         }
         return null;
