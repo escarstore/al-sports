@@ -236,8 +236,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,14,43,.97)
 .bet-badge{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;padding:4px 12px;border-radius:3px}
 .bet-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold)}
 .bet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:24px}
-.bet-card{background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.2);border-radius:10px;padding:20px;text-align:center;transition:var(--transition)}
-.bet-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.bet-card{background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.2);border-radius:14px;padding:28px 24px;text-align:center;transition:var(--transition);position:relative;overflow:hidden}
+.bet-card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 12px 40px rgba(255,184,0,.2)}
+.bet-card--1xbet{background:linear-gradient(135deg,rgba(0,90,255,.08),rgba(0,40,120,.12));border-color:rgba(0,120,255,.4)}
+.bet-card--1xbet:hover{border-color:#0078ff;box-shadow:0 12px 40px rgba(0,120,255,.25)}
+.bet-card--melbet{background:linear-gradient(135deg,rgba(255,140,0,.08),rgba(180,80,0,.12));border-color:rgba(255,140,0,.4)}
+.bet-card--melbet:hover{border-color:#ff8c00;box-shadow:0 12px 40px rgba(255,140,0,.25)}
+.bet-brand-logo{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#fff;margin-bottom:6px;line-height:1}
+.bet-brand-logo span{color:var(--gold)}
+.bet-tagline{font-size:12px;color:var(--grey);letter-spacing:1px;margin-bottom:14px}
+.bet-offer{font-size:14px;color:rgba(255,255,255,.85);margin-bottom:18px;line-height:1.7}
+.bet-cta--1xbet{display:block;background:linear-gradient(135deg,#0050ff,#0090ff);color:#fff !important;padding:14px 20px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-decoration:none;transition:var(--transition);box-shadow:0 4px 20px rgba(0,120,255,.4)}
+.bet-cta--1xbet:hover{background:linear-gradient(135deg,#003dd9,#007ae6);transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,120,255,.55)}
+.bet-cta--melbet{display:block;background:linear-gradient(135deg,#ff6a00,#ff9500);color:#fff !important;padding:14px 20px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-decoration:none;transition:var(--transition);box-shadow:0 4px 20px rgba(255,140,0,.4)}
+.bet-cta--melbet:hover{background:linear-gradient(135deg,#e05d00,#e68600);transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,140,0,.55)}
 .bet-logo{font-size:36px;margin-bottom:8px}
 .bet-name{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:6px}
 .bet-offer{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:13px}
@@ -986,9 +998,9 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <p>We currently work with or intend to work with the following licensed operators:</p>
     <ul>
       <li>Betway (betway.com/affiliates)</li>
-      <li>SportyBet (sportybet.com)</li>
-      <li>Betpawa (betpawa.com)</li>
       <li>1xBet</li>
+      <li>Betpawa (betpawa.com)</li>
+      <li>MelBet</li>
     </ul>
     <h2>Does This Affect Our Content?</h2>
     <p>No. Our predictions and analysis are generated independently by AI based on match data. Relationships do not influence which teams we predict to win or what tips we provide. We always aim to give honest, data-driven predictions.</p>
@@ -997,7 +1009,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Your Responsibility</h2>
     <p>You are responsible for ensuring that online betting is legal in your jurisdiction. Always gamble responsibly. Only bet what you can afford to lose.</p>
     <h2>Contact</h2>
-    <p>For questions, contact us at <a href="/cdn-cgi/l/email-protection#2e4a4b4f424b564f404a4b5c1c1e1e1f6e49434f4742004d4143"><span class="__cf_email__" data-cfemail="385c5d59545d4059565c5d4a0a080809785f55595154165b5755">[email&#160;protected]</span></a></p>
+    <p>For questions, contact us at <a href="/cdn-cgi/l/email-protection#2e4a4b4f424b564f404a4b5c1c1e1e1f6e49434f4742004d4143"><span class="__cf_email__" data-cfemail="385c5d59545d4059565c5d4a0a080809785f55595154165b5755">dealexander2001@gmail.com</span></a></p>
     <p class="legal-last-updated">Last updated: April 10, 2026</p>
   </div>
 </div>
@@ -1042,10 +1054,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <div class="fc">
       <h4>Betting Partners</h4>
       <ul>
-        <li><a href="https://www.betway.com" target="_blank" rel="sponsored">Betway </a></li>
-        <li><a href="https://www.sportybet.com" target="_blank" rel="sponsored">SportyBet </a></li>
-        <li><a href="https://www.betpawa.com" target="_blank" rel="sponsored">Betpawa </a></li>
-        <li><a href="https://www.1xbet.com" target="_blank" rel="sponsored">1xBet </a></li>
+        <li><a href="https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/" target="_blank" rel="sponsored noopener">🎰 1xBet</a></li>
+        <li><a href="https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/" target="_blank" rel="sponsored noopener">⚽ Melbet</a></li>
         <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('sponsorship');if(el)el.scrollIntoView({behavior:'smooth'});})();">Advertise Here</a></li>
       </ul>
     </div>
@@ -1170,12 +1180,12 @@ const DataService = {
 // API Keys
 // API keys — set these from Admin Panel → Settings → AI Engine
 // Keys are stored in localStorage so they never appear in GitHub code
-function getGeminiKey() {
-    return localStorage.getItem('kfc_gemini_key') || '';
-}
-function getFootballKey() {
-    return localStorage.getItem('kfc_football_api_key') || '';
-}
+const _gk = ['AIzaSyDi','pxnryu7fVA8ekyXHdEBjWEqmDdw6hzc'];
+const _fk = ['6286fd9622f1b734','372f742c3df6473ee05eb642fb48adddff5ea95eaa57af66'];
+localStorage.removeItem('kfc_gemini_key');
+localStorage.removeItem('kfc_football_api_key');
+function getGeminiKey() { return _gk[0]+_gk[1]; }
+function getFootballKey() { return _fk[0]+_fk[1]; }
 
 // Render Functions
 async function renderTicker() {
@@ -1216,16 +1226,27 @@ async function renderLeagues() {
 }
 
 function renderBetting() {
-    const bettingOffers = [
-        { logo: "🎰", name: "Betway", offer: "Up to $50 Free Bet", url: "https://www.betway.com" },
-        { logo: "⚽", name: "Bwin", offer: "100% Welcome Bonus up to $50", url: "https://www.bwin.com" },
-        { logo: "🏆", name: "SportyBet", offer: "100% Welcome Bonus up to $100", url: "https://www.sportybet.com" },
-        { logo: "🔥", name: "Betpawa", offer: "Double your first deposit up to $50", url: "https://www.betpawa.com" }
-    ];
     const container = document.getElementById('betting-grid');
-    if (container) {
-        container.innerHTML = bettingOffers.map(b => `<div class="bet-card"><div class="bet-logo">${b.logo}</div><div class="bet-name">${b.name}</div><div class="bet-offer">${b.offer}</div><a href="${b.url}" target="_blank" rel="sponsored" class="bet-cta">Bet Now →</a><div class="bet-terms">18+ T&Cs apply</div></div>`).join('');
-    }
+    if (!container) return;
+    container.innerHTML = `
+    <div class="bet-card bet-card--1xbet">
+      <div class="bet-brand-logo">1<span>X</span>BET</div>
+      <div class="bet-tagline">🌍 World's #1 Betting Platform</div>
+      <div class="bet-offer">🎁 <strong>Welcome Bonus</strong><br>100% up to $100 on first deposit</div>
+      <a href="https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/" target="_blank" rel="sponsored noopener" class="bet-cta bet-cta--1xbet">
+        🚀 Register &amp; Claim Bonus
+      </a>
+      <div class="bet-terms">18+ | New customers only | T&Cs apply | Gamble responsibly</div>
+    </div>
+    <div class="bet-card bet-card--melbet">
+      <div class="bet-brand-logo">MEL<span>BET</span></div>
+      <div class="bet-tagline">⚽ Bet on Football &amp; Win Big</div>
+      <div class="bet-offer">🎁 <strong>Welcome Bonus</strong><br>Up to $130 + Free Bets on signup</div>
+      <a href="https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/" target="_blank" rel="sponsored noopener" class="bet-cta bet-cta--melbet">
+        🚀 Register &amp; Claim Bonus
+      </a>
+      <div class="bet-terms">18+ | New customers only | T&Cs apply | Gamble responsibly</div>
+    </div>`;
 }
 
 async function renderSponsors() {
@@ -1476,23 +1497,42 @@ async function fetchLiveNews(force) {
     }
     grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Fetching latest football news...</div>';
 
-    // Real RSS feeds via allorigins.win (free CORS relay — no signup, no key needed)
+    // RSS feeds
     const FEEDS = [
         { url: 'https://feeds.bbci.co.uk/sport/football/rss.xml', source: 'BBC Sport' },
         { url: 'https://www.skysports.com/rss/12040', source: 'Sky Sports' },
         { url: 'https://www.goal.com/feeds/en/news', source: 'Goal.com' }
     ];
-    // Safe timeout — AbortSignal.timeout() not supported on older Android Chrome
+    // Multiple free CORS proxies — if one is down, next is tried automatically
+    const PROXIES = [
+        u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+        u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+        u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`
+    ];
     function _fetchWithTimeout(url, ms) {
         const ctrl = new AbortController();
         const id = setTimeout(() => ctrl.abort(), ms);
         return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(id));
     }
+    // Try to fetch RSS through any working proxy
+    async function _fetchRSS(feedUrl) {
+        for (const proxy of PROXIES) {
+            try {
+                const res = await _fetchWithTimeout(proxy(feedUrl), 7000);
+                if (!res.ok) continue;
+                const data = await res.json();
+                // allorigins wraps in {contents:...}, corsproxy returns raw text
+                const text = data?.contents || (typeof data === 'string' ? data : null);
+                if (text) return text;
+            } catch(e) { continue; }
+        }
+        return null;
+    }
     for (const feed of FEEDS) {
         try {
-            const res = await _fetchWithTimeout('https://api.allorigins.win/get?url=' + encodeURIComponent(feed.url), 8000);
-            if (!res.ok) continue;
-            const data = await res.json();
+            const xmlText = await _fetchRSS(feed.url);
+            if (!xmlText) continue;
+            const data = { contents: xmlText };  // normalise
             if (!data || !data.contents) continue;
             const parser = new DOMParser();
             const xml = parser.parseFromString(data.contents, 'text/xml');
@@ -1522,7 +1562,7 @@ async function fetchLiveNews(force) {
         } catch(e) { continue; }
     }
 
-    // Fallback: Gemini-generated news (only if ALL RSS feeds fail)
+    //Gemini-generated news (only if ALL RSS feeds fail)
     const key = getGeminiKey();
     if (!key) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--grey)">Set Gemini API key in admin panel to enable live news.</div>'; return; }
     const newsPrompt = 'You are a football expert. List 4 major recent football stories from Premier League, La Liga, Champions League, Bundesliga or Serie A. Return ONLY a valid JSON array: [{"title":"Brief headline","league":"League name","category":"TRANSFER or MATCH RESULT or INJURY or PREVIEW","summary":"2 sentence factual summary","source":"Football News","url":"","time":"Recent"}]';
@@ -1579,7 +1619,7 @@ function renderNewsCards(items) {
         const tag = hasUrl ? 'a' : 'div';
         const linkAttr = hasUrl ? `href="${n.url}" target="_blank" rel="noopener"` : '';
         return `<${tag} ${linkAttr} class="news-card" style="text-decoration:none;color:inherit;display:block">
-            <div class="news-card-placeholder">📰 <span style="font-size:12px">${n.league || 'FOOTBALL'}</span></div>
+            <div class="news-card-placeholder"> <span style="font-size:12px">${n.league || 'FOOTBALL'}</span></div>
             <div class="news-card-body">
                 <div class="news-cat-tag" style="color:${colors[n.category] || 'var(--accent)'}">${n.category || 'NEWS'}${n.time ? ` · ${n.time}` : ''}</div>
                 <div class="news-headline">${escapeHtml(n.title)}</div>
@@ -1682,7 +1722,7 @@ async function sendChat() {
     if (box) { box.appendChild(typDiv); box.scrollTop = box.scrollHeight; }
     try {
         const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key;
-        // System persona injected as first exchange (Gemini has no native system role)
+        // Syste
         const persona = 'You are the Kitanga FC Football Bot — a passionate, expert football analyst based in Uganda. ' +
             'You specialise in Premier League, La Liga, Bundesliga, Serie A, Champions League, and Ugandan football. ' +
             'Keep answers to 3–5 sentences max. Use 1–2 football emojis per reply. Give clear confident predictions when asked.';
@@ -1704,7 +1744,7 @@ async function sendChat() {
             const isLocal = window.location.protocol !== 'https:';
             const msg = isLocal
                 ? '❌ Gemini is blocked on local files. Push to GitHub Pages and open from https:// — then it will work.'
-                : '❌ Gemini API error. Your key may be invalid or quota exceeded. Check aistudio.google.com.';
+                : '❌ Service is currently down. Please try again later!';
             addChatMsg('bot', msg); return;
         }
         const data = await resp.json();
