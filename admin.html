@@ -223,10 +223,10 @@ body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);m
       <div class="page active" id="page-dashboard">
         <div id="ai-status-bar" style="background:rgba(0,194,255,.06);border:1px solid rgba(0,194,255,.15);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
             <span style="font-size:12px;font-weight:700;color:var(--accent)">AI Status:</span>
-            <span id="dash-gemini-status" style="font-size:12px;color:var(--grey)">Checking Gemini...</span>
+            <span id="dash-backend-status" style="font-size:12px;color:var(--grey)">Checking backend...</span>
             <span style="color:rgba(255,255,255,.2)">|</span>
             <span id="dash-football-status" style="font-size:12px;color:var(--grey)">Checking API-Football...</span>
-            <button class="btn btn-grey btn-sm" style="margin-left:auto" onclick="goTo('settings')">⚙️ Manage Keys</button>
+            <button class="btn btn-grey btn-sm" style="margin-left:auto" onclick="goTo('settings')">⚙️ Manage Settings</button>
           </div>
           <div class="stats-row">
           <div class="stat-card"><div class="stat-num" id="stat-players">0</div><div class="stat-label">Players</div></div>
@@ -365,21 +365,34 @@ body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);m
         <div class="field"><label>Home Ground</label><input id="club-ground" value="Kitanga Community Stadium"/></div>
         <div class="field"><label>Email</label><input id="club-email" value="info@kitangafc.com"/></div></div>
         <button class="btn btn-accent" onclick="saveClubInfo()">Save Club Info</button></div></div>
-        <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🤖 AI Engine — Gemini API Key</div></div>
-        <div class="sec-body">
-          <p style="font-size:13px;color:var(--grey);margin-bottom:14px">This key powers the Football Bot, Live News and AI Predictions on the public site. Stored securely in this browser — visitors never see it.</p>
-          <div class="field" style="max-width:480px"><label>Gemini API Key</label>
-            <div style="display:flex;gap:8px">
-              <input id="gemini-key-input" type="password" placeholder="AIza..." style="flex:1" autocomplete="off"/>
-              <button class="btn btn-accent" onclick="saveGeminiKey()">💾 Save</button>
+
+        <!-- BACKEND URL CONFIG — replaces Gemini key (key now lives securely on server) -->
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-head-title">🤖 AI Backend — OpenAI (Node.js Server)</div></div>
+          <div class="sec-body">
+            <div style="background:rgba(0,194,255,.07);border:1px solid rgba(0,194,255,.2);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.7">
+              <strong style="color:var(--accent)">🔒 How It Works:</strong> Your OpenAI key is stored in a <code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:3px">.env</code> file on your Node.js server — visitors never see it. This admin panel just needs to know your server's public URL.<br>
+              Deploy the backend on <a href="https://render.com" target="_blank" style="color:var(--accent)">Render.com</a> (free tier) then paste the URL below.
             </div>
-            <div style="font-size:11px;color:var(--grey);margin-top:6px">Free key: <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent)">aistudio.google.com/apikey</a></div>
+            <div class="field" style="max-width:520px;margin-bottom:12px">
+              <label>Backend Server URL</label>
+              <div style="display:flex;gap:8px">
+                <input id="backend-url-input" type="url" placeholder="https://kitanga-backend.onrender.com" style="flex:1" autocomplete="off"/>
+                <button class="btn btn-accent" onclick="saveBackendUrl()">💾 Save</button>
+              </div>
+              <div style="font-size:11px;color:var(--grey);margin-top:6px">No trailing slash. Must be https://</div>
+            </div>
+            <button class="btn btn-grey" onclick="testBackendConnection()" style="margin-bottom:10px">🔌 Test Connection</button>
+            <div style="margin-top:8px;font-size:12px" id="backend-url-status"></div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--grey)">
+              <strong style="color:var(--white)">After deploying your backend, also update</strong> <code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:3px">BACKEND_URL</code> in <code style="background:rgba(255,255,255,.1);padding:1px 5px;border-radius:3px">index.html</code> line ~1751 to the same URL.
+            </div>
           </div>
-          <div style="margin-top:10px;font-size:12px" id="gemini-key-status"></div>
-        </div></div>
+        </div>
+
         <div class="sec-card"><div class="sec-head"><div class="sec-head-title">⚽ API-Football Key (Live Scores)</div></div>
         <div class="sec-body">
-          <p style="font-size:13px;color:var(--grey);margin-bottom:14px">Free key from RapidAPI for real live scores and fixtures (100 calls/day free).</p>
+          <p style="font-size:13px;color:var(--grey);margin-bottom:14px">Free key from RapidAPI for real live scores and fixtures (100 calls/day free). Still used directly from the browser for the scores widget.</p>
           <div class="field" style="max-width:480px"><label>RapidAPI Key</label>
             <div style="display:flex;gap:8px">
               <input id="football-api-key-input" type="password" placeholder="Paste RapidAPI key..." style="flex:1" autocomplete="off"/>
@@ -389,6 +402,7 @@ body{font-family:'Barlow',sans-serif;background:var(--dark);color:var(--white);m
           </div>
           <div style="margin-top:10px;font-size:12px" id="football-key-status"></div>
         </div></div>
+
         <div class="sec-card"><div class="sec-head"><div class="sec-head-title" style="color:var(--red)">⚠️ Danger Zone</div></div>
         <div class="sec-body"><button class="btn btn-red" onclick="clearData('players')">Clear All Players</button>
         <button class="btn btn-red" onclick="clearData('fixtures')">Clear All Fixtures</button>
@@ -1203,13 +1217,34 @@ async function removeTickerMessage(idx) {
 }
 
 // Settings & Stats
-function saveGeminiKey() {
-    const key = document.getElementById('gemini-key-input')?.value.trim();
-    if (!key || key.length < 10) { toast('Please enter a valid Gemini key (starts with AIza)', true); return; }
-    localStorage.setItem('kfc_gemini_key', key);
-    document.getElementById('gemini-key-input').value = '';
-    document.getElementById('gemini-key-status').innerHTML = '<span style="color:var(--green)">✅ Gemini key saved! Visitors will now get live AI features.</span>';
-    toast('✅ Gemini key saved!');
+function saveBackendUrl() {
+    const url = document.getElementById('backend-url-input')?.value.trim().replace(/\/$/, '');
+    if (!url || !url.startsWith('http')) { toast('Please enter a valid URL (must start with https://)', true); return; }
+    localStorage.setItem('kfc_backend_url', url);
+    document.getElementById('backend-url-input').value = '';
+    document.getElementById('backend-url-status').innerHTML = `<span style="color:var(--green)">✅ Backend URL saved: ${url}</span><br><span style="color:var(--grey);font-size:11px">Now click "Test Connection" to verify it's live, then update BACKEND_URL in index.html.</span>`;
+    toast('✅ Backend URL saved!');
+    updateStats();
+}
+async function testBackendConnection() {
+    const url = localStorage.getItem('kfc_backend_url');
+    const statusEl = document.getElementById('backend-url-status');
+    if (!url) { toast('Save a backend URL first', true); return; }
+    statusEl.innerHTML = '<span style="color:var(--grey)">⏳ Testing connection...</span>';
+    try {
+        const resp = await fetch(`${url}/health`, { signal: AbortSignal.timeout(8000) });
+        if (resp.ok) {
+            const data = await resp.json();
+            statusEl.innerHTML = `<span style="color:var(--green)">✅ Backend is live! Server time: ${data.timestamp}</span>`;
+            toast('✅ Backend connected!');
+        } else {
+            statusEl.innerHTML = `<span style="color:var(--red)">❌ Server responded with status ${resp.status}. Check your Render deployment logs.</span>`;
+            toast('❌ Backend returned an error', true);
+        }
+    } catch(err) {
+        statusEl.innerHTML = `<span style="color:var(--red)">❌ Could not reach ${url}. Is the server running? Error: ${err.message}</span>`;
+        toast('❌ Connection failed', true);
+    }
 }
 function saveFootballKey() {
     const key = document.getElementById('football-api-key-input')?.value.trim();
@@ -1220,12 +1255,16 @@ function saveFootballKey() {
     toast('✅ API-Football key saved!');
 }
 function loadSettingsKeys() {
-    const gKey = localStorage.getItem('kfc_gemini_key');
+    const backendUrl = localStorage.getItem('kfc_backend_url');
     const fKey = localStorage.getItem('kfc_football_api_key');
-    const gStatus = document.getElementById('gemini-key-status');
+    const bStatus = document.getElementById('backend-url-status');
     const fStatus = document.getElementById('football-key-status');
-    if (gStatus) gStatus.innerHTML = gKey ? '<span style="color:var(--green)">✅ Gemini key set (' + gKey.slice(0,8) + '...)</span>' : '<span style="color:var(--grey)">Not set yet</span>';
-    if (fStatus) fStatus.innerHTML = fKey ? '<span style="color:var(--green)">✅ API-Football key set</span>' : '<span style="color:var(--grey)">Not set yet</span>';
+    if (bStatus) bStatus.innerHTML = backendUrl
+        ? `<span style="color:var(--green)">✅ Backend URL set: ${backendUrl}</span>`
+        : '<span style="color:var(--grey)">Not set yet. Deploy backend and paste URL above.</span>';
+    if (fStatus) fStatus.innerHTML = fKey
+        ? '<span style="color:var(--green)">✅ API-Football key set</span>'
+        : '<span style="color:var(--grey)">Not set yet</span>';
 }
 async function saveClubInfo() { toast('✅ Club info saved'); }
 function loadClubInfo() { }
@@ -1243,12 +1282,16 @@ async function updateStats() {
     document.getElementById('stat-sponsors').textContent = sponsors.length; 
     document.getElementById('stat-ads').textContent = ads.filter(a => a.status === 'Active').length; 
     document.getElementById('stat-inquiries').textContent = inquiries.length;
-    const gKey = localStorage.getItem('kfc_gemini_key');
+    const backendUrl = localStorage.getItem('kfc_backend_url');
     const fKey = localStorage.getItem('kfc_football_api_key');
-    const gs = document.getElementById('dash-gemini-status');
+    const bs = document.getElementById('dash-backend-status');
     const fs = document.getElementById('dash-football-status');
-    if (gs) gs.innerHTML = gKey ? '<span style="color:var(--green)">✅ Gemini AI active</span>' : '<span style="color:var(--red)">❌ Gemini not set — go to Settings</span>';
-    if (fs) fs.innerHTML = fKey ? '<span style="color:var(--green)">✅ API-Football active</span>' : '<span style="color:var(--gold)">⚠️ API-Football not set (optional)</span>'; 
+    if (bs) bs.innerHTML = backendUrl
+        ? '<span style="color:var(--green)">✅ OpenAI Backend configured</span>'
+        : '<span style="color:var(--red)">❌ Backend URL not set — go to Settings</span>';
+    if (fs) fs.innerHTML = fKey
+        ? '<span style="color:var(--green)">✅ API-Football active</span>'
+        : '<span style="color:var(--gold)">⚠️ API-Football not set (optional)</span>'; 
 }
 async function loadAllData() {
     const sections = [
