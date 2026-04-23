@@ -683,14 +683,14 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 
   <!-- ── CUSTOM PREDICTION GENERATOR ─────────────────────────── -->
   <div class="pred-gen-wrap">
-    <div class="pred-gen-title">⚡ Custom Match Predictor</div>
+    <div class="pred-gen-title"> Custom Match Predictor</div>
     <div class="pred-gen-sub">Enter any two teams — our AI fetches live form data and generates a full analysis</div>
     <div class="pred-gen-row">
-      <input class="fi" id="pred-home-input" placeholder="🏠 Home Team (e.g. Arsenal)" maxlength="60" autocomplete="off">
+      <input class="fi" id="pred-home-input" placeholder="  Home Team (e.g. Arsenal)" maxlength="60" autocomplete="off">
       <div class="vs-divider">VS</div>
-      <input class="fi" id="pred-away-input" placeholder="✈️ Away Team (e.g. Chelsea)" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')getPrediction()">
+      <input class="fi" id="pred-away-input" placeholder="  Away Team (e.g. Chelsea)" maxlength="60" autocomplete="off" onkeydown="if(event.key==='Enter')getPrediction()">
       <button class="pred-gen-btn" id="pred-gen-btn" onclick="getPrediction()">
-        <span id="pred-btn-icon">🔮</span> <span id="pred-btn-text">Predict</span>
+        <span id="pred-btn-icon"></span> <span id="pred-btn-text">Predict</span>
       </button>
     </div>
     <div class="pred-gen-result" id="pred-gen-result"></div>
@@ -957,7 +957,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
-    <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">[email&#160;protected]</a></p>
+    <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
   </div>
 </div>
 
@@ -1280,7 +1280,7 @@ async function renderLeagues() {
     if (!leagues||!leagues.length) leagues = leaguesData;
     container.innerHTML = leagues.map(l => {
         const tUrl=l.tableUrl||l.table_url||'#';
-        return `<div class="lhc"><div class="lh-head"><div class="lh-flag">${l.flag||'🌍'}</div><div><div class="lh-name">${l.name}</div><div class="lh-sub">${l.country}</div></div></div><div class="lh-foot"><a href="${l.url}" target="_blank" class="wbf">▶ Watch / Full Scores</a><a href="${tUrl}" target="_blank" class="tbtn">📊 View Table</a></div></div>`;
+        return `<div class="lhc"><div class="lh-head"><div class="lh-flag">${l.flag||'🌍'}</div><div><div class="lh-name">${l.name}</div><div class="lh-sub">${l.country}</div></div></div><div class="lh-foot"><a href="${l.url}" target="_blank" class="wbf">▶ Watch / Full Scores</a><a href="${tUrl}" target="_blank" class="tbtn"> View Table</a></div></div>`;
     }).join('');
 }
 
@@ -1332,7 +1332,7 @@ async function renderTopAd() {
     if (activeTopAd.type === 'image' && activeTopAd.image_url) {
         html = `<a href="${activeTopAd.link_url || '#'}" target="_blank"><img src="${activeTopAd.image_url}" alt="${activeTopAd.title}"></a>`;
     } else if (activeTopAd.code) { html = activeTopAd.code; }
-    if (activeTopAd.description) html += `<div class="ad-desc"><span class="ad-desc-inner">📢 ${activeTopAd.description}</span></div>`;
+    if (activeTopAd.description) html += `<div class="ad-desc"><span class="ad-desc-inner"> ${activeTopAd.description}</span></div>`;
     container.innerHTML = html;
 }
 
@@ -1365,7 +1365,7 @@ async function renderNextMatch() {
     const matchDate = new Date(next.date + 'T' + (next.time || '15:00'));
     const homeInit = next.home.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
     const awayInit = next.away.split(' ').map(w => w[0]).join('').slice(0, 3).toUpperCase();
-    card.innerHTML = `<div class="match-team"><div class="mt-crest">${homeInit}</div><div class="mt-name">${next.home}</div></div><div class="match-vs"><div class="match-info">📅 ${matchDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div><div class="vs-text">VS</div><div class="match-detail">⏰ ${next.time || 'TBD'} · 📍 ${next.venue || 'TBD'}</div><div class="countdown" id="cd"><div class="cd-u"><span class="cd-n" id="cd-d">—</span><div class="cd-l">Days</div></div><div class="cd-u"><span class="cd-n" id="cd-h">—</span><div class="cd-l">Hrs</div></div><div class="cd-u"><span class="cd-n" id="cd-m">—</span><div class="cd-l">Mins</div></div><div class="cd-u"><span class="cd-n" id="cd-s">—</span><div class="cd-l">Secs</div></div></div></div><div class="match-team"><div class="mt-crest">${awayInit}</div><div class="mt-name">${next.away}</div></div>`;
+    card.innerHTML = `<div class="match-team"><div class="mt-crest">${homeInit}</div><div class="mt-name">${next.home}</div></div><div class="match-vs"><div class="match-info"> ${matchDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div><div class="vs-text">VS</div><div class="match-detail"> ${next.time || 'TBD'} ·  ${next.venue || 'TBD'}</div><div class="countdown" id="cd"><div class="cd-u"><span class="cd-n" id="cd-d">—</span><div class="cd-l">Days</div></div><div class="cd-u"><span class="cd-n" id="cd-h">—</span><div class="cd-l">Hrs</div></div><div class="cd-u"><span class="cd-n" id="cd-m">—</span><div class="cd-l">Mins</div></div><div class="cd-u"><span class="cd-n" id="cd-s">—</span><div class="cd-l">Secs</div></div></div></div><div class="match-team"><div class="mt-crest">${awayInit}</div><div class="mt-name">${next.away}</div></div>`;
     function tick() { const diff = matchDate - new Date(); if (diff > 0) { const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000); ['cd-d', 'cd-h', 'cd-m', 'cd-s'].forEach((id, i) => { const el = document.getElementById(id); if (el) el.textContent = String([d, h, m, s][i]).padStart(2, '0'); }); } }
     tick(); setInterval(tick, 1000);
 }
@@ -1427,8 +1427,8 @@ async function renderFormationDisplay() {
     }
     const container = document.getElementById('formation-display-container');
     let html = '';
-    if (showHome) html += `<div class="formation-box"><div class="formation-box-title">🏠 HOME (${formation.home?.formation_name || '4-3-3'})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.home)}</div></div></div>`;
-    if (showAway) html += `<div class="formation-box"><div class="formation-box-title">✈️ AWAY (${formation.away?.formation_name || '4-4-2'})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.away)}</div></div></div>`;
+    if (showHome) html += `<div class="formation-box"><div class="formation-box-title"> HOME (${formation.home?.formation_name || '4-3-3'})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.home)}</div></div></div>`;
+    if (showAway) html += `<div class="formation-box"><div class="formation-box-title">️ AWAY (${formation.away?.formation_name || '4-4-2'})</div><div class="formation-pitch-display"><div class="formation-rows">${buildSide(formation.away)}</div></div></div>`;
     container.innerHTML = html;
 }
 
