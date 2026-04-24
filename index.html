@@ -1237,13 +1237,8 @@ const DataService = {
 };
 
 // API Keys
-// API keys — set these from Admin Panel → Settings → AI Engine
-// Keys are stored in localStorage so they never appear in GitHub code
-const _gk = ['AIzaSyDi','pxnryu7fVA8ekyXHdEBjWEqmDdw6hzc'];
+// API keys — Football API used directly for live scores widget
 const _fk = ['6286fd9622f1b734','372f742c3df6473ee05eb642fb48adddff5ea95eaa57af66'];
-localStorage.removeItem('kfc_gemini_key');
-localStorage.removeItem('kfc_football_api_key');
-function getGeminiKey() { return _gk[0]+_gk[1]; }
 function getFootballKey() { return _fk[0]+_fk[1]; }
 
 // Render Functions
@@ -1690,12 +1685,14 @@ function renderNewsCards(items) {
 async function fetchAIPredictions() {
     const grid = document.getElementById('predictions-grid');
     if (!grid) return;
-    // 60-minute cache so we don't burn backend credits on every page load
-    const CACHE = 'kfc_preds_v4', CTIME = 'kfc_preds_ts_v4', MINS = 60;
+    const CACHE = 'kfc_preds_v5', CTIME = 'kfc_preds_ts_v5', MINS = 60;
+    const today = new Date().toISOString().slice(0, 10);
     try {
         const cached = localStorage.getItem(CACHE);
         const ts = parseInt(localStorage.getItem(CTIME) || '0');
-        if (cached && Date.now() - ts < MINS * 60000) {
+        const cachedDate = localStorage.getItem('kfc_preds_date');
+        // Only use cache if: not expired AND it was generated today
+        if (cached && Date.now() - ts < MINS * 60000 && cachedDate === today) {
             const preds = JSON.parse(cached);
             if (preds && preds.length) {
                 const BETS = [{ name:'1xBet', url:'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/', color:'#1a73e8' }, { name:'MelBet', url:'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/', color:'#e53935' }, { name:'Betpawa', url:'https://www.betpawa.com', color:'#d4a017' }, { name:'Bwin', url:'https://www.bwin.com', color:'#0077cc' }];
@@ -1704,7 +1701,6 @@ async function fetchAIPredictions() {
             }
         }
     } catch(e) {}
-
     if (!BACKEND_URL) {
         grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px">🔧</div><div>Backend not configured. Set BACKEND_URL in the script.</div></div>';
         return;
@@ -1721,11 +1717,12 @@ async function fetchAIPredictions() {
         if (!preds || !preds.length) throw new Error('No predictions returned');
         localStorage.setItem(CACHE, JSON.stringify(preds));
         localStorage.setItem(CTIME, Date.now().toString());
+        localStorage.setItem('kfc_preds_date', today);
         const BETS = [{ name:'1xBet', url:'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/', color:'#1a73e8' }, { name:'MelBet', url:'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/', color:'#e53935' }, { name:'Betpawa', url:'https://www.betpawa.com', color:'#d4a017' }, { name:'Bwin', url:'https://www.bwin.com', color:'#0077cc' }];
         grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i % BETS.length], BETS[(i+1) % BETS.length])).join('');
     } catch(err) {
         console.error('Daily predictions error:', err);
-        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Could not load predictions. <button onclick="fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:8px">Retry</button></div>`;
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Could not load predictions. <button onclick="fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:8px">⟳ Retry</button></div>`;
     }
 }
 function buildPredCard(m, hw, dr, aw, pred, analysis, conf, tip, bet1, bet2) {
@@ -2039,8 +2036,7 @@ async function fetchLiveScores(force) {
     const fetches = LEAGUE_IDS.map(lid =>
         fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&season=${season}&date=${today}`, {
             headers: {
-                'x-rapidapi-host': 'v3.football.api-sports.io',
-                'x-rapidapi-key': key
+                'x-apisports-key': key
             }
         })
         .then(r => r.ok ? r.json() : null)
