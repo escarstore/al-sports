@@ -954,7 +954,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">dealexander2001@gmail.com</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
     <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
@@ -1685,35 +1685,61 @@ function renderNewsCards(items) {
 async function fetchAIPredictions() {
     const grid = document.getElementById('predictions-grid');
     if (!grid) return;
-    const CACHE = 'kfc_preds_v5', CTIME = 'kfc_preds_ts_v5', MINS = 60;
-    const today = new Date().toISOString().slice(0, 10);
+    const CACHE = 'kfc_preds_v6', CTIME = 'kfc_preds_ts_v6', MINS = 60;
+    const now = new Date();
+    const today = now.toISOString().slice(0, 10);
+    const nowTs = now.getTime();
+
+    const BETS = [
+        { name:'1xBet', url:'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/', color:'#1a73e8' },
+        { name:'MelBet', url:'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/', color:'#e53935' }
+    ];
+
+    function renderPreds(preds) {
+        // Filter out matches that have already been played (date is in the past)
+        const upcoming = preds.filter(p => {
+            if (!p.date) return true;
+            const matchDate = new Date(p.date + 'T23:59:00');
+            return matchDate.getTime() > nowTs;
+        });
+        if (!upcoming.length) {
+            // All predicted matches are done — clear cache and fetch fresh
+            localStorage.removeItem(CACHE);
+            localStorage.removeItem(CTIME);
+            localStorage.removeItem('kfc_preds_date');
+            return false; // signal to re-fetch
+        }
+        grid.innerHTML = upcoming.map((p, i) =>
+            buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct,
+                p.prediction, p.analysis, p.confidence, p.tip,
+                BETS[i%2], BETS[(i+1)%2])
+        ).join('');
+        return true;
+    }
+
+    // Check cache
     try {
         const cached = localStorage.getItem(CACHE);
         const ts = parseInt(localStorage.getItem(CTIME) || '0');
         const cachedDate = localStorage.getItem('kfc_preds_date');
-        // Only use cache if: not expired AND it was generated today
         if (cached && Date.now() - ts < MINS * 60000 && cachedDate === today) {
             const preds = JSON.parse(cached);
             if (preds && preds.length) {
-                const BETS = [
-                    { name:'1xBet', url:'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/', color:'#1a73e8' },
-                    { name:'MelBet', url:'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/', color:'#e53935' }
-                ];
-                grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i%2], BETS[(i+1)%2])).join('');
-                return;
+                const ok = renderPreds(preds);
+                if (ok) return; // cache still valid and has upcoming matches
+                // If ok=false, all matches done — fall through to fetch fresh
             }
         }
     } catch(e) {}
+
     if (!BACKEND_URL) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px">🔧</div><div>Backend not configured. Set BACKEND_URL in the script.</div></div>';
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)"><div style="font-size:36px;margin-bottom:12px">🔧</div><div>Backend not configured.</div></div>';
         return;
     }
+
     grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div>';
     try {
-        const resp = await fetch(`${BACKEND_URL}/api/daily-predictions`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
+        const resp = await fetch(`${BACKEND_URL}/api/daily-predictions`);
         if (!resp.ok) throw new Error('Backend error ' + resp.status);
         const data = await resp.json();
         const preds = data.predictions;
@@ -1721,15 +1747,22 @@ async function fetchAIPredictions() {
         localStorage.setItem(CACHE, JSON.stringify(preds));
         localStorage.setItem(CTIME, Date.now().toString());
         localStorage.setItem('kfc_preds_date', today);
-        const BETS = [
-            { name:'1xBet', url:'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/', color:'#1a73e8' },
-            { name:'MelBet', url:'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/', color:'#e53935' }
-        ];
-        grid.innerHTML = preds.map((p, i) => buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct, p.prediction, p.analysis, p.confidence, p.tip, BETS[i%2], BETS[(i+1)%2])).join('');
+        const ok = renderPreds(preds);
+        if (!ok) {
+            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--grey)">
+                <div style="font-size:36px;margin-bottom:12px">✅</div>
+                <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">All today's predicted matches have finished!</div>
+                <div style="font-size:13px;color:var(--grey);margin-bottom:16px">Check back tomorrow for fresh predictions.</div>
+                <button onclick="localStorage.removeItem('kfc_preds_v6');fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:10px 22px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer">🔮 Get New Predictions</button>
+            </div>`;
+        }
     } catch(err) {
         console.error('Daily predictions error:', err);
         grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--grey)">Could not load predictions. <button onclick="fetchAIPredictions()" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:8px">⟳ Retry</button></div>`;
     }
+
+    // Auto-refresh predictions every 30 minutes to catch completed matches
+    setTimeout(fetchAIPredictions, 30 * 60 * 1000);
 }
 function buildPredCard(m, hw, dr, aw, pred, analysis, conf, tip, bet1, bet2) {
     const confCol = { HIGH:'#00E676', MEDIUM:'#FFB800', LOW:'#FF3D57' };
@@ -2034,53 +2067,21 @@ async function fetchLiveScores(force) {
         return;
     }
 
-    // Fetch LIVE matches + next upcoming fixtures
-    const key2 = getFootballKey();
-
-    // Step 1: Get all currently LIVE matches across all leagues
-    const liveRes = await fetch(`https://v3.football.api-sports.io/fixtures?live=all`, {
-        headers: { 'x-apisports-key': key }
-    }).then(r => r.ok ? r.json() : null).catch(() => null);
-
-    // Step 2: Get next 3 upcoming fixtures per league
-    const fetches = LEAGUE_IDS.map(lid =>
-        fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&next=3`, {
-            headers: { 'x-apisports-key': key }
-        })
-        .then(r => r.ok ? r.json() : null)
-        .catch(() => null)
-    );
-
-    allScoreData = [];
-
-    // Add live matches first
-    if (liveRes?.response?.length) {
-        liveRes.response.forEach(fix => {
-            if (LEAGUE_IDS.includes(fix.league.id)) {
-                allScoreData.push(normalizeFixture(fix, fix.league.id));
-            }
-        });
+    // Route through backend — avoids CORS and auth issues with direct API calls
+    if (!BACKEND_URL) {
+        grid.innerHTML = '<div class="scores-empty">Backend not configured.</div>';
+        return;
     }
 
-    // Add upcoming scheduled matches (no duplicates)
-    const results = await Promise.allSettled(fetches);
-    results.forEach((res, i) => {
-        if (res.status === 'fulfilled' && res.value?.response) {
-            res.value.response.forEach(fix => {
-                if (!allScoreData.find(m => m.id === fix.fixture.id)) {
-                    allScoreData.push(normalizeFixture(fix, LEAGUE_IDS[i]));
-                }
-            });
-        }
-    });
-
-    // Sort: LIVE first → NS by kickoff time → FT last
-    allScoreData.sort((a, b) => {
-        const order = { LIVE: 0, NS: 1, FT: 2 };
-        const ao = order[a.statusGroup] ?? 3;
-        const bo = order[b.statusGroup] ?? 3;
-        return ao !== bo ? ao - bo : a.kickoffTs - b.kickoffTs;
-    });
+    try {
+        const resp = await fetch(`${BACKEND_URL}/api/scores`);
+        if (!resp.ok) throw new Error('Scores fetch failed');
+        const data = await resp.json();
+        allScoreData = data.fixtures || [];
+    } catch(e) {
+        grid.innerHTML = `<div class="scores-empty">Could not load scores. <button onclick="fetchLiveScores(true)" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px">⟳ Retry</button></div>`;
+        return;
+    }
 
     try {
         localStorage.setItem(CACHE, JSON.stringify(allScoreData));
