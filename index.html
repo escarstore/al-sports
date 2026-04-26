@@ -2072,19 +2072,31 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // Show banner after 2.5s if not dismissed before
     if (!localStorage.getItem('pwa_dismissed')) {
-        setTimeout(() => {
-            document.getElementById('pwa-banner')?.classList.add('show');
-            const li = document.getElementById('nav-install-li');
-            if (li) li.style.display = 'block';
-        }, 2500);
+        setTimeout(showPWABanner, 2500);
+    }
+});
+
+function showPWABanner() {
+    const banner = document.getElementById('pwa-banner');
+    if (banner) banner.classList.add('show');
+    const li = document.getElementById('nav-install-li');
+    if (li) li.style.display = 'block';
+}
+
+// Show banner even on browsers that don't fire beforeinstallprompt
+// so user gets the manual "Add to Home Screen" guide
+window.addEventListener('load', () => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (!isStandalone && !localStorage.getItem('pwa_dismissed')) {
+        setTimeout(showPWABanner, 3000);
     }
 });
 
 async function installPWA() {
     document.getElementById('pwa-banner')?.classList.remove('show');
     if (deferredPrompt) {
+        // Chrome/Edge — native install dialog
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
         deferredPrompt = null;
@@ -2093,8 +2105,13 @@ async function installPWA() {
             toast('🎉 AL Sports installed!', 'success');
         }
     } else {
-        // Already installed or not supported — guide user
-        toast('Tap ⋮ → "Add to Home screen" to install', 'success');
+        // Safari/others — show manual instructions
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        if (isIOS) {
+            toast('Tap Share → "Add to Home Screen"', 'success');
+        } else {
+            toast('Tap ⋮ menu → "Add to Home screen"', 'success');
+        }
     }
 }
 
@@ -2110,12 +2127,14 @@ window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
 });
 
-// Register service worker for PWA
+// Register service worker
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
-    });
+    navigator.serviceWorker.register('sw.js').catch(() => {});
 }
+
+// Clear old broken scores cache
+localStorage.removeItem('kfc_scores_v1');
+localStorage.removeItem('kfc_scores_ts_v1');
 
 init();
 
@@ -2148,11 +2167,11 @@ let scoresTimer    = null;
 let hasLiveMatches = false;
 
 async function fetchLiveScores(force) {
-    const CACHE = 'kfc_scores_v1', CTIME = 'kfc_scores_ts_v1', MINS = 5;
+    const CACHE = 'kfc_scores_v2', CTIME = 'kfc_scores_ts_v2', MINS = 2; // 2 min cache for live
     const grid = document.getElementById('scores-grid');
     if (!grid) return;
 
-    // Cache check (saves daily API quota)
+    // Use cache only for non-forced refreshes and within 2 minutes
     if (!force) {
         try {
             const cached = localStorage.getItem(CACHE);
@@ -2170,48 +2189,64 @@ async function fetchLiveScores(force) {
 
     const key = getFootballKey();
     if (!key) {
-        grid.innerHTML = '<div class="scores-empty">API-Football key not configured.</div>';
+        grid.innerHTML = '<div class="scores-empty">API key not configured.</div>';
         return;
     }
 
-    // Fetch today's fixtures for all leagues in parallel (one request each)
-    const today = new Date().toISOString().slice(0, 10);
-    // Season logic: Aug+ = this year's season, Jan-Jul = last year's season
-    const _now = new Date();
-    const season = _now.getMonth() >= 7 ? _now.getFullYear() : _now.getFullYear() - 1;
-    const fetches = LEAGUE_IDS.map(lid =>
-        fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&season=${season}&date=${today}`, {
-            headers: {
-                'x-apisports-key': key
-            }
-        })
-        .then(r => r.ok ? r.json() : null)
-        .catch(() => null)
-    );
-
-    const results = await Promise.allSettled(fetches);
-    allScoreData = [];
-
-    results.forEach((res, i) => {
-        if (res.status === 'fulfilled' && res.value?.response) {
-            res.value.response.forEach(fix => {
-                allScoreData.push(normalizeFixture(fix, LEAGUE_IDS[i]));
-            });
-        }
-    });
-
-    // Sort: LIVE first → FT → upcoming by time
-    allScoreData.sort((a, b) => {
-        const order = { LIVE: 0, FT: 1, NS: 2 };
-        const ao = order[a.statusGroup] ?? 3;
-        const bo = order[b.statusGroup] ?? 3;
-        return ao !== bo ? ao - bo : a.kickoffTs - b.kickoffTs;
-    });
-
     try {
-        localStorage.setItem(CACHE, JSON.stringify(allScoreData));
-        localStorage.setItem(CTIME, Date.now().toString());
-    } catch(e) {}
+        // Step 1: Fetch ALL currently LIVE matches (works on free plan)
+        const liveResp = await fetch('https://v3.football.api-sports.io/fixtures?live=all', {
+            headers: { 'x-apisports-key': key }
+        }).then(r => r.ok ? r.json() : { response: [] }).catch(() => ({ response: [] }));
+
+        // Step 2: Fetch next upcoming fixtures per league (works on free plan)
+        const upcomingFetches = LEAGUE_IDS.map(lid =>
+            fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&next=3`, {
+                headers: { 'x-apisports-key': key }
+            }).then(r => r.ok ? r.json() : { response: [] }).catch(() => ({ response: [] }))
+        );
+        const upcomingResults = await Promise.allSettled(upcomingFetches);
+
+        allScoreData = [];
+        const liveIds = new Set();
+
+        // Add live matches first
+        (liveResp.response || []).forEach(fix => {
+            if (LEAGUE_IDS.includes(fix.league.id)) {
+                liveIds.add(fix.fixture.id);
+                allScoreData.push(normalizeFixture(fix, fix.league.id));
+            }
+        });
+
+        // Add upcoming (no duplicates with live)
+        upcomingResults.forEach((res, i) => {
+            if (res.status === 'fulfilled' && res.value?.response) {
+                res.value.response.forEach(fix => {
+                    if (!liveIds.has(fix.fixture.id)) {
+                        allScoreData.push(normalizeFixture(fix, LEAGUE_IDS[i]));
+                    }
+                });
+            }
+        });
+
+        // Sort: LIVE first → NS by time → FT last
+        allScoreData.sort((a, b) => {
+            const order = { LIVE: 0, NS: 1, FT: 2 };
+            const ao = order[a.statusGroup] ?? 3;
+            const bo = order[b.statusGroup] ?? 3;
+            return ao !== bo ? ao - bo : a.kickoffTs - b.kickoffTs;
+        });
+
+        try {
+            localStorage.setItem(CACHE, JSON.stringify(allScoreData));
+            localStorage.setItem(CTIME, Date.now().toString());
+        } catch(e) {}
+
+    } catch(err) {
+        console.error('Live scores error:', err);
+        grid.innerHTML = `<div class="scores-empty">Could not load scores. <button onclick="fetchLiveScores(true)" style="background:var(--accent);border:none;color:var(--dark);padding:8px 16px;border-radius:5px;cursor:pointer;margin-left:8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px">⟳ Retry</button></div>`;
+        return;
+    }
 
     renderScores();
     updateLastRefresh();
