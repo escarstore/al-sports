@@ -563,7 +563,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .pred-form-section.open{display:block}
 
 /* ── FLOATING INSTALL BUTTON ────────────────────────────── */
-#pwa-fab{position:fixed;bottom:24px;right:20px;z-index:9990;display:none;flex-direction:column;align-items:center;gap:5px;cursor:pointer;animation:fabBounce 2.5s ease-in-out infinite}
+#pwa-fab{position:fixed;bottom:24px;right:20px;z-index:9990;display:none;flex-direction:column;align-items:center;gap:5px;cursor:pointer;animation:fabBounce 2.5s ease-in-out infinite;transition:bottom .3s ease}
+#pwa-fab.lifted{bottom:90px}
 #pwa-fab img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4);animation:fabPulse 2s ease-in-out infinite}
 #pwa-fab-lbl{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 8px rgba(255,184,0,.4)}
 @keyframes fabPulse{0%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4)}70%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 14px rgba(255,184,0,0)}100%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,0)}}
@@ -580,8 +581,27 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .pwa-btn-install{background:var(--gold);color:#000;border:none;padding:10px 18px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
 .pwa-btn-install:hover{opacity:.85}
 .pwa-btn-dismiss{background:rgba(255,255,255,.07);color:var(--grey);border:1px solid rgba(255,255,255,.15);padding:10px 12px;border-radius:7px;font-size:15px;cursor:pointer}
+/* STICKY BETTING BAR — for passive viewers */
+#sticky-bet-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:9989;
+  background:linear-gradient(135deg,#0a1428,#0d1f5e);
+  border-top:2px solid var(--gold);
+  padding:10px 16px;
+  display:none;
+  align-items:center;gap:12px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.5);
+  animation:slideUpBar .4s ease;
+}
+#sticky-bet-bar.show{display:flex}
+@keyframes slideUpBar{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sbb-text{flex:1;min-width:0}
+.sbb-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--white)}
+.sbb-sub{font-size:10px;color:var(--grey);margin-top:1px}
+.sbb-btns{display:flex;gap:8px;flex-shrink:0}
+.sbb-btn-1xbet{background:#1a73e8;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.sbb-btn-melbet{background:rgba(255,184,0,.12);color:var(--gold);border:1px solid rgba(255,184,0,.3);padding:8px 14px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.sbb-close{background:none;border:none;color:var(--grey);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -602,6 +622,19 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <button class="pwa-btn-install" onclick="installPWA()">📲 Install</button>
     <button class="pwa-btn-dismiss" onclick="dismissPWA()">✕</button>
   </div>
+</div>
+
+<!-- STICKY BETTING BAR — for passive viewers who don't bet -->
+<div id="sticky-bet-bar">
+  <div class="sbb-text">
+    <div class="sbb-title">🎰 Place your bet on today's predictions</div>
+    <div class="sbb-sub">18+ only · Gamble responsibly · T&Cs apply</div>
+  </div>
+  <div class="sbb-btns">
+    <a href="https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/" target="_blank" rel="sponsored noopener" class="sbb-btn-1xbet">1xBet →</a>
+    <a href="https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/" target="_blank" rel="sponsored noopener" class="sbb-btn-melbet">MelBet →</a>
+  </div>
+  <button class="sbb-close" onclick="document.getElementById('sticky-bet-bar').classList.remove('show');document.getElementById('pwa-fab')?.classList.remove('lifted');localStorage.setItem('sbb_closed','1')">✕</button>
 </div>
 <!-- PAGE LOADER -->
 <div id="page-loader">
@@ -924,7 +957,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 <section id="football-bot">
   <div class="sl">AI Powered</div>
   <div class="st">Football <span>Bot Assistant</span></div>
-  <p style="text-align:center;color:var(--grey);font-size:14px;max-width:520px;margin:0 auto 28px">Ask our AI bot anything about football — live scores, transfers, match previews, tactics, rules and more. Powered by OpenAI.</p>
+  <p style="text-align:center;color:var(--grey);font-size:14px;max-width:520px;margin:0 auto 28px">Ask our AI bot anything about football — live scores, transfers, match previews, tactics, rules and more. Powered by Gemini AI.</p>
   <div id="bot-section">
     <div class="bot-header">
       <img src="logo.png" alt="AL Sports Bot" class="bot-avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,184,0,.3)">
@@ -1034,8 +1067,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">dealexander2001@gmail.com</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
-    <h2>Changes to This Policy</h
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
     <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
   </div>
@@ -2026,7 +2059,7 @@ function buildPredCard(m, hw, dr, aw, pred, analysis, conf, tip, bet1, bet2) {
 // ══════════════════════════════════════════════════════════════
 const BACKEND_URL = 'https://kitanga-backend.onrender.com';
 
-// Chat Functions — OpenAI 
+// Chat Functions — migrated from Gemini to OpenAI via secure backend
 let chatHistory = []; // Format: [{role:'user'|'assistant', content:'...'}]
 
 function botReady() {
@@ -2249,6 +2282,9 @@ async function init() {
         navigator.serviceWorker.register('sw.js').catch(() => {});
     }
 
+    // Apply site controls set by admin panel
+    applySiteControls();
+
     await renderTicker();
     await renderLeagues();
     renderBetting();
@@ -2266,6 +2302,9 @@ async function init() {
     fetchAIPredictions();
     botReady();
     addChatMsg('bot', '👋 Hi! I\'m your AL Sports Bot. Ask me about live scores, transfers, predictions and anything football! ⚽');
+
+    // Show sticky betting bar for passive viewers after 30 seconds
+    setTimeout(showStickyBetting, 30000);
 
     // Dismiss page loader smoothly — guaranteed to fire
     const dismissLoader = () => {
@@ -2287,6 +2326,37 @@ async function init() {
         }
     });
 }
+// ── SITE CONTROLS (read from admin toggles) ───────────────────
+function applySiteControls() {
+    const controls = {
+        'predictions_visible': 'predictions',
+        'custom_pred_visible':  'custom-predictor',
+        'scores_visible':       'live-scores',
+        'betting_visible':      'betting'
+    };
+    Object.entries(controls).forEach(([key, sectionId]) => {
+        const stored = localStorage.getItem('al_ctrl_' + key);
+        if (stored === '0') {
+            const el = document.getElementById(sectionId);
+            if (el) el.style.display = 'none';
+        }
+    });
+}
+
+// Sticky betting bar — shown to passive viewers after 30 seconds
+function showStickyBetting() {
+    if (localStorage.getItem('sbb_closed') === '1') return;
+    if (localStorage.getItem('al_ctrl_betting_visible') === '0') return;
+    const bar = document.getElementById('sticky-bet-bar');
+    const fab = document.getElementById('pwa-fab');
+    if (bar) bar.classList.add('show');
+    if (fab) fab.classList.add('lifted'); // move FAB up so it doesn't overlap
+    setTimeout(() => {
+        if (bar) bar.classList.remove('show');
+        if (fab) fab.classList.remove('lifted');
+    }, 60000);
+}
+
 // ── PWA INSTALL ───────────────────────────────────────────────
 let deferredPrompt = null;
 const PWA_KEY = 'al_pwa_installed';
