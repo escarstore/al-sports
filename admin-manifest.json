@@ -1,8 +1,9 @@
 {
   "name": "AL Sports Admin",
   "short_name": "AL Admin",
-  "description": "AL Sports Admin Panel — manage your sports site",
-  "start_url": "/al-sports/admin.html",
+  "description": "AL Sports Admin Panel — Staff Access Only",
+  "start_url": "/kitanga-fc/admin.html",
+  "scope": "/kitanga-fc/",
   "display": "standalone",
   "background_color": "#060d24",
   "theme_color": "#060d24",
@@ -12,13 +13,13 @@
       "src": "admin-logo.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "admin-logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }
