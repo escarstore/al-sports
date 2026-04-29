@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
 <title>AL Sports — Admin Panel</title>
+<meta name="theme-color" content="#060d24">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AL Sports Admin">
+<link rel="manifest" href="admin-manifest.json">
+<link rel="icon" href="admin-logo.png" type="image/png">
+<link rel="apple-touch-icon" href="admin-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -276,10 +284,34 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 .ticker-message-item input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:8px;color:white}
 .upload-zone{border:2px dashed rgba(0,194,255,.25);border-radius:10px;padding:32px;text-align:center;cursor:pointer;margin-bottom:16px;transition:border-color .2s}
 .upload-zone:hover{border-color:rgba(0,194,255,.6)}
+
+/* Admin PWA FAB */
+#admin-pwa-fab{position:fixed;bottom:24px;right:20px;z-index:9990;display:none;flex-direction:column;align-items:center;gap:5px;cursor:pointer;animation:fabBounce 2.5s ease-in-out infinite}
+#admin-pwa-fab img{width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4);animation:fabPulse 2s ease-in-out infinite}
+#admin-pwa-fab span{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:10px;white-space:nowrap}
+@keyframes fabPulse{0%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4)}70%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 12px rgba(255,184,0,0)}100%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,0)}}
+@keyframes fabBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Toggle Switch */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:13px;color:var(--white)}
+.toggle-sub{font-size:11px;color:var(--grey);margin-top:2px}
+.toggle-switch{position:relative;width:48px;height:26px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:26px;cursor:pointer;transition:.3s;border:1px solid rgba(255,255,255,.15)}
+.toggle-slider:before{content:'';position:absolute;height:20px;width:20px;left:2px;bottom:2px;background:var(--grey);border-radius:50%;transition:.3s}
+.toggle-switch input:checked + .toggle-slider{background:var(--green);border-color:var(--green)}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(22px);background:#fff}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<!-- ADMIN PWA INSTALL FAB -->
+<div id="admin-pwa-fab" onclick="adminInstallPWA()">
+  <img src="admin-logo.png" alt="AL Sports Admin">
+  <span>📲 INSTALL ADMIN</span>
+</div>
 
 <!-- LOGIN SCREEN -->
 <div id="login-screen">
@@ -536,6 +568,54 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
         <div class="sec-body"><button class="btn btn-red" onclick="clearData('players')">Clear All Players</button>
         <button class="btn btn-red" onclick="clearData('fixtures')">Clear All Fixtures</button>
         <button class="btn btn-red" onclick="clearData('results')">Clear All Results</button></div></div>
+
+        <!-- SITE CONTROLS -->
+        <div class="sec-card">
+          <div class="sec-head"><div class="sec-head-title">🎛️ Site Controls</div></div>
+          <div class="sec-body">
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">AI Predictions Section</div>
+                <div class="toggle-sub">Turn off to hide all predictions from the public site</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-predictions" checked onchange="saveSiteControl('predictions_visible', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Custom Match Predictor</div>
+                <div class="toggle-sub">Allow users to predict any custom match</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-custom-pred" checked onchange="saveSiteControl('custom_pred_visible', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Live Scores Section</div>
+                <div class="toggle-sub">Show/hide live scores widget</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-scores" checked onchange="saveSiteControl('scores_visible', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Betting Offers Section</div>
+                <div class="toggle-sub">Show/hide top betting offers</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-betting" checked onchange="saveSiteControl('betting_visible', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div style="margin-top:14px;font-size:11px;color:var(--grey)">Changes take effect immediately for all visitors.</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -1523,6 +1603,61 @@ async function deleteNews(id) { await DataService.deleteItem('news', id); await 
 
 document.querySelectorAll('.modal-ov').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 checkAuth();
+
+// ── ADMIN PWA INSTALL ─────────────────────────────────────────
+let adminDeferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    adminDeferredPrompt = e;
+    if (!localStorage.getItem('admin_pwa_installed')) {
+        setTimeout(() => { const f=document.getElementById('admin-pwa-fab'); if(f) f.style.display='flex'; }, 2000);
+    }
+});
+window.addEventListener('load', () => {
+    if (!localStorage.getItem('admin_pwa_installed')) {
+        setTimeout(() => { const f=document.getElementById('admin-pwa-fab'); if(f) f.style.display='flex'; }, 3000);
+    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('admin-sw.js').catch(()=>{});
+    loadSiteControls();
+});
+async function adminInstallPWA() {
+    if (adminDeferredPrompt) {
+        adminDeferredPrompt.prompt();
+        const { outcome } = await adminDeferredPrompt.userChoice;
+        adminDeferredPrompt = null;
+        if (outcome === 'accepted') {
+            localStorage.setItem('admin_pwa_installed', '1');
+            document.getElementById('admin-pwa-fab').style.display = 'none';
+            toast('🎉 AL Sports Admin installed!');
+        }
+    } else {
+        toast('Tap ⋮ → "Add to Home screen" to install Admin');
+    }
+}
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('admin_pwa_installed','1');
+    const f=document.getElementById('admin-pwa-fab'); if(f) f.style.display='none';
+});
+
+// ── SITE CONTROLS ─────────────────────────────────────────────
+function saveSiteControl(key, value) {
+    localStorage.setItem('al_ctrl_' + key, value ? '1' : '0');
+    toast(value ? '✅ Section enabled on site' : '🔕 Section hidden from site');
+}
+function loadSiteControls() {
+    const map = {
+        'predictions_visible': 'toggle-predictions',
+        'custom_pred_visible':  'toggle-custom-pred',
+        'scores_visible':       'toggle-scores',
+        'betting_visible':      'toggle-betting'
+    };
+    Object.entries(map).forEach(([k, id]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const stored = localStorage.getItem('al_ctrl_' + k);
+        el.checked = stored === null ? true : stored === '1';
+    });
+}
 </script>
 </body>
 </html>
