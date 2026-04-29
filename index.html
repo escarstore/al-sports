@@ -563,8 +563,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .pred-form-section.open{display:block}
 
 /* ── FLOATING INSTALL BUTTON ────────────────────────────── */
-#pwa-fab{position:fixed;bottom:24px;right:20px;z-index:9990;display:none;flex-direction:column;align-items:center;gap:5px;cursor:pointer;animation:fabBounce 2.5s ease-in-out infinite;transition:bottom .3s ease}
-#pwa-fab.lifted{bottom:90px}
+#pwa-fab{position:fixed;bottom:24px;right:20px;z-index:9990;display:none;flex-direction:column;align-items:center;gap:5px;cursor:pointer;animation:fabBounce 2.5s ease-in-out infinite}
 #pwa-fab img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4);animation:fabPulse 2s ease-in-out infinite}
 #pwa-fab-lbl{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 8px rgba(255,184,0,.4)}
 @keyframes fabPulse{0%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,.4)}70%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 14px rgba(255,184,0,0)}100%{box-shadow:0 4px 20px rgba(255,184,0,.5),0 0 0 0 rgba(255,184,0,0)}}
@@ -581,27 +580,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .pwa-btn-install{background:var(--gold);color:#000;border:none;padding:10px 18px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .2s}
 .pwa-btn-install:hover{opacity:.85}
 .pwa-btn-dismiss{background:rgba(255,255,255,.07);color:var(--grey);border:1px solid rgba(255,255,255,.15);padding:10px 12px;border-radius:7px;font-size:15px;cursor:pointer}
-/* STICKY BETTING BAR — for passive viewers */
-#sticky-bet-bar{
-  position:fixed;bottom:0;left:0;right:0;z-index:9989;
-  background:linear-gradient(135deg,#0a1428,#0d1f5e);
-  border-top:2px solid var(--gold);
-  padding:10px 16px;
-  display:none;
-  align-items:center;gap:12px;
-  box-shadow:0 -4px 20px rgba(0,0,0,.5);
-  animation:slideUpBar .4s ease;
-}
-#sticky-bet-bar.show{display:flex}
-@keyframes slideUpBar{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.sbb-text{flex:1;min-width:0}
-.sbb-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--white)}
-.sbb-sub{font-size:10px;color:var(--grey);margin-top:1px}
-.sbb-btns{display:flex;gap:8px;flex-shrink:0}
-.sbb-btn-1xbet{background:#1a73e8;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.sbb-btn-melbet{background:rgba(255,184,0,.12);color:var(--gold);border:1px solid rgba(255,184,0,.3);padding:8px 14px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.sbb-close{background:none;border:none;color:var(--grey);font-size:16px;cursor:pointer;padding:4px;flex-shrink:0}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -622,19 +602,6 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <button class="pwa-btn-install" onclick="installPWA()">📲 Install</button>
     <button class="pwa-btn-dismiss" onclick="dismissPWA()">✕</button>
   </div>
-</div>
-
-<!-- STICKY BETTING BAR — for passive viewers who don't bet -->
-<div id="sticky-bet-bar">
-  <div class="sbb-text">
-    <div class="sbb-title">🎰 Place your bet on today's predictions</div>
-    <div class="sbb-sub">18+ only · Gamble responsibly · T&Cs apply</div>
-  </div>
-  <div class="sbb-btns">
-    <a href="https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/" target="_blank" rel="sponsored noopener" class="sbb-btn-1xbet">1xBet →</a>
-    <a href="https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/" target="_blank" rel="sponsored noopener" class="sbb-btn-melbet">MelBet →</a>
-  </div>
-  <button class="sbb-close" onclick="document.getElementById('sticky-bet-bar').classList.remove('show');document.getElementById('pwa-fab')?.classList.remove('lifted');localStorage.setItem('sbb_closed','1')">✕</button>
 </div>
 <!-- PAGE LOADER -->
 <div id="page-loader">
@@ -805,12 +772,6 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   <!-- ── END CUSTOM PREDICTOR ──────────────────────────────────── -->
 
   <div class="pred-grid" id="predictions-grid"><div class="pred-loading"><div class="pred-spinner"></div>Generating AI predictions...</div></div>
-  <div id="pred-more-wrap" style="text-align:center;margin-top:20px;display:none">
-    <button onclick="loadMorePredictions()" id="pred-more-btn" style="background:rgba(0,194,255,.1);border:1px solid rgba(0,194,255,.3);color:var(--accent);padding:12px 32px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;cursor:pointer;transition:all .2s">
-      ⬇ VIEW MORE PREDICTIONS
-    </button>
-  </div>
-  <div class="pred-grid" id="predictions-grid-extra" style="margin-top:16px"></div>
   <div class="affiliate-disclaimer" style="margin-top:20px">⚠️ 18+ only. AI predictions. Always gamble responsibly.</div>
 </section>
 
@@ -1067,7 +1028,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">dealexander2001@gmail.com</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
     <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
@@ -1651,7 +1612,7 @@ async function fetchLiveNews(force) {
     const grid = document.getElementById('news-grid');
     if (!grid) return;
     // 20-minute cache saves mobile data
-    const CACHE = 'kfc_news_v5', CTIME = 'kfc_news_ts_v5', MINS = 15;
+    const CACHE = 'kfc_news_v3', CTIME = 'kfc_news_ts_v3', MINS = 20;
     if (!force) {
         try {
             const cached = localStorage.getItem(CACHE);
@@ -1918,8 +1879,6 @@ async function fetchAIPredictions(force) {
     }
 }
 
-let allPredictions = []; // full list including extras
-
 function renderPredictions(preds, grid) {
     if (!preds || !preds.length) {
         grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--grey)">
@@ -1927,6 +1886,7 @@ function renderPredictions(preds, grid) {
             <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">All predicted matches have finished!</div>
             <div style="font-size:13px;color:var(--grey);margin-bottom:16px">Fetching fresh upcoming predictions...</div>
         </div>`;
+        // Auto-fetch fresh predictions after 3 seconds
         setTimeout(() => {
             localStorage.removeItem('kfc_preds_v7');
             localStorage.removeItem('kfc_preds_ts_v7');
@@ -1934,45 +1894,13 @@ function renderPredictions(preds, grid) {
         }, 3000);
         return;
     }
-
-    // Show first 4, offer more if available
-    const first4 = preds.slice(0, 4);
-    const rest = preds.slice(4);
-
-    grid.innerHTML = first4.map((p, i) =>
+    grid.innerHTML = preds.map((p, i) =>
         `<div class="pred-card" id="${p._id || 'pred_' + i}" style="transition:opacity .6s ease,transform .6s ease">` +
         buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct,
             p.prediction, p.analysis, p.confidence, p.tip,
             PRED_BETS[i%2], PRED_BETS[(i+1)%2]).replace('<div class="pred-card">', '') +
         '</div>'
     ).join('');
-
-    // Show/hide View More button
-    const moreWrap = document.getElementById('pred-more-wrap');
-    const extraGrid = document.getElementById('predictions-grid-extra');
-    if (moreWrap) moreWrap.style.display = rest.length ? 'block' : 'none';
-    if (extraGrid) extraGrid.innerHTML = '';
-    allPredictions = preds; // store full list
-}
-
-function loadMorePredictions() {
-    const extraGrid = document.getElementById('predictions-grid-extra');
-    const moreWrap = document.getElementById('pred-more-wrap');
-    const rest = allPredictions.slice(4);
-    if (!rest.length || !extraGrid) return;
-
-    extraGrid.innerHTML = rest.map((p, i) =>
-        `<div class="pred-card" id="${p._id || 'pred_extra_' + i}" style="transition:opacity .6s ease,transform .6s ease">` +
-        buildPredCard(p, p.home_win_pct, p.draw_pct, p.away_win_pct,
-            p.prediction, p.analysis, p.confidence, p.tip,
-            PRED_BETS[i%2], PRED_BETS[(i+1)%2]).replace('<div class="pred-card">', '') +
-        '</div>'
-    ).join('');
-
-    if (moreWrap) moreWrap.style.display = 'none';
-
-    // Scroll to extra grid
-    extraGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function schedulePredictionCheck() {
@@ -2282,9 +2210,6 @@ async function init() {
         navigator.serviceWorker.register('sw.js').catch(() => {});
     }
 
-    // Apply site controls set by admin panel
-    applySiteControls();
-
     await renderTicker();
     await renderLeagues();
     renderBetting();
@@ -2302,9 +2227,6 @@ async function init() {
     fetchAIPredictions();
     botReady();
     addChatMsg('bot', '👋 Hi! I\'m your AL Sports Bot. Ask me about live scores, transfers, predictions and anything football! ⚽');
-
-    // Show sticky betting bar for passive viewers after 30 seconds
-    setTimeout(showStickyBetting, 30000);
 
     // Dismiss page loader smoothly — guaranteed to fire
     const dismissLoader = () => {
@@ -2326,37 +2248,6 @@ async function init() {
         }
     });
 }
-// ── SITE CONTROLS (read from admin toggles) ───────────────────
-function applySiteControls() {
-    const controls = {
-        'predictions_visible': 'predictions',
-        'custom_pred_visible':  'custom-predictor',
-        'scores_visible':       'live-scores',
-        'betting_visible':      'betting'
-    };
-    Object.entries(controls).forEach(([key, sectionId]) => {
-        const stored = localStorage.getItem('al_ctrl_' + key);
-        if (stored === '0') {
-            const el = document.getElementById(sectionId);
-            if (el) el.style.display = 'none';
-        }
-    });
-}
-
-// Sticky betting bar — shown to passive viewers after 30 seconds
-function showStickyBetting() {
-    if (localStorage.getItem('sbb_closed') === '1') return;
-    if (localStorage.getItem('al_ctrl_betting_visible') === '0') return;
-    const bar = document.getElementById('sticky-bet-bar');
-    const fab = document.getElementById('pwa-fab');
-    if (bar) bar.classList.add('show');
-    if (fab) fab.classList.add('lifted'); // move FAB up so it doesn't overlap
-    setTimeout(() => {
-        if (bar) bar.classList.remove('show');
-        if (fab) fab.classList.remove('lifted');
-    }, 60000);
-}
-
 // ── PWA INSTALL ───────────────────────────────────────────────
 let deferredPrompt = null;
 const PWA_KEY = 'al_pwa_installed';
@@ -2537,8 +2428,6 @@ function normalizeFixture(fix, leagueId) {
     const liveStatuses = ['1H','HT','2H','ET','BT','P','SUSP','INT','LIVE'];
     const ftStatuses   = ['FT','AET','PEN'];
 
-    const kickoffTs = new Date(fix.fixture.date).getTime();
-
     if (liveStatuses.includes(s.short)) {
         statusGroup = 'LIVE';
         statusLabel = elapsed ? elapsed + "'" : 'LIVE';
@@ -2547,15 +2436,9 @@ function normalizeFixture(fix, leagueId) {
         statusLabel = 'FT';
     } else {
         statusGroup = 'NS';
-        // Dynamic: show countdown if < 60 min away, else show local time
-        const minsUntil = Math.round((kickoffTs - Date.now()) / 60000);
-        if (minsUntil > 0 && minsUntil <= 60) {
-            statusLabel = `in ${minsUntil}m`;
-        } else if (minsUntil <= 0 && minsUntil > -120) {
-            statusLabel = 'Starting...';
-        } else {
-            statusLabel = new Date(kickoffTs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
+        // Format kick-off time in local time
+        const d = new Date(fix.fixture.date);
+        statusLabel = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     return {
@@ -2570,8 +2453,7 @@ function normalizeFixture(fix, leagueId) {
         awayGoals:   fix.goals.away,
         statusGroup,
         statusLabel,
-        kickoffTs,
-        rawDate:     fix.fixture.date, // store for dynamic updates
+        kickoffTs:   new Date(fix.fixture.date).getTime(),
         venue:       fix.fixture.venue?.name || ''
     };
 }
@@ -2583,26 +2465,6 @@ function switchLeague(leagueId) {
     });
     renderScores();
 }
-
-// Update NS match countdown times every 60 seconds dynamically
-setInterval(() => {
-    allScoreData.forEach(m => {
-        if (m.statusGroup !== 'NS' || !m.rawDate) return;
-        const kickoffTs = new Date(m.rawDate).getTime();
-        const minsUntil = Math.round((kickoffTs - Date.now()) / 60000);
-        if (minsUntil > 0 && minsUntil <= 60) {
-            m.statusLabel = `in ${minsUntil}m`;
-        } else if (minsUntil <= 0 && minsUntil > -10) {
-            m.statusLabel = 'Starting...';
-            m.statusGroup = 'LIVE'; // transition to live
-        } else {
-            m.statusLabel = new Date(kickoffTs).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
-        }
-    });
-    // Re-render quietly if grid visible
-    const grid = document.getElementById('scores-grid');
-    if (grid && allScoreData.length) renderScores();
-}, 60000);
 
 function renderScores() {
     const grid = document.getElementById('scores-grid');
