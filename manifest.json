@@ -1,12 +1,15 @@
 {
-  "name": "AL Sports",
+  "name": "AL Sports — Football Predictions & Live Scores",
   "short_name": "AL Sports",
-  "description": "AI-powered football predictions, live scores & betting tips",
-  "start_url": "/al-sports/",
+  "description": "AI-powered football predictions, live scores, betting tips — free every day.",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#060d24",
+  "background_color": "#070E2B",
   "theme_color": "#0A1F6E",
   "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["sports", "news", "entertainment"],
   "icons": [
     {
       "src": "logo.png",
@@ -21,17 +24,19 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["sports", "entertainment"],
+  "screenshots": [],
   "shortcuts": [
     {
       "name": "Today's Predictions",
-      "url": "/al-sports/#predictions",
-      "description": "View today's AI football predictions"
+      "short_name": "Predictions",
+      "url": "/#predictions",
+      "icons": [{ "src": "logo.png", "sizes": "96x96" }]
     },
     {
       "name": "Live Scores",
-      "url": "/al-sports/#live-scores",
-      "description": "Check live football scores"
+      "short_name": "Scores",
+      "url": "/#live-scores",
+      "icons": [{ "src": "logo.png", "sizes": "96x96" }]
     }
   ]
 }
