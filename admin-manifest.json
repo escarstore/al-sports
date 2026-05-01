@@ -2,8 +2,8 @@
   "name": "AL Sports Admin Panel",
   "short_name": "AL Admin",
   "description": "AL Sports staff admin panel — manage predictions, scores, players and more.",
-  "start_url": "al-sports/admin.html",
-  "scope": "al-sports/",
+  "start_url": "/kitanga-fc/admin.html",
+  "scope": "/kitanga-fc/",
   "display": "standalone",
   "background_color": "#060d24",
   "theme_color": "#060d24",
@@ -27,13 +27,13 @@
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
-      "url": "al-sports/admin.html#dashboard",
+      "url": "/kitanga-fc/admin.html#dashboard",
       "icons": [{ "src": "admin-logo.png", "sizes": "96x96" }]
     },
     {
       "name": "Predictions",
       "short_name": "Predictions",
-      "url": "al-sports/admin.html#predictions",
+      "url": "/kitanga-fc/admin.html#predictions",
       "icons": [{ "src": "admin-logo.png", "sizes": "96x96" }]
     }
   ]
