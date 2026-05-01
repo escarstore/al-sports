@@ -564,6 +564,18 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
           <div style="margin-top:10px;font-size:12px" id="football-key-status"></div>
         </div></div>
 
+        <div class="sec-card" style="border:1px solid #3b82f644">
+          <div class="sec-head"><div class="sec-head-title" style="color:#3b82f6">🔍 Supabase Connection Diagnostic</div></div>
+          <div class="sec-body">
+            <p style="font-size:13px;color:var(--grey);margin-bottom:14px">
+              Run this to see exactly what data is in <strong style="color:#fff">Supabase (cloud)</strong> vs <strong style="color:#fff">your phone only</strong>.
+              If Supabase shows 0 but your phone has data — that's why other devices see nothing.
+            </p>
+            <button class="btn btn-accent" onclick="runDiagnostic()" id="diag-btn" style="background:#3b82f6">🔍 Run Diagnostic</button>
+            <div id="diag-results" style="margin-top:14px;font-size:13px;font-family:monospace"></div>
+          </div>
+        </div>
+
         <div class="sec-card" style="border:1px solid #f59e0b44">
           <div class="sec-head"><div class="sec-head-title" style="color:#f59e0b">☁️ Sync Local Data to Cloud</div></div>
           <div class="sec-body">
@@ -1757,6 +1769,82 @@ async function loadSiteControls() {
 // ── SYNC LOCAL → CLOUD ────────────────────────────────────────────────────────
 // Pushes any data stuck in localStorage up to Supabase
 // so it becomes visible on ALL devices
+// ── SUPABASE DIAGNOSTIC ───────────────────────────────────────────────────────
+async function runDiagnostic() {
+    const btn = document.getElementById('diag-btn');
+    const out = document.getElementById('diag-results');
+    btn.disabled = true;
+    btn.textContent = '⏳ Checking...';
+    out.innerHTML = '';
+
+    const TABLES = ['players','fixtures','results','photos','videos','reviews','sponsors','ads','formations','ticker_settings','leagues','site_settings'];
+    let html = '';
+
+    // 1. Check Supabase connection
+    if (!supabaseClient) {
+        out.innerHTML = '<div style="color:#ef4444;padding:10px;background:rgba(239,68,68,.1);border-radius:8px">❌ <strong>Supabase client not initialised.</strong> The page failed to load the Supabase library. Check your internet connection and refresh.</div>';
+        btn.disabled = false; btn.textContent = '🔍 Run Diagnostic';
+        return;
+    }
+
+    html += '<div style="color:#22c55e;margin-bottom:10px">✅ Supabase client connected</div>';
+
+    // 2. Check auth
+    const { data: { session } } = await supabaseClient.auth.getSession().catch(() => ({ data: { session: null } }));
+    if (session) {
+        html += `<div style="color:#22c55e;margin-bottom:10px">✅ Logged in as: ${session.user.email}</div>`;
+    } else {
+        html += '<div style="color:#f59e0b;margin-bottom:10px">⚠️ Not logged in — writes will fail (reads should still work)</div>';
+    }
+
+    html += '<div style="margin:14px 0 8px;color:#94a3b8;font-size:11px;letter-spacing:1px">TABLE STATUS — SUPABASE vs YOUR PHONE</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 80px 80px;gap:4px 0;font-size:12px">';
+    html += '<div style="color:#64748b;padding:4px 0;border-bottom:1px solid #1e293b">Table</div><div style="color:#64748b;padding:4px;border-bottom:1px solid #1e293b;text-align:center">☁️ Cloud</div><div style="color:#64748b;padding:4px;border-bottom:1px solid #1e293b;text-align:center">📱 Local</div>';
+
+    let anyMismatch = false;
+    for (const table of TABLES) {
+        let cloudCount = '?';
+        let cloudOk = true;
+        let cloudError = '';
+        try {
+            const { data, error } = await supabaseClient.from(table).select('id', { count: 'exact', head: false });
+            if (error) { cloudCount = '❌'; cloudOk = false; cloudError = error.message; }
+            else cloudCount = (data || []).length;
+        } catch(e) { cloudCount = '❌'; cloudOk = false; cloudError = e.message; }
+
+        const localRaw = localStorage.getItem('kfc_' + table);
+        let localCount = 0;
+        try { localCount = localRaw ? JSON.parse(localRaw).length : 0; } catch(e) { localCount = 0; }
+
+        const mismatch = cloudOk && typeof cloudCount === 'number' && localCount > cloudCount;
+        if (mismatch) anyMismatch = true;
+
+        const cloudColor = !cloudOk ? '#ef4444' : cloudCount === 0 ? '#64748b' : '#22c55e';
+        const localColor = localCount === 0 ? '#64748b' : mismatch ? '#f59e0b' : '#22c55e';
+        const rowBg = mismatch ? 'background:rgba(245,158,11,.07);' : '';
+
+        html += `<div style="padding:5px 0;border-bottom:1px solid #0f172a;${rowBg}color:#e2e8f0">${table}${mismatch ? ' ⚠️' : ''}</div>`;
+        html += `<div style="padding:5px;border-bottom:1px solid #0f172a;text-align:center;color:${cloudColor};${rowBg}" title="${cloudError}">${cloudCount}</div>`;
+        html += `<div style="padding:5px;border-bottom:1px solid #0f172a;text-align:center;color:${localColor};${rowBg}">${localCount}</div>`;
+    }
+    html += '</div>';
+
+    if (anyMismatch) {
+        html += '<div style="margin-top:14px;padding:12px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:8px;color:#fbbf24;font-size:13px">';
+        html += '⚠️ <strong>Mismatch found.</strong> Tables marked with ⚠️ have more data on your phone than in Supabase.<br><br>';
+        html += 'Use the <strong>"Upload Local Data to Supabase"</strong> button below to sync them to the cloud.';
+        html += '</div>';
+    } else {
+        html += '<div style="margin-top:14px;padding:12px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:8px;color:#86efac;font-size:13px">';
+        html += '✅ Cloud and local data match. If other devices still show wrong data, check Supabase RLS policies — run the <strong>complete_setup.sql</strong> script.';
+        html += '</div>';
+    }
+
+    out.innerHTML = html;
+    btn.disabled = false;
+    btn.textContent = '🔍 Run Diagnostic';
+}
+
 async function syncLocalToCloud() {
     if (!supabaseClient) { toast('❌ Not connected to Supabase', true); return; }
     const btn = document.getElementById('sync-cloud-btn');
