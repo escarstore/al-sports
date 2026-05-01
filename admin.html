@@ -842,7 +842,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
-// Data Service — ALL reads/writes go to Supabase only. No silent localStorage fallback.
+// Data Service
 const DataService = {
     async getData(table) {
         if (supabaseClient) {
@@ -852,79 +852,95 @@ const DataService = {
                     localStorage.setItem('kfc_' + table, JSON.stringify(data));
                     return data;
                 }
-                if (error) {
-                    console.error(`❌ Supabase read [${table}]:`, error.message, error.code);
-                    if (error.code === '42P01') return []; // table doesn't exist
-                }
-            } catch(e) { console.error(`❌ getData exception [${table}]:`, e.message); }
+            } catch(e) { console.warn('Supabase getData failed:', table); }
         }
         const local = localStorage.getItem('kfc_' + table);
         return local ? JSON.parse(local) : [];
     },
     async addItem(table, item) {
-        if (!supabaseClient) { toast('❌ Not connected to Supabase', true); return null; }
-        try {
-            const { data, error } = await supabaseClient.from(table).insert([item]).select();
-            if (error) {
-                console.error(`❌ addItem [${table}]:`, error.message, '| code:', error.code);
-                if (error.message && error.message.includes('column'))
-                    toast(`❌ Schema mismatch in "${table}": ${error.message} — run corrected_schema.sql`, true);
-                else if (error.code === '42P01')
-                    toast(`❌ Table "${table}" missing — run corrected_schema.sql in Supabase`, true);
-                else if (error.code === '42501')
-                    toast(`❌ Permission denied on "${table}" — check RLS policies`, true);
-                else
-                    toast('❌ Save failed: ' + error.message, true);
-                return null;
+        if (supabaseClient) {
+            let payload = { ...item };
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const { data, error } = await supabaseClient.from(table).insert([payload]).select();
+                    if (error) {
+                        const colMatch = error.message && error.message.match(/Could not find the '([^']+)' column/);
+                        if (colMatch) {
+                            delete payload[colMatch[1]];
+                            continue;
+                        }
+                        if (error.code === '42P01') {
+                            const items = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
+                            items.push(item);
+                            localStorage.setItem('kfc_' + table, JSON.stringify(items));
+                            return item;
+                        }
+                        toast('❌ Save failed: ' + error.message, true);
+                        return null;
+                    }
+                    if (data && data.length) {
+                        const saved = { ...item, ...data[0] };
+                        const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
+                        local.push(saved);
+                        localStorage.setItem('kfc_' + table, JSON.stringify(local));
+                        return saved;
+                    }
+                    break;
+                } catch(e) { toast('❌ Network error. Check connection.', true); return null; }
             }
-            if (data && data.length) {
-                const saved = { ...item, ...data[0] };
-                const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
-                local.push(saved);
-                localStorage.setItem('kfc_' + table, JSON.stringify(local));
-                toast('✅ Saved to cloud ☁️');
-                return saved;
-            }
-            return item;
-        } catch(e) { toast('❌ Network error — check connection', true); return null; }
+        }
+        toast('❌ Not connected to Supabase', true);
+        return null;
     },
     async updateItem(table, id, updates) {
-        if (!supabaseClient) { toast('❌ Not connected to Supabase', true); return null; }
-        try {
-            const { data, error } = await supabaseClient.from(table).update(updates).eq('id', id).select();
-            if (error) {
-                console.error(`❌ updateItem [${table}]:`, error.message, error.code);
-                if (error.message && error.message.includes('column'))
-                    toast(`❌ Schema mismatch in "${table}": ${error.message} — run corrected_schema.sql`, true);
-                else if (error.code === '42501')
-                    toast('❌ Permission denied — are you logged in?', true);
-                else
-                    toast('❌ Update failed: ' + error.message, true);
-                return null;
+        if (supabaseClient) {
+            let payload = { ...updates };
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    const { data, error } = await supabaseClient.from(table).update(payload).eq('id', id).select();
+                    if (error) {
+                        const colMatch = error.message && error.message.match(/Could not find the '([^']+)' column/);
+                        if (colMatch) { delete payload[colMatch[1]]; continue; }
+                        if (error.code === '42P01') break;
+                        toast('❌ Update failed: ' + error.message, true);
+                        return null;
+                    }
+                    if (data && data.length) {
+                        const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
+                        const idx = local.findIndex(i => i.id === id);
+                        if (idx >= 0) local[idx] = { ...local[idx], ...updates };
+                        localStorage.setItem('kfc_' + table, JSON.stringify(local));
+                        toast('✅ Saved');
+                        return { ...updates, ...data[0] };
+                    }
+                    break;
+                } catch(e) { toast('❌ Network error.', true); return null; }
             }
-            if (data && data.length) {
-                const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
-                const idx = local.findIndex(i => i.id === id);
-                if (idx >= 0) local[idx] = { ...local[idx], ...updates };
-                localStorage.setItem('kfc_' + table, JSON.stringify(local));
-                toast('✅ Updated ☁️');
-                return { ...updates, ...data[0] };
-            }
-            return null;
-        } catch(e) { toast('❌ Network error', true); return null; }
+        }
+        const items = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
+        const idx = items.findIndex(i => i.id === id);
+        if (idx >= 0) { items[idx] = { ...items[idx], ...updates }; localStorage.setItem('kfc_' + table, JSON.stringify(items)); toast('✅ Saved (local)'); return items[idx]; }
+        return null;
     },
     async deleteItem(table, id) {
-        if (!supabaseClient) { toast('❌ Not connected to Supabase', true); return false; }
-        try {
-            const { error } = await supabaseClient.from(table).delete().eq('id', id);
-            if (error) { toast('❌ Delete failed: ' + error.message, true); return false; }
-            const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
-            localStorage.setItem('kfc_' + table, JSON.stringify(local.filter(i => i.id !== id)));
-            toast('🗑️ Deleted');
-            return true;
-        } catch(e) { toast('❌ Network error', true); return false; }
+        if (supabaseClient) {
+            try {
+                const { error } = await supabaseClient.from(table).delete().eq('id', id);
+                if (error) {
+                    const missing = error.code === '42P01';
+                    if (!missing) toast('❌ Delete failed: ' + error.message, true);
+                    return false;
+                }
+                const local = JSON.parse(localStorage.getItem('kfc_' + table) || '[]');
+                localStorage.setItem('kfc_' + table, JSON.stringify(local.filter(i => i.id !== id)));
+                toast('🗑️ Deleted');
+                return true;
+            } catch(e) { toast('❌ Network error', true); return false; }
+        }
+        toast('❌ Not connected to Supabase', true);
+        return false;
     },
-
+    async uploadImage(file, folder) {
         if (supabaseClient) {
             try {
                 const ext = file.name.split('.').pop();
@@ -1615,59 +1631,50 @@ checkAuth();
 // ── ADMIN PWA INSTALL ─────────────────────────────────────────
 let adminDeferredPrompt = null;
 
-// Chrome fires this when PWA install criteria are met
+// Chrome fires this when the site meets PWA install criteria
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     adminDeferredPrompt = e;
-    showAdminFAB();
-});
-
-function showAdminFAB() {
-    // Don't show if already running as installed PWA
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) return;
+    // Show the FAB — Chrome confirmed this page is installable
     const f = document.getElementById('admin-pwa-fab');
     if (f) f.style.display = 'flex';
-}
-
-function hideAdminFAB() {
-    const f = document.getElementById('admin-pwa-fab');
-    if (f) f.style.display = 'none';
-}
-
-// Show FAB independently — don't wait for Supabase or anything else
-// Run immediately, before DOMContentLoaded, to guarantee it shows
-(function initFAB() {
-    function tryShowFAB() {
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) return;
-        const f = document.getElementById('admin-pwa-fab');
-        if (f) { f.style.display = 'flex'; return; }
-        // DOM not ready yet — wait and retry
-        setTimeout(tryShowFAB, 500);
-    }
-    // Show after 2 seconds regardless of beforeinstallprompt
-    setTimeout(tryShowFAB, 2000);
-})();
+});
 
 window.addEventListener('load', async () => {
-    // Register service worker (required for PWA installability)
+    // Register service worker (required for PWA install eligibility)
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('admin-sw.js').catch(() => {});
     }
-    // Load site controls — wrapped so FAB is never blocked by this
-    try { await loadSiteControls(); } catch(e) { console.warn('loadSiteControls failed:', e); }
+    await loadSiteControls();
+
+    // If already installed as PWA, hide the FAB
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        const f = document.getElementById('admin-pwa-fab');
+        if (f) f.style.display = 'none';
+        return;
+    }
+
+    // Show FAB after 3s as a fallback (will show install instructions if Chrome
+    // hasn't fired beforeinstallprompt yet, which is fine — guides user manually)
+    setTimeout(() => {
+        const f = document.getElementById('admin-pwa-fab');
+        if (f) f.style.display = 'flex';
+    }, 3000);
 });
 
 async function adminInstallPWA() {
     if (adminDeferredPrompt) {
+        // Native install prompt available — use it
         adminDeferredPrompt.prompt();
         const { outcome } = await adminDeferredPrompt.userChoice;
         adminDeferredPrompt = null;
         if (outcome === 'accepted') {
-            hideAdminFAB();
+            const f = document.getElementById('admin-pwa-fab');
+            if (f) f.style.display = 'none';
             toast('🎉 AL Sports Admin installed on your phone!');
         }
     } else {
-        // Chrome didn't give us a native prompt — show manual instructions
+        // Native prompt not available — show manual install modal
         showInstallModal();
     }
 }
@@ -1713,7 +1720,8 @@ function showInstallModal() {
 }
 
 window.addEventListener('appinstalled', () => {
-    hideAdminFAB();
+    const f = document.getElementById('admin-pwa-fab');
+    if (f) f.style.display = 'none';
     toast('✅ Admin app installed successfully!');
 });
 
