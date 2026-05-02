@@ -364,6 +364,7 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
       <div class="nav-item" data-page="news"><span class="nav-icon">📰</span><span>Club News</span></div>
       <div class="nav-item" data-page="leagues"><span class="nav-icon">🌍</span><span>Leagues</span></div>
       <div class="nav-section">Site Settings</div>
+      <div class="nav-item" data-page="users"><span class="nav-icon">👥</span><span>Users</span></div>
       <div class="nav-item" data-page="ticker"><span class="nav-icon">📢</span><span>Announcement Bar</span></div>
       <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span>Settings</span></div>
     </nav>
@@ -520,6 +521,26 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
       </div>
 
       <!-- SETTINGS PAGE -->
+      <div class="page" id="page-users">
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-head-title">👥 Registered Users</div>
+            <button class="btn btn-accent" onclick="renderUsersAdmin()">🔄 Refresh</button>
+          </div>
+          <div class="sec-body">
+            <div style="font-size:12px;color:var(--grey);margin-bottom:14px">
+              These are users who signed up on the public site. You can warn, suspend or delete their accounts.
+            </div>
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead><tr><th>User</th><th>Email</th><th>Joined</th><th>Last Seen</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="users-tbody"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--grey)">Click Refresh to load users</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="page" id="page-settings">
         <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🏟️ Club Information</div></div>
         <div class="sec-body"><div class="form-grid"><div class="field"><label>Club Name</label><input id="club-name" value="AL SPORTS"/></div>
@@ -854,7 +875,8 @@ function goTo(page) {
         results: 'Match Results', formation: 'Formation', gallery: 'Photo Gallery',
         videos: 'Match Videos', reviews: 'Fan Reviews', sponsors: 'Sponsors',
         inquiries: 'Sponsor Proposals', ads: 'Advertisements', analytics: 'Ad Analytics', 
-        ticker: 'Announcement Bar', settings: 'Settings', news: 'Club News', leagues: 'Leagues'
+        ticker: 'Announcement Bar', settings: 'Settings', news: 'Club News', leagues: 'Leagues',
+        users: 'User Management'
     };
     document.getElementById('topbar-title').textContent = titles[page] || page;
     
@@ -874,6 +896,7 @@ function goTo(page) {
     if (page === 'settings') loadSettingsKeys();
     if (page === 'news') renderNewsAdmin();
     if (page === 'leagues') renderLeaguesAdmin();
+    if (page === 'users') renderUsersAdmin();
     
     if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
 }
@@ -1939,6 +1962,104 @@ async function syncLocalToCloud() {
     }
 }
 
+// ══════════════════════════════════════════════════════════════
+//  USER MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+
+async function renderUsersAdmin() {
+    const tbody = document.getElementById('users-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--grey)">⏳ Loading users...</td></tr>';
+
+    if (!supabaseClient) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ Not connected to Supabase</td></tr>';
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient.from('user_profiles').select('*').order('last_seen', { ascending: false });
+
+        if (error) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ ${error.message}<br><small>Make sure you ran the user_profiles SQL</small></td></tr>`;
+            return;
+        }
+
+        if (!data || !data.length) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--grey)">No users have signed up yet</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.map(u => {
+            const joined = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
+            const lastSeen = u.last_seen ? new Date(u.last_seen).toLocaleDateString() : '—';
+            const status = u.status || 'active';
+            const statusBadge = {
+                active: '<span class="badge badge-win">Active</span>',
+                suspended: '<span class="badge badge-loss">Suspended</span>',
+                warned: '<span class="badge" style="background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)">Warned</span>',
+                muted: '<span class="badge badge-draw">Muted</span>'
+            }[status] || status;
+
+            return `<tr>
+                <td><strong style="color:#e2e8f0">${u.full_name || '(No name)'}</strong></td>
+                <td style="font-size:12px;color:var(--grey)">${u.email}</td>
+                <td style="font-size:12px">${joined}</td>
+                <td style="font-size:12px">${lastSeen}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap">
+                        <button class="btn btn-sm" style="background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);font-size:11px" onclick="warnUser('${u.id}','${u.email}')">⚠️ Warn</button>
+                        <button class="btn btn-sm btn-grey" onclick="muteUser('${u.id}')">🔇 Mute</button>
+                        <button class="btn btn-sm" style="background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);font-size:11px" onclick="suspendUser('${u.id}')">🚫 Suspend</button>
+                        <button class="btn btn-sm btn-red" onclick="deleteUser('${u.id}','${u.email}')">🗑️ Delete</button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+    } catch(e) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ ${e.message}</td></tr>`;
+    }
+}
+
+async function setUserStatus(id, status) {
+    if (!supabaseClient) return;
+    await supabaseClient.from('user_profiles').update({ status }).eq('id', id);
+    renderUsersAdmin();
+}
+
+async function warnUser(id, email) {
+    const msg = prompt(`Warning message to send to ${email}:`);
+    if (!msg) return;
+    await setUserStatus(id, 'warned');
+    // Store warning message
+    await supabaseClient.from('user_profiles').update({
+        status: 'warned',
+        warning_message: msg,
+        warned_at: new Date().toISOString()
+    }).eq('id', id);
+    toast(`⚠️ Warning sent to ${email}`);
+}
+
+async function muteUser(id) {
+    if (!confirm('Mute this user? They can browse but cannot post reviews.')) return;
+    await setUserStatus(id, 'muted');
+    toast('🔇 User muted');
+}
+
+async function suspendUser(id) {
+    if (!confirm('Suspend this user? They will be logged out and cannot access predictions.')) return;
+    await setUserStatus(id, 'suspended');
+    toast('🚫 User suspended');
+}
+
+async function deleteUser(id, email) {
+    if (!confirm(`Permanently delete user ${email}? This cannot be undone.`)) return;
+    if (!supabaseClient) return;
+    await supabaseClient.from('user_profiles').delete().eq('id', id);
+    toast('🗑️ User deleted');
+    renderUsersAdmin();
+}
 </script>
 </body>
 </html>
