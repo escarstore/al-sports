@@ -1,7 +1,7 @@
 // AL Sports Service Worker — v4
 // Strategy: cache-first for static assets, network-first for API/Supabase calls
 
-const CACHE_NAME = 'al-sports-v4';
+const CACHE_NAME = 'al-sports-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
