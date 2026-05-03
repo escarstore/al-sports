@@ -1,7 +1,7 @@
 // AL Sports Admin Service Worker — v2
 // Admin needs fresh data always — minimal caching, just enough for installability
 
-const CACHE_NAME = 'al-admin-v2';
+const CACHE_NAME = 'al-admin-v3';
 const STATIC_ASSETS = [
   '/admin.html',
   '/admin-manifest.json',
