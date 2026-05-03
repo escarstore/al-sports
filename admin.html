@@ -692,7 +692,8 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 <script>
 // Supabase Configuration
 const SUPABASE_URL = 'https://qlrohdmpkzlkawffqlug.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscm9oZG1wa3psa2F3ZmZxbHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY3NjAsImV4cCI6MjA5MDY0Mjc2MH0.rBfgxNVpbxeMGRENueegZ52xzGRCfkCE70hTbVaHUWA';
+const BACKEND_URL = 'https://kitanga-backend.onrender.com';
+const ADMIN_EMAIL_SECRET = 'alsports_admin_2024'; // must match ADMIN_EMAIL_SECRET on Renderconst SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscm9oZG1wa3psa2F3ZmZxbHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY3NjAsImV4cCI6MjA5MDY0Mjc2MH0.rBfgxNVpbxeMGRENueegZ52xzGRCfkCE70hTbVaHUWA';
 
 let supabaseClient = null;
 let currentUser = null;
@@ -2031,14 +2032,42 @@ async function setUserStatus(id, status) {
 async function warnUser(id, email) {
     const msg = prompt(`Warning message to send to ${email}:`);
     if (!msg) return;
-    await setUserStatus(id, 'warned');
-    // Store warning message
+
+    // Update status in Supabase
     await supabaseClient.from('user_profiles').update({
         status: 'warned',
         warning_message: msg,
         warned_at: new Date().toISOString()
     }).eq('id', id);
-    toast(`⚠️ Warning sent to ${email}`);
+
+    // Get user name
+    const { data } = await supabaseClient.from('user_profiles').select('full_name').eq('id', id).single();
+    const userName = data?.full_name || 'User';
+
+    // Send real email via backend
+    try {
+        const resp = await fetch(`${BACKEND_URL}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                to: email,
+                subject: 'Account Warning',
+                type: 'warning',
+                userName,
+                message: msg,
+                adminSecret: ADMIN_EMAIL_SECRET
+            })
+        });
+        const result = await resp.json();
+        if (result.success) {
+            toast(`⚠️ Warning sent to ${email} by email`);
+        } else {
+            toast(`⚠️ Status updated but email failed: ${result.error}`, true);
+        }
+    } catch(e) {
+        toast('⚠️ Status updated but could not reach email server', true);
+    }
+    renderUsersAdmin();
 }
 
 async function muteUser(id) {
@@ -2049,15 +2078,47 @@ async function muteUser(id) {
 
 async function suspendUser(id) {
     if (!confirm('Suspend this user? They will be logged out and cannot access predictions.')) return;
+    // Get user email for notification
+    const { data } = await supabaseClient.from('user_profiles').select('email, full_name').eq('id', id).single();
     await setUserStatus(id, 'suspended');
+
+    // Email them about suspension
+    if (data?.email) {
+        try {
+            await fetch(`${BACKEND_URL}/api/send-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: data.email,
+                    subject: 'Account Suspended',
+                    type: 'suspended',
+                    userName: data.full_name || 'User',
+                    message: 'Your AL Sports account has been suspended due to a violation of our community guidelines. If you believe this is a mistake, please contact us.',
+                    adminSecret: ADMIN_EMAIL_SECRET
+                })
+            });
+        } catch(e) {}
+    }
     toast('🚫 User suspended');
 }
 
 async function deleteUser(id, email) {
-    if (!confirm(`Permanently delete user ${email}? This cannot be undone.`)) return;
+    if (!confirm(`Permanently delete user ${email}? They will be signed out immediately and cannot log back in.`)) return;
     if (!supabaseClient) return;
+
+    // Delete from user_profiles
     await supabaseClient.from('user_profiles').delete().eq('id', id);
-    toast('🗑️ User deleted');
+
+    // Tell backend to delete from Supabase Auth
+    try {
+        await fetch(`${BACKEND_URL}/api/delete-user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: id, adminSecret: ADMIN_EMAIL_SECRET })
+        });
+    } catch(e) { console.warn('Backend delete failed:', e.message); }
+
+    toast('🗑️ User deleted and signed out');
     renderUsersAdmin();
 }
 </script>
