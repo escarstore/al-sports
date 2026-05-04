@@ -2198,7 +2198,7 @@ async function sendChat() {
         });
         document.getElementById('chat-typing')?.remove();
         if (!resp.ok) {
-            if (resp.status === 429) { addChatMsg('bot', '⏳ Too many messages. Please wait a moment and try again.'); return; }
+            if (resp.status === 429) { addChatMsg('bot', '⏳ You\'ve sent a lot of messages! Please wait 1-2 minutes then try again.'); return; }
             throw new Error('Backend error ' + resp.status);
         }
         const data = await resp.json();
@@ -2251,7 +2251,7 @@ async function getPrediction() {
         });
         if (!resp.ok) {
             const err = await resp.json().catch(() => ({ error: 'Request failed.' }));
-            if (resp.status === 429) throw new Error('Rate limit reached. You can make 5 predictions per 15 minutes.');
+            if (resp.status === 429) throw new Error('Too many predictions. Please wait a few minutes and try again.');
             throw new Error(err.error || 'Prediction failed.');
         }
         const data = await resp.json();
