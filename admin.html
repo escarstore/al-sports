@@ -533,7 +533,7 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
             </div>
             <div style="overflow-x:auto">
               <table class="data-table">
-                <thead><tr><th>User</th><th>Email</th><th>Joined</th><th>Last Seen</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>User</th><th>Last Seen</th><th>Actions</th></tr></thead>
                 <tbody id="users-tbody"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--grey)">Click Refresh to load users</td></tr></tbody>
               </table>
             </div>
@@ -1977,59 +1977,53 @@ async function syncLocalToCloud() {
 async function renderUsersAdmin() {
     const tbody = document.getElementById('users-tbody');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--grey)">⏳ Loading users...</td></tr>';
-
-    if (!supabaseClient) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ Not connected to Supabase</td></tr>';
-        return;
-    }
-
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:30px;color:var(--grey)">⏳ Loading users...</td></tr>';
+    if (!supabaseClient) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:30px;color:#ef4444">❌ Not connected to Supabase</td></tr>'; return; }
     try {
         const { data, error } = await supabaseClient.from('user_profiles').select('*').order('last_seen', { ascending: false });
-
-        if (error) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ ${error.message}<br><small>Make sure you ran the user_profiles SQL</small></td></tr>`;
-            return;
-        }
-
-        if (!data || !data.length) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--grey)">No users have signed up yet</td></tr>';
-            return;
-        }
-
+        if (error) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:30px;color:#ef4444">❌ ${error.message}</td></tr>`; return; }
+        if (!data || !data.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:40px;color:var(--grey)">No users yet</td></tr>'; return; }
+        const now = new Date();
         tbody.innerHTML = data.map(u => {
-            const joined = u.created_at ? new Date(u.created_at).toLocaleDateString('en-GB') : '—';
-            const lastSeen = u.last_seen ? new Date(u.last_seen).toLocaleString('en-GB', {
-                day:'2-digit', month:'2-digit', year:'numeric',
-                hour:'2-digit', minute:'2-digit'
-            }) : '—';
+            const lastSeenDate = u.last_seen ? new Date(u.last_seen) : null;
+            const secsAgo = lastSeenDate ? (now - lastSeenDate) / 1000 : 9999;
+            const isOnline = u.is_online && secsAgo < 120;
+            const onlineBadge = isOnline
+                ? `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700">🟢 ONLINE NOW</span>`
+                : `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(100,116,139,.1);color:#64748b;border:1px solid rgba(100,116,139,.2);border-radius:20px;padding:2px 8px;font-size:10px">⚫ ${lastSeenDate ? timeAgo(lastSeenDate) : 'Never'}</span>`;
             const status = u.status || 'active';
-            const statusBadge = {
-                active: '<span class="badge badge-win">Active</span>',
-                suspended: '<span class="badge badge-loss">Suspended</span>',
-                warned: '<span class="badge" style="background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)">Warned</span>',
-                muted: '<span class="badge badge-draw">Muted</span>'
-            }[status] || status;
-
-            return `<tr>
-                <td><strong style="color:#e2e8f0">${u.full_name || '—'}</strong><div style="font-size:11px;color:var(--grey)">${u.email}</div></td>
-                <td style="font-size:12px;color:var(--grey)">${joined}</td>
-                <td style="font-size:12px">${lastSeen}</td>
-                <td>${statusBadge}</td>
-                <td>
-                    <div style="display:flex;gap:4px;flex-wrap:wrap">
-                        <button class="btn btn-sm" style="background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);font-size:11px" onclick="warnUser('${u.id}','${u.email}')">⚠️ Warn</button>
-                        <button class="btn btn-sm btn-grey" onclick="muteUser('${u.id}')">🔇 Mute</button>
-                        <button class="btn btn-sm" style="background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);font-size:11px" onclick="suspendUser('${u.id}')">🚫 Suspend</button>
-                        <button class="btn btn-sm btn-red" onclick="deleteUser('${u.id}','${u.email}')">🗑️ Delete</button>
+            const statusColors = { active:'#22c55e', suspended:'#ef4444', warned:'#f59e0b', muted:'#94a3b8' };
+            const statusBadge = `<span style="background:rgba(0,0,0,.2);color:${statusColors[status]||'#fff'};border:1px solid ${statusColors[status]||'#fff'}44;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase">${status}</span>`;
+            const isMuted = status === 'muted';
+            const uid = u.id, uemail = (u.email||'').replace(/'/g,"\'"), uname = (u.full_name||'').replace(/'/g,"\'");
+            return `<tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+                <td style="padding:10px 6px">
+                    <div style="font-weight:700;color:#e2e8f0;font-size:12px">${u.full_name||'—'}</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:1px;word-break:break-all">${u.email||''}</div>
+                    <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap">${onlineBadge}${statusBadge}</div>
+                </td>
+                <td style="padding:10px 6px;font-size:10px;color:#64748b;white-space:nowrap;vertical-align:top">
+                    ${lastSeenDate ? lastSeenDate.toLocaleString('en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—'}
+                </td>
+                <td style="padding:10px 6px;vertical-align:top">
+                    <div style="display:flex;flex-direction:column;gap:4px">
+                        <button onclick="warnUser('${uid}','${uemail}','${uname}')" style="background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer;text-align:left">⚠️ Warn</button>
+                        <button onclick="${isMuted ? `unmuteUser('${uid}')` : `muteUser('${uid}')`}" style="background:rgba(100,116,139,.15);color:#94a3b8;border:1px solid rgba(100,116,139,.3);border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer;text-align:left">${isMuted ? '🔊 Unmute' : '🔇 Mute'}</button>
+                        <button onclick="suspendUser('${uid}','${uemail}','${uname}')" style="background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer;text-align:left">🚫 Suspend</button>
+                        <button onclick="deleteUser('${uid}','${uemail}')" style="background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer;text-align:left">🗑️ Delete</button>
                     </div>
                 </td>
             </tr>`;
         }).join('');
+    } catch(e) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:30px;color:#ef4444">❌ ${e.message}</td></tr>`; }
+}
 
-    } catch(e) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:#ef4444">❌ ${e.message}</td></tr>`;
-    }
+function timeAgo(date) {
+    const s = Math.floor((new Date() - date) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s/60) + 'm ago';
+    if (s < 86400) return Math.floor(s/3600) + 'h ago';
+    return Math.floor(s/86400) + 'd ago';
 }
 
 async function setUserStatus(id, status) {
@@ -2038,55 +2032,77 @@ async function setUserStatus(id, status) {
     renderUsersAdmin();
 }
 
-async function warnUser(id, email) {
-    const msg = prompt(`Warning message to send to ${email}:`);
-    if (!msg) return;
-
-    // Update status in Supabase
-    await supabaseClient.from('user_profiles').update({
-        status: 'warned',
-        warning_message: msg,
-        warned_at: new Date().toISOString()
-    }).eq('id', id);
-
-    // Get user name
-    const { data } = await supabaseClient.from('user_profiles').select('full_name').eq('id', id).single();
-    const userName = data?.full_name || 'User';
-
-    // Send real email via backend
-    try {
-        const resp = await fetch(`${BACKEND_URL}/api/send-email`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                to: email,
-                subject: 'Account Warning',
-                type: 'warning',
-                userName,
-                message: msg,
-                adminSecret: ADMIN_EMAIL_SECRET
-            })
-        });
-        const result = await resp.json();
-        if (result.success) {
-            toast(`⚠️ Warning sent to ${email} by email`);
-        } else {
-            if (result.error === 'Unauthorized') {
-                toast(`⚠️ Status updated but email failed — set ADMIN_EMAIL_SECRET=alsports_admin_2024 in Render environment variables`, true);
-            } else {
-                toast(`⚠️ Status updated but email failed: ${result.error}`, true);
-            }
-        }
-    } catch(e) {
-        toast('⚠️ Status updated but could not reach email server', true);
-    }
-    renderUsersAdmin();
+async function unmuteUser(id) {
+    await setUserStatus(id, 'active');
+    toast('🔊 User unmuted — they can post reviews again');
 }
 
 async function muteUser(id) {
     if (!confirm('Mute this user? They can browse but cannot post reviews.')) return;
     await setUserStatus(id, 'muted');
     toast('🔇 User muted');
+}
+
+function showWarnModal(id, email, name) {
+    const existing = document.getElementById('warn-modal');
+    if (existing) existing.remove();
+    const modal = document.createElement('div');
+    modal.id = 'warn-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:20px';
+    modal.innerHTML = `
+        <div style="background:#0d1b3e;border:1px solid rgba(245,158,11,.3);border-radius:16px;padding:24px;width:100%;max-width:420px">
+            <div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:#f59e0b;letter-spacing:2px;margin-bottom:4px">⚠️ WARN USER</div>
+            <div style="font-size:12px;color:#64748b;margin-bottom:16px">${name || email}</div>
+            <div style="margin-bottom:12px">
+                <label style="font-size:12px;color:#94a3b8;letter-spacing:1px;display:block;margin-bottom:6px">WARNING TYPE</label>
+                <select id="warn-type" style="width:100%;background:#0a1640;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px;color:#fff;font-size:13px">
+                    <option value="warning">⚠️ General Warning</option>
+                    <option value="info">ℹ️ Important Notice</option>
+                    <option value="suspended">🚫 Final Warning (before suspension)</option>
+                </select>
+            </div>
+            <div style="margin-bottom:16px">
+                <label style="font-size:12px;color:#94a3b8;letter-spacing:1px;display:block;margin-bottom:6px">YOUR MESSAGE</label>
+                <textarea id="warn-msg" rows="4" placeholder="Type your message to this user..." style="width:100%;background:#0a1640;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;box-sizing:border-box"></textarea>
+            </div>
+            <div style="display:flex;gap:10px">
+                <button onclick="document.getElementById('warn-modal').remove()" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:11px;color:#94a3b8;font-size:13px;cursor:pointer">Cancel</button>
+                <button onclick="submitWarn('${id}','${email}','${(name||'').replace(/'/g,"\\'")}') " style="flex:2;background:#f59e0b;border:none;border-radius:8px;padding:11px;color:#000;font-family:Barlow Condensed,sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;cursor:pointer">Send Warning</button>
+            </div>
+        </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    setTimeout(() => document.getElementById('warn-msg')?.focus(), 100);
+}
+
+async function warnUser(id, email, name) {
+    showWarnModal(id, email, name);
+}
+
+async function submitWarn(id, email, name) {
+    const msg = document.getElementById('warn-msg')?.value.trim();
+    const type = document.getElementById('warn-type')?.value || 'warning';
+    if (!msg) { toast('Please type a message', true); return; }
+    document.getElementById('warn-modal')?.remove();
+
+    await supabaseClient.from('user_profiles').update({
+        status: 'warned',
+        warning_message: msg,
+        warned_at: new Date().toISOString()
+    }).eq('id', id);
+
+    try {
+        const resp = await fetch(`${BACKEND_URL}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to: email, subject: 'Account Warning', type, userName: name, message: msg, adminSecret: ADMIN_EMAIL_SECRET })
+        });
+        const result = await resp.json();
+        toast(result.success ? `⚠️ Warning sent to ${email}` : `⚠️ Status saved — email: ${result.error}`, !result.success);
+    } catch(e) {
+        toast('⚠️ Status saved but email failed — check Render env vars', true);
+    }
+    renderUsersAdmin();
 }
 
 async function suspendUser(id) {
