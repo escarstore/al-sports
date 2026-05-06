@@ -2404,15 +2404,22 @@ async function init() {
     // Register service worker — auto-reloads when new version is deployed
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').then(reg => {
+            if (!navigator.serviceWorker.controller) return;
             reg.addEventListener('updatefound', () => {
                 const newSW = reg.installing;
+                if (!newSW) return;
                 newSW.addEventListener('statechange', () => {
                     if (newSW.state === 'activated' && navigator.serviceWorker.controller) {
-                        window.location.reload(); // silently update all users
+                        setTimeout(() => window.location.reload(), 1000);
                     }
                 });
             });
         }).catch(() => {});
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (window._swUpdating) return;
+            window._swUpdating = true;
+            setTimeout(() => window.location.reload(), 1000);
+        });
     }
 
     // Apply site controls — reads from Supabase so admin changes reach all devices
