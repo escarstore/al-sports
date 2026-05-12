@@ -19,6 +19,7 @@
   --red:#FF3D57;--green:#00E676;--white:#FFF;--grey:#8A9BB5;
   --dark:#070E2B;--card:#0D1E4F;--card2:#091540;--border:rgba(255,255,255,.08);
   --sidebar-w:260px;
+  --content-max:1440px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-height:100vh}
@@ -60,6 +61,12 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
   border-right:1px solid rgba(255,255,255,.06);
   display:flex;flex-direction:column;z-index:1000;
   overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
+}
+/* PC large screens — wider sidebar */
+@media(min-width:1400px){
+  .sidebar{width:280px}
+  .main{margin-left:280px}
 }
 /* Mobile: hidden by default */
 @media(max-width:768px){
@@ -122,11 +129,12 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 /* ── TOPBAR ───────────────────────────────────────────────── */
 .topbar{
   background:#04091a;border-bottom:1px solid rgba(255,255,255,.06);
-  padding:0 24px;height:58px;
+  padding:0 32px;height:62px;
   display:flex;align-items:center;justify-content:space-between;
   position:sticky;top:0;z-index:50;
   box-shadow:0 2px 12px rgba(0,0,0,.3);
 }
+@media(max-width:768px){.topbar{padding:0 16px;height:56px}}
 .topbar-left{display:flex;align-items:center;gap:14px}
 .topbar-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--white)}
 .topbar-breadcrumb{font-size:11px;color:var(--grey);display:none}
@@ -148,9 +156,11 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 
 /* ── CONTENT AREA ─────────────────────────────────────────── */
 .content{
-  padding:24px 28px;flex:1;
-  max-width:1400px; /* cap width on ultra-wide monitors */
+  padding:28px 36px;flex:1;
+  max-width:var(--content-max);
+  width:100%;
 }
+@media(min-width:1600px){.content{padding:32px 52px}}
 @media(max-width:768px){.content{padding:14px}}
 .page{display:none}
 .page.active{display:block}
@@ -158,9 +168,10 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 /* ── STATS CARDS ──────────────────────────────────────────── */
 .stats-row{
   display:grid;
-  grid-template-columns:repeat(6,1fr); /* 6 across on desktop */
-  gap:14px;margin-bottom:24px;
+  grid-template-columns:repeat(7,1fr); /* 7 across on large desktop */
+  gap:14px;margin-bottom:28px;
 }
+@media(max-width:1300px){.stats-row{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:1100px){.stats-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr)}}
 .stat-card{
@@ -178,19 +189,21 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 /* ── SECTION CARDS ────────────────────────────────────────── */
 .sec-card{
   background:var(--card);border:1px solid var(--border);
-  border-radius:12px;margin-bottom:18px;overflow:hidden;
+  border-radius:14px;margin-bottom:22px;overflow:hidden;
 }
 .sec-head{
-  padding:14px 20px;border-bottom:1px solid var(--border);
+  padding:16px 24px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
   background:rgba(255,255,255,.02);
 }
 .sec-head-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;color:var(--white)}
-.sec-body{padding:18px 20px}
+.sec-body{padding:22px 24px}
+@media(min-width:1600px){.sec-body{padding:26px 30px}}
+@media(max-width:600px){.sec-head{padding:12px 16px}.sec-body{padding:14px 16px}}
 
 /* ── BUTTONS ──────────────────────────────────────────────── */
-.btn{padding:8px 16px;border:none;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s}
-.btn:hover{opacity:.82}
+.btn{padding:9px 18px;border:none;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s,transform .1s}
+.btn:hover{opacity:.82;transform:translateY(-1px)}
 .btn-accent{background:var(--accent);color:var(--dark)}
 .btn-red{background:rgba(255,61,87,.12);color:var(--red);border:1px solid rgba(255,61,87,.3)}
 .btn-grey{background:rgba(255,255,255,.07);color:var(--white);border:1px solid var(--border)}
@@ -198,33 +211,36 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 .btn-sm{padding:5px 10px;font-size:10px}
 
 /* ── FORMS ────────────────────────────────────────────────── */
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:18px}
 @media(min-width:1100px){.form-grid{grid-template-columns:repeat(3,1fr)}}
-.field{display:flex;flex-direction:column;gap:5px}
+@media(min-width:1500px){.form-grid{grid-template-columns:repeat(4,1fr)}}
+.field{display:flex;flex-direction:column;gap:6px}
 .field label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;color:var(--grey)}
 .field input,.field select,.field textarea{
   background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:7px;padding:9px 13px;color:var(--white);
+  border-radius:8px;padding:10px 14px;color:var(--white);
   font-family:'Barlow',sans-serif;font-size:13px;outline:none;width:100%;
   transition:border-color .2s;
 }
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:rgba(0,194,255,.04)}
 .field select option{background:#0d1e4f}
 
 /* ── DATA TABLES — proper table layout on desktop ─────────── */
 .data-table{width:100%;border-collapse:collapse;font-size:13px}
 .data-table thead,.data-table tbody{display:table-header-group;display:revert}
 .data-table tr{display:revert;border-bottom:1px solid rgba(255,255,255,.04)}
-.data-table tr:hover td{background:rgba(255,255,255,.02)}
+.data-table tr:hover td{background:rgba(255,255,255,.025)}
 .data-table th{
-  padding:10px 14px;text-align:left;
+  padding:11px 16px;text-align:left;
   font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;
   letter-spacing:2px;color:var(--grey);
   border-bottom:1px solid rgba(255,255,255,.08);
   white-space:nowrap;background:rgba(255,255,255,.02);
 }
-.data-table td{padding:11px 14px;vertical-align:middle;color:rgba(255,255,255,.85)}
+.data-table td{padding:12px 16px;vertical-align:middle;color:rgba(255,255,255,.85)}
 .table-wrap{overflow-x:auto;border-radius:8px}
+/* On large screens — tables never scroll */
+@media(min-width:1200px){.table-wrap{overflow-x:visible}}
 
 /* ── BADGES ───────────────────────────────────────────────── */
 .badge{display:inline-block;padding:3px 9px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px}
@@ -303,7 +319,25 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
 .toggle-slider:before{content:'';position:absolute;height:20px;width:20px;left:2px;bottom:2px;background:var(--grey);border-radius:50%;transition:.3s}
 .toggle-switch input:checked + .toggle-slider{background:var(--green);border-color:var(--green)}
 .toggle-switch input:checked + .toggle-slider:before{transform:translateX(22px);background:#fff}
-</style>
+
+/* ── SCROLLBARS ───────────────────────────────────────────── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}
+::-webkit-scrollbar-thumb{background:rgba(0,194,255,.2);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,194,255,.45)}
+
+/* ── LARGE-SCREEN SIDEBAR REFINEMENTS ────────────────────── */
+@media(min-width:1400px){
+  .stat-card{padding:18px 16px}
+  .stat-num{font-size:28px}
+  .page{padding-bottom:40px}
+}
+@media(min-width:1800px){
+  :root{--sidebar-w:300px}
+  .main{margin-left:300px}
+  .content{padding:36px 60px}
+  .form-grid{grid-template-columns:repeat(4,1fr)}
+}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -365,6 +399,7 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
       <div class="nav-item" data-page="leagues"><span class="nav-icon">🌍</span><span>Leagues</span></div>
       <div class="nav-section">Site Settings</div>
       <div class="nav-item" data-page="users"><span class="nav-icon">👥</span><span>Users</span></div>
+      <div class="nav-item" data-page="betting-clicks"><span class="nav-icon">🎰</span><span>Betting Registrations</span></div>
       <div class="nav-item" data-page="ticker"><span class="nav-icon">📢</span><span>Announcement Bar</span></div>
       <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span>Settings</span></div>
     </nav>
@@ -397,6 +432,7 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
           <div class="stat-card"><div class="stat-num" id="stat-sponsors">0</div><div class="stat-label">Sponsors</div></div>
           <div class="stat-card"><div class="stat-num" id="stat-ads">0</div><div class="stat-label">Active Ads</div></div>
           <div class="stat-card"><div class="stat-num" id="stat-inquiries">0</div><div class="stat-label">Proposals</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-bet-clicks">0</div><div class="stat-label">Bet Clicks Today</div></div>
         </div>
         <div class="sec-card"><div class="sec-head"><div class="sec-head-title">⚡ Quick Actions</div></div><div class="sec-body" style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn btn-accent" onclick="openPlayerModal()">+ Add Player</button>
@@ -541,6 +577,42 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
         </div>
       </div>
 
+      <!-- BETTING CLICKS PAGE -->
+      <div class="page" id="page-betting-clicks">
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-head-title">🎰 Betting Registrations & Clicks</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <select id="bet-filter-platform" onchange="renderBettingClicks()" style="background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:12px">
+                <option value="all">All Platforms</option>
+                <option value="1xBet">1xBet</option>
+                <option value="MelBet">MelBet</option>
+              </select>
+              <button class="btn btn-accent btn-sm" onclick="exportBettingCSV()">📥 Export CSV</button>
+              <button class="btn btn-grey btn-sm" onclick="renderBettingClicks()">🔄 Refresh</button>
+            </div>
+          </div>
+          <div class="sec-body">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px">
+              <div class="stat-card"><div class="stat-num" id="bc-total">0</div><div class="stat-label">Total Clicks</div></div>
+              <div class="stat-card" style="--accent:#1a73e8"><div class="stat-num" id="bc-1xbet" style="color:#1a73e8">0</div><div class="stat-label">1xBet Clicks</div></div>
+              <div class="stat-card" style="--accent:#ef5350"><div class="stat-num" id="bc-melbet" style="color:#ef5350">0</div><div class="stat-label">MelBet Clicks</div></div>
+              <div class="stat-card"><div class="stat-num" id="bc-users">0</div><div class="stat-label">Logged-in Users</div></div>
+            </div>
+            <div style="font-size:12px;color:var(--grey);margin-bottom:14px">
+              Every time a visitor clicks a 1xBet or MelBet link on your site, it's recorded here — including whether they were logged in. This helps you track affiliate conversions.
+            </div>
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead><tr><th>Time</th><th>Platform</th><th>Source</th><th>User</th><th>Status</th></tr></thead>
+                <tbody id="betting-clicks-tbody"><tr><td colspan="5" style="text-align:center;padding:40px;color:var(--grey)">Click Refresh to load data</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
       <div class="page" id="page-settings">
         <div class="sec-card"><div class="sec-head"><div class="sec-head-title">🏟️ Club Information</div></div>
         <div class="sec-body"><div class="form-grid"><div class="field"><label>Club Name</label><input id="club-name" value="AL SPORTS"/></div>
@@ -878,7 +950,7 @@ function goTo(page) {
         videos: 'Match Videos', reviews: 'Fan Reviews', sponsors: 'Sponsors',
         inquiries: 'Sponsor Proposals', ads: 'Advertisements', analytics: 'Ad Analytics', 
         ticker: 'Announcement Bar', settings: 'Settings', news: 'Club News', leagues: 'Leagues',
-        users: 'User Management'
+        users: 'User Management', 'betting-clicks': '🎰 Betting Registrations'
     };
     document.getElementById('topbar-title').textContent = titles[page] || page;
     
@@ -899,6 +971,7 @@ function goTo(page) {
     if (page === 'news') renderNewsAdmin();
     if (page === 'leagues') renderLeaguesAdmin();
     if (page === 'users') renderUsersAdmin();
+    if (page === 'betting-clicks') renderBettingClicks();
     
     if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
 }
@@ -1570,6 +1643,17 @@ async function updateStats() {
     document.getElementById('stat-sponsors').textContent = sponsors.length; 
     document.getElementById('stat-ads').textContent = ads.filter(a => a.status === 'Active').length; 
     document.getElementById('stat-inquiries').textContent = inquiries.length;
+
+    // Betting clicks today
+    try {
+        if (supabaseClient) {
+            const today = new Date().toISOString().slice(0, 10);
+            const { data: clicks } = await supabaseClient.from('betting_clicks').select('id').gte('clicked_at', today + 'T00:00:00');
+            const el = document.getElementById('stat-bet-clicks');
+            if (el && clicks) el.textContent = clicks.length;
+        }
+    } catch(e) {}
+
     const backendUrl = localStorage.getItem('kfc_backend_url');
     const fKey = localStorage.getItem('kfc_football_api_key');
     const bs = document.getElementById('dash-backend-status');
@@ -1580,6 +1664,88 @@ async function updateStats() {
     if (fs) fs.innerHTML = fKey
         ? '<span style="color:var(--green)">✅ API-Football active</span>'
         : '<span style="color:var(--gold)">⚠️ API-Football not set (optional)</span>'; 
+}
+
+// ── BETTING CLICKS ────────────────────────────────────────────
+async function renderBettingClicks() {
+    const tbody = document.getElementById('betting-clicks-tbody');
+    if (!tbody) return;
+    const platform = document.getElementById('bet-filter-platform')?.value || 'all';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--grey)">Loading...</td></tr>';
+    if (!supabaseClient) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--red)">Supabase not connected.</td></tr>';
+        return;
+    }
+    try {
+        let q = supabaseClient.from('betting_clicks').select('*').order('clicked_at', { ascending: false }).limit(500);
+        if (platform !== 'all') q = q.eq('platform', platform);
+        const { data, error } = await q;
+        if (error) throw error;
+        const all = data || [];
+
+        // Update summary stats
+        const oneX = all.filter(c => c.platform === '1xBet').length;
+        const mel  = all.filter(c => c.platform === 'MelBet').length;
+        const loggedIn = all.filter(c => c.user_email).length;
+        const el1 = document.getElementById('bc-total'), el2 = document.getElementById('bc-1xbet'),
+              el3 = document.getElementById('bc-melbet'), el4 = document.getElementById('bc-users');
+        if (el1) el1.textContent = all.length;
+        if (el2) el2.textContent = oneX;
+        if (el3) el3.textContent = mel;
+        if (el4) el4.textContent = loggedIn;
+
+        if (!all.length) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--grey)">No betting clicks recorded yet. Links on the public site will appear here when users click them.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = all.map(c => {
+            const ts = c.clicked_at ? new Date(c.clicked_at) : null;
+            const timeStr = ts ? ts.toLocaleString('en-GB', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+            const platColor = c.platform === '1xBet' ? '#1a73e8' : '#ef5350';
+            const sourceFmt = (c.source || 'unknown').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const isLoggedIn = !!c.user_email;
+            return `<tr>
+                <td style="padding:10px 8px;font-size:11px;color:var(--grey);white-space:nowrap">${timeStr}</td>
+                <td style="padding:10px 8px"><span style="background:${platColor};color:#fff;padding:3px 10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700">${c.platform || '—'}</span></td>
+                <td style="padding:10px 8px;font-size:12px;color:var(--grey)">${sourceFmt}</td>
+                <td style="padding:10px 8px;font-size:12px">
+                    ${isLoggedIn
+                        ? `<span style="color:var(--white)">${c.user_email}</span>`
+                        : '<span style="color:var(--grey);font-size:11px">Guest visitor</span>'}
+                </td>
+                <td style="padding:10px 8px">
+                    <span style="background:${isLoggedIn ? 'rgba(0,230,118,.1)' : 'rgba(255,255,255,.06)'};color:${isLoggedIn ? 'var(--green)' : 'var(--grey)'};padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700">
+                        ${isLoggedIn ? '✅ Logged In' : '👤 Guest'}
+                    </span>
+                </td>
+            </tr>`;
+        }).join('');
+    } catch(e) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--red)">❌ ${e.message}<br><small>Make sure the <code>betting_clicks</code> table exists in Supabase.</small></td></tr>`;
+    }
+}
+
+async function exportBettingCSV() {
+    if (!supabaseClient) { toast('Supabase not connected', true); return; }
+    try {
+        const { data } = await supabaseClient.from('betting_clicks').select('*').order('clicked_at', { ascending: false });
+        if (!data || !data.length) { toast('No data to export', true); return; }
+        const headers = ['Time', 'Platform', 'Source', 'User Email', 'User ID'];
+        const rows = data.map(c => [
+            c.clicked_at ? new Date(c.clicked_at).toLocaleString('en-GB') : '',
+            c.platform || '', c.source || '',
+            c.user_email || 'Guest', c.user_id || ''
+        ]);
+        const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `betting_clicks_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast('📥 CSV exported!');
+    } catch(e) { toast('❌ Export failed: ' + e.message, true); }
 }
 async function loadAllData() {
     const sections = [
