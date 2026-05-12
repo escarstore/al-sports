@@ -2881,7 +2881,7 @@ function renderUpcomingMatches() {
 
     if (!filtered.length) {
         grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1">
-            <div style="font-size:28px;margin-bottom:8px">📅</div>
+            <div style="font-size:28px;margin-bottom:8px"></div>
             <div>${activeUpcomingComp === 'FIFA World Cup'
                 ? 'World Cup 2026 fixtures will appear here when the schedule is released.'
                 : 'No upcoming matches found for this competition.'}</div>
@@ -3263,7 +3263,7 @@ function renderScores() {
     if (!filtered.length) {
         const leagueName = activeLeague === 'all' ? 'any league' : (LEAGUE_NAMES[activeLeague] || 'this league');
         grid.innerHTML = `<div class="scores-empty">
-            <div style="font-size:32px;margin-bottom:10px">⏰</div>
+            <div style="font-size:32px;margin-bottom:10px"></div>
             <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">No live matches right now for ${leagueName}</div>
             <div style="font-size:12px;color:var(--grey);line-height:1.8">
                 Today's kick-off times (EAT):<br>
