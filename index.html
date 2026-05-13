@@ -2989,9 +2989,9 @@ async function toggleMatchStats(fixtureId, btnEl) {
     const panel = document.getElementById('stats-panel-' + fixtureId);
     if (!panel) return;
     const isOpen = panel.classList.contains('open');
-    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = '📊 Show Live Stats'; return; }
+    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = ' Show Live Stats'; return; }
     panel.classList.add('open');
-    btnEl.textContent = '▲ Hide Stats';
+    btnEl.textContent = ' Hide Stats';
     if (_statsCache[fixtureId]) { renderStatsPanel(panel, _statsCache[fixtureId]); return; }
     panel.innerHTML = '<div class="stats-loading">⏳ Loading stats...</div>';
     const key = getFootballKey();
