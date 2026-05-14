@@ -740,6 +740,40 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 ::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
 ::-webkit-scrollbar-thumb{background:rgba(0,194,255,.25);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(0,194,255,.5)}
+/* ── SURE WIN SECTION ─────────────────────────────────────── */
+#sure-win-section{background:linear-gradient(135deg,#06111f,#071628);padding:68px 4%;border-top:2px solid var(--gold);border-bottom:1px solid rgba(255,184,0,.15)}
+.sw-header{text-align:center;margin-bottom:28px}
+.sw-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.5);border-radius:20px;padding:6px 18px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:14px}
+.sw-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,6vw,52px);letter-spacing:3px;color:var(--white)}
+.sw-title span{color:var(--gold)}
+.sw-subtitle{font-size:13px;color:var(--grey);max-width:480px;margin:8px auto 0;line-height:1.6}
+.sw-card{background:var(--card);border:1px solid rgba(255,184,0,.2);border-radius:16px;overflow:hidden;max-width:680px;margin:0 auto;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.sw-bookmaker-bar{background:linear-gradient(90deg,rgba(255,184,0,.15),rgba(255,184,0,.05));padding:10px 20px;border-bottom:1px solid rgba(255,184,0,.15);display:flex;align-items:center;justify-content:space-between}
+.sw-bm-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold)}
+.sw-total-odds{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--grey)}
+.sw-match-list{padding:0}
+.sw-match-item{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:12px;transition:background .2s}
+.sw-match-item:last-of-type{border-bottom:none}
+.sw-match-item:hover{background:rgba(255,255,255,.03)}
+.sw-match-time{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--grey);min-width:54px;text-align:center;line-height:1.3}
+.sw-match-time strong{display:block;font-size:14px;color:var(--white)}
+.sw-match-teams{flex:1}
+.sw-match-teams .home{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;line-height:1.2}
+.sw-match-teams .away{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,.7);line-height:1.2}
+.sw-match-meta{font-size:10px;color:var(--grey);margin-top:3px;letter-spacing:.5px}
+.sw-odds-wrap{display:flex;gap:5px;align-items:center}
+.sw-odd-box{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 10px;text-align:center;min-width:48px}
+.sw-odd-box.selected{background:rgba(255,184,0,.15);border-color:var(--gold)}
+.sw-odd-lbl{font-size:9px;color:var(--grey);letter-spacing:1px}
+.sw-odd-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--white)}
+.sw-tip-badge{background:var(--gold);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.sw-footer{padding:18px 20px;background:rgba(255,184,0,.06);border-top:1px solid rgba(255,184,0,.15)}
+.sw-add-btn{width:100%;padding:16px;background:var(--gold);color:#000;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
+.sw-add-btn:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,184,0,.35)}
+.sw-add-btn:active{transform:translateY(0)}
+.sw-disclaimer{text-align:center;font-size:10px;color:var(--grey);margin-top:10px;line-height:1.5}
+.sw-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid var(--gold);border-radius:10px;padding:14px 20px;color:var(--white);font-size:13px;max-width:340px;width:90%;text-align:center;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.5);display:none;animation:fadeUp .3s ease}
+.sw-empty{text-align:center;padding:48px 20px;color:var(--grey)}
 </style>
 </head>
 <body>
@@ -799,14 +833,15 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <div class="user-menu" id="nav-user-menu" style="display:none">
         <div class="user-avatar" id="nav-avatar" onclick="toggleUserDropdown()">?</div>
         <div class="user-dropdown" id="user-dropdown">
-          <div class="user-drop-item" onclick="toggleUserDropdown();scrollToSection('predictions')"> My Predictions</div>
+          <div class="user-drop-item" onclick="toggleUserDropdown();scrollToSection('predictions')">🎯 My Predictions</div>
           <div class="user-drop-item" onclick="signOutUser()" style="color:#ef4444">🚪 Sign Out</div>
         </div>
       </div>
     </div>
     <ul class="nav-links" id="nav-links">
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('club-news')">News</a></li>
-      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('upcoming-matches')"> Upcoming</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('sure-win-section')">🏆 Sure Win</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('upcoming-matches')">📅 Upcoming</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('live-scores')">📺 Live Scores</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('predictions')">Predictions</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('next-match')">Next Match</a></li>
@@ -899,6 +934,21 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   </div>
 </section>
 
+
+<!-- SURE WIN SECTION -->
+<section id="sure-win-section">
+  <div class="sw-header">
+    <div class="sw-badge">🏆 <span>TODAY'S PICKS</span></div>
+    <div class="sw-title">Today's <span>Sure Win</span></div>
+    <p class="sw-subtitle">Our expert-curated 5-match combo — one booking code loads it all on your bet slip.</p>
+  </div>
+  <div id="sw-public-wrap">
+    <div class="sw-empty"><div class="pred-spinner" style="margin:0 auto 14px"></div>Loading today's Sure Win…</div>
+  </div>
+</section>
+
+<!-- Sure Win Toast -->
+<div class="sw-toast" id="sw-toast"></div>
 
 <!-- UPCOMING MATCHES -->
 <section id="upcoming-matches">
@@ -1164,9 +1214,9 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
         <strong>Disclosure:</strong> Links on this site are licensed. This helps us keep the site free. We only partner with licensed, reputable betting companies. Always gamble responsibly. 18+ only.
       </div>
       <div class="social-row">
-        <a href="https://facebook.com/ALSPORTS" target="_blank" class="social-btn social-fb"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook</a>
+        <a href="https://facebook.com/KitangaFC" target="_blank" class="social-btn social-fb"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook</a>
         <a href="whatsapp://send?phone=256750162429" onclick="if(!this.href.startsWith('whatsapp'))return;window.location.href=this.href;return false;" class="social-btn social-wa"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
-        <a href="https://x.com/ALSPORTS" target="_blank" class="social-btn social-tw"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X / Twitter</a>
+        <a href="https://x.com/KitangaFC" target="_blank" class="social-btn social-tw"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X / Twitter</a>
       </div>
     </div>
     <div class="about-contact-box">
@@ -1236,7 +1286,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">dealexander2001@gmail.com</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
     <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
@@ -1366,11 +1416,11 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> <a href="https://wa.me/256750162429" target="_blank" style="color:var(--accent)">+256 750 162 429</a></p>
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> Uganda 🇺🇬</p>
       <div class="social-links-footer" style="margin-top:14px">
-        <a href="https://facebook.com/ALSPORTS" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://facebook.com/KitangaFC" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
         <a href="whatsapp://send?phone=256750162429" onclick="window.location.href=this.href;return false;" class="slink-real" style="background:#25D366" title="WhatsApp"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-        <a href="https://x.com/ALSPORTS" target="_blank" class="slink-real" style="background:#1DA1F2" title="X / Twitter"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://x.com/KitangaFC" target="_blank" class="slink-real" style="background:#1DA1F2" title="X / Twitter"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
         <a href="https://youtube.com" target="_blank" class="slink-real" style="background:#FF0000" title="YouTube"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-        <a href="https://instagram.com/ALSPORTS" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://instagram.com/KitangaFC" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
     <div class="fc">
@@ -2271,6 +2321,9 @@ function buildPredCard(m, hw, dr, aw, pred, analysis, conf, tip, bet1, bet2) {
 }
 // ══════════════════════════════════════════════════════════════
 //  BACKEND CONFIG
+//  Set this to your deployed Render/Railway URL once it's live.
+//  Leave as empty string '' to disable backend features with a
+//  friendly message instead of a broken error.
 // ══════════════════════════════════════════════════════════════
 const BACKEND_URL = 'https://kitanga-backend.onrender.com';
 
@@ -2558,6 +2611,7 @@ async function init() {
     await renderReviews();
     await renderFormationDisplay();
     fetchLiveNews();
+    loadSureWin();
     fetchUpcomingMatches();   // load upcoming first — shows before predictions
     fetchLiveScores();
     await initAuth(); // sets up user state, then loads predictions based on login
@@ -2824,7 +2878,7 @@ async function fetchUpcomingMatches(force) {
 
     if (!collected.length) {
         if (!hasCached) grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1;padding:32px 20px">
-            <div style="font-size:36px;margin-bottom:12px"></div>
+            <div style="font-size:36px;margin-bottom:12px">📅</div>
             <div style="font-weight:700;font-size:15px;margin-bottom:10px">No fixtures right now</div>
             <div style="font-size:12px;color:var(--grey);line-height:1.9">
                 Most European leagues end mid-May and resume August.<br>
@@ -2872,7 +2926,7 @@ function renderUpcomingMatches() {
 
     if (!filtered.length) {
         grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1">
-            <div style="font-size:28px;margin-bottom:8px"></div>
+            <div style="font-size:28px;margin-bottom:8px">📅</div>
             <div>${activeUpcomingComp === 'FIFA World Cup'
                 ? 'World Cup 2026 fixtures will appear here when the schedule is released.'
                 : 'No upcoming matches found for this competition.'}</div>
@@ -2939,7 +2993,7 @@ function buildUpcomingCard(m) {
             <span class="upmatch-league-name" style="color:${accent}">${m.comp}</span>
             <div style="display:flex;align-items:center;gap:6px">
                 ${statusBadge}
-                <span class="upmatch-time"> ${dateStr} · ${timeStr}</span>
+                <span class="upmatch-time">🕐 ${dateStr} · ${timeStr}</span>
             </div>
         </div>
         <div class="upmatch-teams">
@@ -2953,7 +3007,7 @@ function buildUpcomingCard(m) {
                 <div class="upmatch-team-name">${m.away}</div>
             </div>
         </div>
-        <div class="upmatch-venue"> ${m.venue}</div>
+        <div class="upmatch-venue">📍 ${m.venue}</div>
         <div class="upmatch-odds">
             <div class="upmatch-odd" title="Bet Home Win">
                 <div class="upmatch-odd-val">${odds.home}</div>
@@ -2989,9 +3043,9 @@ async function toggleMatchStats(fixtureId, btnEl) {
     const panel = document.getElementById('stats-panel-' + fixtureId);
     if (!panel) return;
     const isOpen = panel.classList.contains('open');
-    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = ' Show Live Stats'; return; }
+    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = '📊 Show Live Stats'; return; }
     panel.classList.add('open');
-    btnEl.textContent = ' Hide Stats';
+    btnEl.textContent = '▲ Hide Stats';
     if (_statsCache[fixtureId]) { renderStatsPanel(panel, _statsCache[fixtureId]); return; }
     panel.innerHTML = '<div class="stats-loading">⏳ Loading stats...</div>';
     const key = getFootballKey();
@@ -3064,6 +3118,137 @@ async function trackBet(platform, source) {
             clicked_at: new Date().toISOString()
         }]);
     } catch(e) { /* silent — never block user navigation */ }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TODAY'S SURE WIN — fetches from Supabase, renders BetPawa-style
+// ══════════════════════════════════════════════════════════════
+async function loadSureWin() {
+    const wrap = document.getElementById('sw-public-wrap');
+    if (!wrap || !supabaseClient) return;
+    try {
+        const { data, error } = await supabaseClient
+            .from('sure_wins')
+            .select('*')
+            .eq('is_active', true)
+            .order('published_at', { ascending: false })
+            .limit(1)
+            .single();
+
+        if (error || !data) {
+            wrap.innerHTML = `<div class="sw-empty">
+                <div style="font-size:36px;margin-bottom:12px">🏆</div>
+                <div style="font-weight:700;margin-bottom:6px">No Sure Win published today</div>
+                <div style="font-size:12px">Check back later — our experts publish daily picks.</div>
+            </div>`;
+            return;
+        }
+        renderSureWin(data, wrap);
+    } catch(e) {
+        wrap.innerHTML = `<div class="sw-empty"><div style="font-size:28px">⚽</div><div>Sure Win not available right now.</div></div>`;
+    }
+}
+
+function renderSureWin(sw, wrap) {
+    const bm       = sw.bookmaker || '1xBet';
+    const code     = sw.booking_code || '';
+    const link     = sw.affiliate_link || '#';
+    const matches  = sw.matches || [];
+
+    // Calculate combined odds
+    const combined = matches.reduce((acc, m) => {
+        const tip = (m.tip || '1').toLowerCase();
+        let odds = tip === '1' ? m.odds_home : tip === 'x' ? m.odds_draw : m.odds_away;
+        odds = parseFloat(odds) || 0;
+        return odds > 0 ? acc * odds : acc;
+    }, 1).toFixed(2);
+
+    const matchRows = matches.map(m => {
+        const tip  = (m.tip || '1').toUpperCase();
+        const oh   = m.odds_home ? parseFloat(m.odds_home).toFixed(2) : '—';
+        const od   = m.odds_draw ? parseFloat(m.odds_draw).toFixed(2) : '—';
+        const oa   = m.odds_away ? parseFloat(m.odds_away).toFixed(2) : '—';
+        const selH = tip === '1';
+        const selD = tip === 'X';
+        const selA = tip === '2';
+        return `<div class="sw-match-item">
+            <div class="sw-match-time">
+                <strong>${m.time || '—'}</strong>
+                ${m.date ? `<span>${new Date(m.date+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</span>` : ''}
+            </div>
+            <div class="sw-match-teams">
+                <div class="home">${m.home}</div>
+                <div class="away">${m.away}</div>
+                <div class="sw-match-meta">${m.league || ''} ${m.venue ? '· ' + m.venue : ''}</div>
+            </div>
+            <div class="sw-odds-wrap">
+                <div class="sw-odd-box ${selH?'selected':''}">
+                    <div class="sw-odd-lbl">1</div>
+                    <div class="sw-odd-val">${oh}</div>
+                </div>
+                <div class="sw-odd-box ${selD?'selected':''}">
+                    <div class="sw-odd-lbl">X</div>
+                    <div class="sw-odd-val">${od}</div>
+                </div>
+                <div class="sw-odd-box ${selA?'selected':''}">
+                    <div class="sw-odd-lbl">2</div>
+                    <div class="sw-odd-val">${oa}</div>
+                </div>
+                <div class="sw-tip-badge">${tip}</div>
+            </div>
+        </div>`;
+    }).join('');
+
+    wrap.innerHTML = `<div class="sw-card">
+        <div class="sw-bookmaker-bar">
+            <div class="sw-bm-name">🏆 ${bm}</div>
+            <div class="sw-total-odds">Combined odds: <strong style="color:var(--gold)">${combined}</strong></div>
+        </div>
+        <div class="sw-match-list">${matchRows}</div>
+        <div class="sw-footer">
+            <button class="sw-add-btn" onclick="swAddToBetSlip('${code}','${bm}','${link}')">
+                🎯 Add All to Bet Slip
+            </button>
+            <div class="sw-disclaimer">18+ · Gamble responsibly · Odds subject to change · T&Cs apply</div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--grey)">
+        Last updated: ${sw.published_at ? new Date(sw.published_at).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'} 
+        · Booking code: <span style="font-family:monospace;color:var(--gold);letter-spacing:2px">${code}</span>
+    </div>`;
+}
+
+async function swAddToBetSlip(code, bookmaker, link) {
+    // 1. Copy booking code to clipboard
+    try {
+        await navigator.clipboard.writeText(code);
+    } catch(e) {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+
+    // 2. Track the click
+    trackBet(bookmaker, 'sure_win_section');
+
+    // 3. Show toast
+    const toast = document.getElementById('sw-toast');
+    if (toast) {
+        toast.innerHTML = `
+            <div style="font-size:20px;margin-bottom:6px">📋</div>
+            <strong style="color:var(--gold)">Booking code copied!</strong><br>
+            <span style="font-family:monospace;font-size:16px;letter-spacing:3px;color:var(--gold)">${code}</span><br>
+            <span style="color:rgba(255,255,255,.75);font-size:12px;margin-top:6px;display:block">
+                Redirecting to ${bookmaker}…<br>Paste the code in the <em>"Load Bet Slip"</em> section.
+            </span>`;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 5000);
+    }
+
+    // 4. Open affiliate link after 1.5 seconds
+    setTimeout(() => { window.open(link, '_blank', 'noopener'); }, 1500);
 }
 
 init();
@@ -3254,10 +3439,13 @@ function renderScores() {
     if (!filtered.length) {
         const leagueName = activeLeague === 'all' ? 'any league' : (LEAGUE_NAMES[activeLeague] || 'this league');
         grid.innerHTML = `<div class="scores-empty">
-            <div style="font-size:32px;margin-bottom:10px"></div>
+            <div style="font-size:32px;margin-bottom:10px">⏰</div>
             <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">No live matches right now for ${leagueName}</div>
             <div style="font-size:12px;color:var(--grey);line-height:1.8">
                 Today's kick-off times (EAT):<br>
+                🇪🇸 La Liga from <strong style="color:var(--accent)">3:00pm</strong> &nbsp;·&nbsp;
+                🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League from <strong style="color:var(--accent)">5:00pm</strong><br>
+                🏆 FA Cup at <strong style="color:var(--accent)">7:15pm</strong>
             </div>
             <button onclick="fetchLiveScores(true)" style="margin-top:14px;background:var(--accent);border:none;color:var(--dark);padding:9px 20px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer">⟳ Refresh</button>
         </div>`;
@@ -3297,7 +3485,7 @@ function renderScoreCard(m) {
                 <div class="score-team-name">${m.away}</div>
             </div>
         </div>
-        ${m.venue ? `<div class="score-time"> ${m.venue}</div>` : ''}
+        ${m.venue ? `<div class="score-time">📍 ${m.venue}</div>` : ''}
         ${showStats ? `<button class="stats-toggle-btn" id="stats-btn-${m.id}" onclick="toggleMatchStats('${m.id}',this)">📊 Live Stats &amp; Analysis</button>
         <div class="match-stats-panel" id="stats-panel-${m.id}"></div>` : ''}
     </div>`;
@@ -3375,7 +3563,7 @@ async function onUserLoggedIn(user) {
     // SUSPENDED — sign out immediately, show message
     if (userStatus === 'suspended') {
         await supabaseClient.auth.signOut();
-        showToast('🚫 Your account has been paused. Contact support.', 'error');
+        showToast('🚫 Your account has been suspended. Contact support.', 'error');
         onUserLoggedOut();
         return;
     }
@@ -3483,7 +3671,7 @@ async function fetchAIPredictionsLimited() {
                     🔒 ${preds.length - 1} MORE PREDICTIONS LOCKED
                 </div>
                 <button class="pred-lock-btn" onclick="openAuthModal('signup')">
-                     Sign Up Free to Unlock All
+                    🎯 Sign Up Free to Unlock All
                 </button>
             </div>
         </div>
