@@ -683,6 +683,9 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 /* ═══════════════════════════════════════════════
    GLOBAL PC / DESKTOP ENHANCEMENTS
    ─────────────────────────────────────────────
+   Sections use 4% side padding by default.
+   On large screens we switch to a fixed max-width
+   approach so content is never stretched too wide.
    ═══════════════════════════════════════════════ */
 
 /* Sections get a centered content wrapper on large screens */
@@ -737,6 +740,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 ::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
 ::-webkit-scrollbar-thumb{background:rgba(0,194,255,.25);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(0,194,255,.5)}
+
 /* ── SURE WIN SECTION ─────────────────────────────────────── */
 #sure-win-section{background:linear-gradient(135deg,#06111f,#071628);padding:68px 4%;border-top:2px solid var(--gold);border-bottom:1px solid rgba(255,184,0,.15)}
 .sw-header{text-align:center;margin-bottom:28px}
@@ -758,7 +762,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .sw-match-teams .home{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;line-height:1.2}
 .sw-match-teams .away{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,.7);line-height:1.2}
 .sw-match-meta{font-size:10px;color:var(--grey);margin-top:3px;letter-spacing:.5px}
-.sw-odds-wrap{display:flex;gap:5px;align-items:center}
+.sw-odds-wrap{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .sw-odd-box{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:6px 10px;text-align:center;min-width:48px}
 .sw-odd-box.selected{background:rgba(255,184,0,.15);border-color:var(--gold)}
 .sw-odd-lbl{font-size:9px;color:var(--grey);letter-spacing:1px}
@@ -767,9 +771,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 .sw-footer{padding:18px 20px;background:rgba(255,184,0,.06);border-top:1px solid rgba(255,184,0,.15)}
 .sw-add-btn{width:100%;padding:16px;background:var(--gold);color:#000;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s}
 .sw-add-btn:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,184,0,.35)}
-.sw-add-btn:active{transform:translateY(0)}
 .sw-disclaimer{text-align:center;font-size:10px;color:var(--grey);margin-top:10px;line-height:1.5}
-.sw-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid var(--gold);border-radius:10px;padding:14px 20px;color:var(--white);font-size:13px;max-width:340px;width:90%;text-align:center;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.5);display:none;animation:fadeUp .3s ease}
+.sw-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0d1b3e;border:1px solid var(--gold);border-radius:12px;padding:16px 22px;color:var(--white);font-size:13px;max-width:340px;width:90%;text-align:center;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.6);display:none;animation:fadeUp .3s ease}
 .sw-empty{text-align:center;padding:48px 20px;color:var(--grey)}
 </style>
 </head>
@@ -830,16 +833,16 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <div class="user-menu" id="nav-user-menu" style="display:none">
         <div class="user-avatar" id="nav-avatar" onclick="toggleUserDropdown()">?</div>
         <div class="user-dropdown" id="user-dropdown">
-          <div class="user-drop-item" onclick="toggleUserDropdown();scrollToSection('predictions')"> My Predictions</div>
+          <div class="user-drop-item" onclick="toggleUserDropdown();scrollToSection('predictions')">🎯 My Predictions</div>
           <div class="user-drop-item" onclick="signOutUser()" style="color:#ef4444">🚪 Sign Out</div>
         </div>
       </div>
     </div>
     <ul class="nav-links" id="nav-links">
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('club-news')">News</a></li>
-      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('sure-win-section')"> Sure Win</a></li>
-      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('upcoming-matches')"> Upcoming</a></li>
-      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('live-scores')"> Live Scores</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('sure-win-section')">🏆 Sure Win</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('upcoming-matches')">📅 Upcoming</a></li>
+      <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('live-scores')">📺 Live Scores</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('predictions')">Predictions</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('next-match')">Next Match</a></li>
       <li><a href="javascript:void(0)" onclick="closeNav();scrollToSection('fixtures')">Fixtures</a></li>
@@ -923,8 +926,8 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 
 <!-- CLUB NEWS -->
 <section id="club-news">
-  <div class="sl">International Football</div>
-  <div class="st">Live <span>Football News</span></div>
+  <div class="sl">Latest Updates</div>
+  <div class="st">Football <span>News</span></div>
   <div class="news-grid" id="news-grid"><div class="pred-loading"><div class="pred-spinner"></div>Fetching latest football news...</div></div>
   <div id="news-refresh-row" style="text-align:center;margin-top:16px;display:none">
     <button class="btn-s" onclick="fetchLiveNews(true)" style="font-size:12px;padding:8px 20px">Refresh News</button>
@@ -935,12 +938,15 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 <!-- SURE WIN SECTION -->
 <section id="sure-win-section">
   <div class="sw-header">
-    <div class="sw-badge"> <span>TODAY'S PICKS</span></div>
+    <div class="sw-badge">🏆 <span>TODAY'S PICKS</span></div>
     <div class="sw-title">Today's <span>Sure Win</span></div>
-    <p class="sw-subtitle">Our expert-curated 5-match combo — one booking code loads it all on your bet slip.</p>
+    <p class="sw-subtitle">Expert-curated 5-match combo — one booking code loads all picks on your bet slip instantly.</p>
   </div>
   <div id="sw-public-wrap">
-    <div class="sw-empty"><div class="pred-spinner" style="margin:0 auto 14px"></div>Loading today's Sure Win…</div>
+    <div class="sw-empty">
+      <div class="pred-spinner" style="margin:0 auto 14px"></div>
+      Loading today's Sure Win…
+    </div>
   </div>
 </section>
 
@@ -951,7 +957,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
 <section id="upcoming-matches">
   <div class="sl">This Week</div>
   <div class="st">Upcoming <span>Matches</span></div>
-  <p style="text-align:center;color:var(--grey);font-size:13px;max-width:520px;margin:0 auto 24px">Today's, tomorrow's and this week's fixtures from top international leagues.</p>
+  <p style="text-align:center;color:var(--grey);font-size:13px;max-width:520px;margin:0 auto 24px">Today's, tomorrow's and this week's fixtures from top international leagues — odds and affiliate links on every match.</p>
   <div class="upcoming-tabs" id="upcoming-tabs">
     <button class="upcoming-tab active" onclick="filterUpcoming('all')" data-comp="all">⚽ All</button>
     <button class="upcoming-tab" onclick="filterUpcoming('FIFA World Cup')" data-comp="FIFA World Cup">🏆 World Cup</button>
@@ -990,9 +996,11 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <button class="score-tab" onclick="switchLeague(271)" data-league="271">🇺🇬 Uganda PL</button>
   </div>
   <div class="scores-grid" id="scores-grid"><div class="pred-loading"><div class="pred-spinner"></div>Loading live scores...</div></div>
-  <div class="scores-refresh">
-    <button class="btn-s" onclick="fetchLiveScores(true)" style="font-size:12px;padding:8px 20px">  Refresh Scores</button>
-    <div id="scores-last-update" style="font-size:10px;color:var(--grey);margin-top:6px"></div>
+  <div class="scores-refresh" style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:16px">
+    <button class="btn-s" onclick="fetchLiveScores(true)" style="font-size:12px;padding:8px 20px;display:flex;align-items:center;gap:6px">
+      <span style="display:inline-block;animation:spin 2s linear infinite" id="scores-spin" style="display:none">⟳</span> ⟳ Refresh Scores
+    </button>
+    <div id="scores-last-update" style="font-size:10px;color:var(--grey)"></div>
   </div>
 </section>
 
@@ -1028,13 +1036,6 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
   </div>
   <div class="pred-grid" id="predictions-grid-extra" style="margin-top:16px"></div>
   <div class="affiliate-disclaimer" style="margin-top:20px">⚠️ 18+ only. AI predictions. Always gamble responsibly.</div>
-</section>
-
-<!-- LEAGUES HUB -->
-<section id="leagues">
-  <div class="sl">International Football</div>
-  <div class="st">Live Scores &amp; <span>Tables</span></div>
-  <div class="lg-grid" id="leagues-grid"></div>
 </section>
 
 <!-- BETTING SECTION -->
@@ -1211,9 +1212,9 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
         <strong>Disclosure:</strong> Links on this site are licensed. This helps us keep the site free. We only partner with licensed, reputable betting companies. Always gamble responsibly. 18+ only.
       </div>
       <div class="social-row">
-        <a href="https://facebook.com/ALSPORTS" target="_blank" class="social-btn social-fb"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook</a>
+        <a href="https://facebook.com/KitangaFC" target="_blank" class="social-btn social-fb"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> Facebook</a>
         <a href="whatsapp://send?phone=256750162429" onclick="if(!this.href.startsWith('whatsapp'))return;window.location.href=this.href;return false;" class="social-btn social-wa"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> WhatsApp</a>
-        <a href="https://x.com/ALSPORTS" target="_blank" class="social-btn social-tw"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X / Twitter</a>
+        <a href="https://x.com/KitangaFC" target="_blank" class="social-btn social-tw"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X / Twitter</a>
       </div>
     </div>
     <div class="about-contact-box">
@@ -1283,7 +1284,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
     <h2>Data Retention</h2>
     <p>Fan reviews and contact submissions are stored until manually deleted by the site administrator. You may request deletion by contacting us.</p>
     <h2>Your Rights</h2>
-    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">dealexander2001@gmail.com</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
+    <p>You have the right to access, correct or delete any personal data we hold about you. Contact us at <a href="/cdn-cgi/l/email-protection#4a2e2f2b262f322b242e2f38787a7a7b0a2d272b232664292527"><span class="__cf_email__" data-cfemail="c8acada9a4adb0a9a6acadbafaf8f8f988afa5a9a1a4e6aba7a5">[email&#160;protected]</span></a> or WhatsApp <a href="https://wa.me/256750162429">+256 750 162 429</a>.</p>
     <h2>Changes to This Policy</h2>
     <p>We may update this policy from time to time. Changes will be posted on this page with an updated date.</p>
     <p class="legal-last-updated">Last updated: April 10, 2026 | Contact: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7511101419100d141b11100747454544351218141c195b161a18">dealexander2001@gmail.com</a></p>
@@ -1413,11 +1414,11 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> <a href="https://wa.me/256750162429" target="_blank" style="color:var(--accent)">+256 750 162 429</a></p>
       <p style="font-size:12px;color:var(--grey);margin-top:6px"> Uganda 🇺🇬</p>
       <div class="social-links-footer" style="margin-top:14px">
-        <a href="https://facebook.com/ALSPORTS" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://facebook.com/KitangaFC" target="_blank" class="slink-real" style="background:#1877F2" title="Facebook"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
         <a href="whatsapp://send?phone=256750162429" onclick="window.location.href=this.href;return false;" class="slink-real" style="background:#25D366" title="WhatsApp"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-        <a href="https://x.com/ALSPORTS" target="_blank" class="slink-real" style="background:#1DA1F2" title="X / Twitter"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://x.com/KitangaFC" target="_blank" class="slink-real" style="background:#1DA1F2" title="X / Twitter"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
         <a href="https://youtube.com" target="_blank" class="slink-real" style="background:#FF0000" title="YouTube"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-        <a href="https://instagram.com/ALSPORTS" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://instagram.com/KitangaFC" target="_blank" class="slink-real" style="background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)" title="Instagram"><svg viewBox="0 0 24 24" fill="white" width="18" height="18"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
       </div>
     </div>
     <div class="fc">
@@ -1435,7 +1436,7 @@ footer{background:#030A1A;padding:50px 4% 30px;border-top:2px solid var(--accent
       <ul>
         <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('predictions');if(el)el.scrollIntoView({behavior:'smooth'});})();">Today's Tips</a></li>
         <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('club-news');if(el)el.scrollIntoView({behavior:'smooth'});})();">Football News</a></li>
-        <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('leagues');if(el)el.scrollIntoView({behavior:'smooth'});})();">Live Scores</a></li>
+        <li><a href="javascript:void(0)" onclick="scrollToSection('live-scores')">Live Scores</a></li>
         <li><a href="javascript:void(0)" onclick="(function(){var el=document.getElementById('football-bot');if(el)el.scrollIntoView({behavior:'smooth'});})();">AI Football Bot</a></li>
       </ul>
     </div>
@@ -2781,7 +2782,8 @@ function generateOdds(home, away) {
 
 // ── Fetch one date from API-Football with timeout + 1 retry ──────────────────
 // ══════════════════════════════════════════════════════════════
-//  UPCOMING MATCHES
+//  UPCOMING MATCHES — powered by TheSportsDB (FREE, no API key,
+//  no daily limit — preserves all API-Football calls for live scores)
 // ══════════════════════════════════════════════════════════════
 const TSDB_LEAGUES = [
     { id: 4328, comp: 'Premier League',         flag: '\U0001f3f4\U000e0067\U000e0062\U000e0065\U000e006e\U000e0067\U000e007f' },
@@ -2874,7 +2876,7 @@ async function fetchUpcomingMatches(force) {
 
     if (!collected.length) {
         if (!hasCached) grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1;padding:32px 20px">
-            <div style="font-size:36px;margin-bottom:12px"></div>
+            <div style="font-size:36px;margin-bottom:12px">📅</div>
             <div style="font-weight:700;font-size:15px;margin-bottom:10px">No fixtures right now</div>
             <div style="font-size:12px;color:var(--grey);line-height:1.9">
                 Most European leagues end mid-May and resume August.<br>
@@ -2922,7 +2924,7 @@ function renderUpcomingMatches() {
 
     if (!filtered.length) {
         grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1">
-            <div style="font-size:28px;margin-bottom:8px"></div>
+            <div style="font-size:28px;margin-bottom:8px">📅</div>
             <div>${activeUpcomingComp === 'FIFA World Cup'
                 ? 'World Cup 2026 fixtures will appear here when the schedule is released.'
                 : 'No upcoming matches found for this competition.'}</div>
@@ -2989,7 +2991,7 @@ function buildUpcomingCard(m) {
             <span class="upmatch-league-name" style="color:${accent}">${m.comp}</span>
             <div style="display:flex;align-items:center;gap:6px">
                 ${statusBadge}
-                <span class="upmatch-time"> ${dateStr} · ${timeStr}</span>
+                <span class="upmatch-time">🕐 ${dateStr} · ${timeStr}</span>
             </div>
         </div>
         <div class="upmatch-teams">
@@ -3003,7 +3005,7 @@ function buildUpcomingCard(m) {
                 <div class="upmatch-team-name">${m.away}</div>
             </div>
         </div>
-        <div class="upmatch-venue"> ${m.venue}</div>
+        <div class="upmatch-venue">📍 ${m.venue}</div>
         <div class="upmatch-odds">
             <div class="upmatch-odd" title="Bet Home Win">
                 <div class="upmatch-odd-val">${odds.home}</div>
@@ -3039,7 +3041,7 @@ async function toggleMatchStats(fixtureId, btnEl) {
     const panel = document.getElementById('stats-panel-' + fixtureId);
     if (!panel) return;
     const isOpen = panel.classList.contains('open');
-    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = ' Show Live Stats'; return; }
+    if (isOpen) { panel.classList.remove('open'); btnEl.textContent = '📊 Show Live Stats'; return; }
     panel.classList.add('open');
     btnEl.textContent = '▲ Hide Stats';
     if (_statsCache[fixtureId]) { renderStatsPanel(panel, _statsCache[fixtureId]); return; }
@@ -3117,7 +3119,7 @@ async function trackBet(platform, source) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TODAY'S SURE WIN — fetches from Supabase, renders BetPawa-style
+//  TODAY'S SURE WIN — loads from Supabase sure_wins table
 // ══════════════════════════════════════════════════════════════
 async function loadSureWin() {
     const wrap = document.getElementById('sw-public-wrap');
@@ -3133,29 +3135,31 @@ async function loadSureWin() {
 
         if (error || !data) {
             wrap.innerHTML = `<div class="sw-empty">
-                <div style="font-size:36px;margin-bottom:12px"></div>
-                <div style="font-weight:700;margin-bottom:6px">No Sure Win published today</div>
-                <div style="font-size:12px">Check back later — our experts publish daily picks.</div>
+                <div style="font-size:36px;margin-bottom:12px">🏆</div>
+                <div style="font-weight:700;margin-bottom:6px;color:var(--white)">No Sure Win published yet today</div>
+                <div style="font-size:12px">Our experts publish daily picks — check back soon.</div>
             </div>`;
             return;
         }
         renderSureWin(data, wrap);
     } catch(e) {
-        wrap.innerHTML = `<div class="sw-empty"><div style="font-size:28px"></div><div>Sure Win not available right now.</div></div>`;
+        wrap.innerHTML = `<div class="sw-empty">
+            <div style="font-size:28px">⚽</div>
+            <div style="margin-top:8px">Sure Win not available right now.</div>
+        </div>`;
     }
 }
 
 function renderSureWin(sw, wrap) {
-    const bm       = sw.bookmaker || '1xBet';
-    const code     = sw.booking_code || '';
-    const link     = sw.affiliate_link || '#';
-    const matches  = sw.matches || [];
+    const bm      = sw.bookmaker || '1xBet';
+    const code    = sw.booking_code || '';
+    const link    = sw.affiliate_link || '#';
+    const matches = sw.matches || [];
 
-    // Calculate combined odds
+    // Combined odds
     const combined = matches.reduce((acc, m) => {
         const tip = (m.tip || '1').toLowerCase();
-        let odds = tip === '1' ? m.odds_home : tip === 'x' ? m.odds_draw : m.odds_away;
-        odds = parseFloat(odds) || 0;
+        const odds = parseFloat(tip === '1' ? m.odds_home : tip === 'x' ? m.odds_draw : m.odds_away) || 0;
         return odds > 0 ? acc * odds : acc;
     }, 1).toFixed(2);
 
@@ -3164,29 +3168,30 @@ function renderSureWin(sw, wrap) {
         const oh   = m.odds_home ? parseFloat(m.odds_home).toFixed(2) : '—';
         const od   = m.odds_draw ? parseFloat(m.odds_draw).toFixed(2) : '—';
         const oa   = m.odds_away ? parseFloat(m.odds_away).toFixed(2) : '—';
-        const selH = tip === '1';
-        const selD = tip === 'X';
-        const selA = tip === '2';
+        const selH = tip === '1', selD = tip === 'X', selA = tip === '2';
+        const dateLabel = m.date
+            ? new Date(m.date + 'T12:00:00').toLocaleDateString('en-GB', { day:'2-digit', month:'short' })
+            : '';
         return `<div class="sw-match-item">
             <div class="sw-match-time">
                 <strong>${m.time || '—'}</strong>
-                ${m.date ? `<span>${new Date(m.date+'T12:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}</span>` : ''}
+                ${dateLabel ? `<span>${dateLabel}</span>` : ''}
             </div>
             <div class="sw-match-teams">
                 <div class="home">${m.home}</div>
                 <div class="away">${m.away}</div>
-                <div class="sw-match-meta">${m.league || ''} ${m.venue ? '· ' + m.venue : ''}</div>
+                <div class="sw-match-meta">${m.league || ''}${m.venue ? ' · ' + m.venue : ''}</div>
             </div>
             <div class="sw-odds-wrap">
-                <div class="sw-odd-box ${selH?'selected':''}">
+                <div class="sw-odd-box ${selH ? 'selected' : ''}">
                     <div class="sw-odd-lbl">1</div>
                     <div class="sw-odd-val">${oh}</div>
                 </div>
-                <div class="sw-odd-box ${selD?'selected':''}">
+                <div class="sw-odd-box ${selD ? 'selected' : ''}">
                     <div class="sw-odd-lbl">X</div>
                     <div class="sw-odd-val">${od}</div>
                 </div>
-                <div class="sw-odd-box ${selA?'selected':''}">
+                <div class="sw-odd-box ${selA ? 'selected' : ''}">
                     <div class="sw-odd-lbl">2</div>
                     <div class="sw-odd-val">${oa}</div>
                 </div>
@@ -3195,23 +3200,28 @@ function renderSureWin(sw, wrap) {
         </div>`;
     }).join('');
 
-    wrap.innerHTML = `<div class="sw-card">
-        <div class="sw-bookmaker-bar">
-            <div class="sw-bm-name"> ${bm}</div>
-            <div class="sw-total-odds">Combined odds: <strong style="color:var(--gold)">${combined}</strong></div>
+    const publishedTime = sw.published_at
+        ? new Date(sw.published_at).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+        : '—';
+
+    wrap.innerHTML = `
+        <div class="sw-card">
+            <div class="sw-bookmaker-bar">
+                <div class="sw-bm-name">🏆 ${bm}</div>
+                <div class="sw-total-odds">Combined odds: <strong style="color:var(--gold)">${combined}</strong></div>
+            </div>
+            <div class="sw-match-list">${matchRows}</div>
+            <div class="sw-footer">
+                <button class="sw-add-btn" onclick="swAddToBetSlip('${code}','${bm}','${link}')">
+                    🎯 Add All to Bet Slip
+                </button>
+                <div class="sw-disclaimer">18+ · Gamble responsibly · Odds subject to change · T&Cs apply</div>
+            </div>
         </div>
-        <div class="sw-match-list">${matchRows}</div>
-        <div class="sw-footer">
-            <button class="sw-add-btn" onclick="swAddToBetSlip('${code}','${bm}','${link}')">
-                 Add All to Bet Slip
-            </button>
-            <div class="sw-disclaimer">18+ · Gamble responsibly · Odds subject to change · T&Cs apply</div>
-        </div>
-    </div>
-    <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--grey)">
-        Last updated: ${sw.published_at ? new Date(sw.published_at).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'} 
-        · Booking code: <span style="font-family:monospace;color:var(--gold);letter-spacing:2px">${code}</span>
-    </div>`;
+        <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--grey)">
+            Published: ${publishedTime} &nbsp;·&nbsp;
+            Code: <span style="font-family:monospace;color:var(--gold);letter-spacing:2px">${code}</span>
+        </div>`;
 }
 
 async function swAddToBetSlip(code, bookmaker, link) {
@@ -3219,31 +3229,31 @@ async function swAddToBetSlip(code, bookmaker, link) {
     try {
         await navigator.clipboard.writeText(code);
     } catch(e) {
-        // Fallback for older browsers
         const ta = document.createElement('textarea');
-        ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        ta.value = code; ta.style.cssText = 'position:fixed;opacity:0';
         document.body.appendChild(ta); ta.select(); document.execCommand('copy');
         document.body.removeChild(ta);
     }
 
-    // 2. Track the click
-    trackBet(bookmaker, 'sure_win_section');
+    // 2. Track affiliate click
+    if (typeof trackBet === 'function') trackBet(bookmaker, 'sure_win_section');
 
-    // 3. Show toast
+    // 3. Toast notification
     const toast = document.getElementById('sw-toast');
     if (toast) {
         toast.innerHTML = `
-            <div style="font-size:20px;margin-bottom:6px"></div>
+            <div style="font-size:22px;margin-bottom:6px">📋</div>
             <strong style="color:var(--gold)">Booking code copied!</strong><br>
-            <span style="font-family:monospace;font-size:16px;letter-spacing:3px;color:var(--gold)">${code}</span><br>
+            <span style="font-family:monospace;font-size:17px;letter-spacing:3px;color:var(--gold)">${code}</span><br>
             <span style="color:rgba(255,255,255,.75);font-size:12px;margin-top:6px;display:block">
-                Redirecting to ${bookmaker}…<br>Paste the code in the <em>"Load Bet Slip"</em> section.
+                Redirecting to ${bookmaker}…<br>
+                Paste the code in the <em>"Load Bet Slip"</em> section.
             </span>`;
         toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 5000);
+        setTimeout(() => { toast.style.display = 'none'; }, 5500);
     }
 
-    // 4. Open affiliate link after 1.5 seconds
+    // 4. Open affiliate link after 1.5s
     setTimeout(() => { window.open(link, '_blank', 'noopener'); }, 1500);
 }
 
@@ -3265,30 +3275,35 @@ window.addEventListener('load', () => {
 //  Free tier: 100 requests/day  |  Cache: 5 min to protect quota
 // ═══════════════════════════════════════════════════════════════
 
-const LEAGUE_IDS = [39, 140, 2, 78, 135, 61, 3, 271];
+// All leagues we care about — World Cup (1) auto-shows when it starts in June 2026
+const LEAGUE_IDS = new Set([1, 2, 3, 39, 61, 78, 94, 135, 140, 271, 307, 848]);
 const LEAGUE_NAMES = {
-    39: 'Premier League', 140: 'La Liga', 2: 'Champions League',
-    78: 'Bundesliga', 135: 'Serie A', 61: 'Ligue 1',
-    3: 'Europa League', 271: 'Uganda PL'
+    1: 'World Cup', 2: 'Champions League', 3: 'Europa League',
+    39: 'Premier League', 61: 'Ligue 1', 78: 'Bundesliga',
+    94: 'Primeira Liga', 135: 'Serie A', 140: 'La Liga',
+    271: 'Uganda PL', 307: 'Saudi Pro League', 848: 'Conference League'
 };
 
-let allScoreData   = [];   // all fetched fixtures
+let allScoreData   = [];
 let activeLeague   = 'all';
 let scoresTimer    = null;
 let hasLiveMatches = false;
 
 async function fetchLiveScores(force) {
-    const CACHE = 'kfc_scores_v1', CTIME = 'kfc_scores_ts_v1', MINS = 5;
+    const CACHE = 'als_scores_v3', CTIME = 'als_scores_ts_v3';
     const grid = document.getElementById('scores-grid');
     if (!grid) return;
 
-    // Cache check (saves daily API quota)
+    // Cache check
     if (!force) {
         try {
             const cached = localStorage.getItem(CACHE);
             const ts = parseInt(localStorage.getItem(CTIME) || '0');
-            if (cached && Date.now() - ts < MINS * 60000) {
-                allScoreData = JSON.parse(cached);
+            const cacheAge = Date.now() - ts;
+            // Short cache when live games likely; longer at night
+            const maxAge = hasLiveMatches ? 90000 : 10 * 60000;
+            if (cached && cacheAge < maxAge) {
+                allScoreData = JSON.parse(cached).map(m => ({ ...m }));
                 renderScores();
                 scheduleRefresh();
                 return;
@@ -3296,45 +3311,72 @@ async function fetchLiveScores(force) {
         } catch(e) {}
     }
 
-    grid.innerHTML = '<div class="pred-loading"><div class="pred-spinner"></div>Loading live scores...</div>';
-
     const key = getFootballKey();
     if (!key) {
-        grid.innerHTML = '<div class="scores-empty">API-Football key not configured.</div>';
+        grid.innerHTML = `<div class="scores-empty">
+            <div style="font-size:28px;margin-bottom:8px">🔑</div>
+            <div>API-Football key not set — check Admin → Settings</div>
+        </div>`;
         return;
     }
 
-    // Fetch today's fixtures for all leagues in parallel (one request each)
+    // ── TWO REQUESTS ONLY ────────────────────────────────────────
+    // 1) ?live=all   → every currently live match from any league (no season/date needed)
+    // 2) ?date=TODAY → every fixture today (NS, FT, live) — no season needed
+    // Total: 2 API-Football calls per refresh instead of 8+
     const today = new Date().toISOString().slice(0, 10);
-    // Season logic: Aug+ = this year's season, Jan-Jul = last year's season
-    const _now = new Date();
-    const season = _now.getMonth() >= 7 ? _now.getFullYear() : _now.getFullYear() - 1;
-    const fetches = LEAGUE_IDS.map(lid =>
-        fetch(`https://v3.football.api-sports.io/fixtures?league=${lid}&season=${season}&date=${today}`, {
-            headers: {
-                'x-apisports-key': key
-            }
-        })
-        .then(r => r.ok ? r.json() : null)
-        .catch(() => null)
-    );
 
-    const results = await Promise.allSettled(fetches);
+    const [liveRes, todayRes] = await Promise.allSettled([
+        fetch('https://v3.football.api-sports.io/fixtures?live=all',
+            { headers: { 'x-apisports-key': key } })
+            .then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`https://v3.football.api-sports.io/fixtures?date=${today}`,
+            { headers: { 'x-apisports-key': key } })
+            .then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+
+    const seenIds = new Set();
     allScoreData = [];
 
-    results.forEach((res, i) => {
-        if (res.status === 'fulfilled' && res.value?.response) {
-            res.value.response.forEach(fix => {
-                allScoreData.push(normalizeFixture(fix, LEAGUE_IDS[i]));
-            });
-        }
-    });
+    // Helper: add fixture if not duplicate and in our league list
+    const add = (fix) => {
+        if (!fix?.fixture?.id) return;
+        if (seenIds.has(fix.fixture.id)) return;
+        if (!LEAGUE_IDS.has(fix.league?.id)) return;
+        seenIds.add(fix.fixture.id);
+        allScoreData.push(normalizeFixture(fix, fix.league.id));
+    };
 
-    // Sort: LIVE first → FT → upcoming by time
+    // Live matches first (from ?live=all — no league filter, shows everything)
+    if (liveRes.status === 'fulfilled' && liveRes.value?.response) {
+        liveRes.value.response.forEach(add);
+    }
+
+    // Today's matches (NS + FT + any live not already added)
+    if (todayRes.status === 'fulfilled' && todayRes.value?.response) {
+        todayRes.value.response.forEach(add);
+    }
+
+    // If both failed (network error or daily limit hit), show clear message
+    if (!allScoreData.length &&
+        liveRes.status === 'rejected' && todayRes.status === 'rejected') {
+        grid.innerHTML = `<div class="scores-empty">
+            <div style="font-size:30px;margin-bottom:10px">📡</div>
+            <div style="font-weight:700;margin-bottom:6px">Could not reach API-Football</div>
+            <div style="font-size:12px;color:var(--grey);line-height:1.8">
+                Check your internet connection.<br>
+                If this persists, your 100 daily requests may be used up.<br>
+                <span style="color:var(--accent)">Requests reset at midnight.</span>
+            </div>
+            <button onclick="fetchLiveScores(true)" style="margin-top:12px;background:var(--accent);border:none;color:var(--dark);padding:8px 20px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer">⟳ Retry</button>
+        </div>`;
+        return;
+    }
+
+    // Sort: LIVE first → FT → NS by kickoff
     allScoreData.sort((a, b) => {
         const order = { LIVE: 0, FT: 1, NS: 2 };
-        const ao = order[a.statusGroup] ?? 3;
-        const bo = order[b.statusGroup] ?? 3;
+        const ao = order[a.statusGroup] ?? 3, bo = order[b.statusGroup] ?? 3;
         return ao !== bo ? ao - bo : a.kickoffTs - b.kickoffTs;
     });
 
@@ -3381,7 +3423,7 @@ function normalizeFixture(fix, leagueId) {
     return {
         id:          fix.fixture.id,
         leagueId,
-        leagueName:  LEAGUE_NAMES[leagueId] || fix.leagues?.name || 'Football',
+        leagueName:  LEAGUE_NAMES[leagueId] || fix.league?.name || 'Football',
         home:        fix.teams.home.name,
         away:        fix.teams.away.name,
         homeLogo:    fix.teams.home.logo,
@@ -3433,14 +3475,25 @@ function renderScores() {
         : allScoreData.filter(m => m.leagueId === activeLeague || m.leagueId === Number(activeLeague));
 
     if (!filtered.length) {
-        const leagueName = activeLeague === 'all' ? 'any league' : (LEAGUE_NAMES[activeLeague] || 'this league');
+        const isAll = activeLeague === 'all';
+        const leagueName = isAll ? '' : (LEAGUE_NAMES[activeLeague] || 'this league');
+        const hour = new Date().getHours();
+        const timeHint = hour < 12
+            ? 'Most European matches kick off from 3pm EAT onwards.'
+            : hour < 17
+            ? 'Matches typically kick off from 3pm – midnight EAT.'
+            : 'Evening matches are underway — try refreshing.';
         grid.innerHTML = `<div class="scores-empty">
-            <div style="font-size:32px;margin-bottom:10px"></div>
-            <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">No live matches right now for ${leagueName}</div>
-            <div style="font-size:12px;color:var(--grey);line-height:1.8">
-                Today's kick-off times (EAT):<br>
+            <div style="font-size:32px;margin-bottom:10px">⏰</div>
+            <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:8px">
+                No fixtures right now${leagueName ? ' for ' + leagueName : ''}
             </div>
-            <button onclick="fetchLiveScores(true)" style="margin-top:14px;background:var(--accent);border:none;color:var(--dark);padding:9px 20px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer">⟳ Refresh</button>
+            <div style="font-size:12px;color:var(--grey);line-height:1.8">
+                ${timeHint}<br>
+                Live scores update automatically — or hit Refresh.<br>
+                <span style="color:var(--accent)">🌍 World Cup 2026 kicks off June 11 — it will auto-appear here.</span>
+            </div>
+            <button onclick="fetchLiveScores(true)" style="margin-top:12px;background:var(--accent);border:none;color:var(--dark);padding:9px 20px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer">⟳ Refresh Now</button>
         </div>`;
         return;
     }
@@ -3478,29 +3531,35 @@ function renderScoreCard(m) {
                 <div class="score-team-name">${m.away}</div>
             </div>
         </div>
-        ${m.venue ? `<div class="score-time"> ${m.venue}</div>` : ''}
-        ${showStats ? `<button class="stats-toggle-btn" id="stats-btn-${m.id}" onclick="toggleMatchStats('${m.id}',this)"> Live Stats &amp; Analysis</button>
+        ${m.venue ? `<div class="score-time">📍 ${m.venue}</div>` : ''}
+        ${showStats ? `<button class="stats-toggle-btn" id="stats-btn-${m.id}" onclick="toggleMatchStats('${m.id}',this)">📊 Live Stats &amp; Analysis</button>
         <div class="match-stats-panel" id="stats-panel-${m.id}"></div>` : ''}
     </div>`;
 }
 
 function updateLastRefresh() {
     const el = document.getElementById('scores-last-update');
-    if (el) el.textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+    if (!el) return;
+    const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+    const nextMin = hasLiveMatches ? 4 : 15;
+    el.innerHTML = `Updated ${time} · <span style="color:${hasLiveMatches ? 'var(--red)' : 'var(--grey)'}">
+        ${hasLiveMatches ? '🔴 LIVE — auto-refreshes every 4 min' : `Auto-refreshes every ${nextMin} min`}
+    </span>`;
 }
 
 function scheduleRefresh() {
     clearTimeout(scoresTimer);
-    // Smart refresh: only burn API calls when it makes sense
-    // Live games active    → refresh every 90 seconds
-    // No live games, 7am-midnight → refresh every 12 minutes
-    // Night hours 12am-7am → refresh every 30 minutes (rarely any games)
+    // Free plan = 100 req/day budget shared with stats calls
+    // Budget: 70 req for live scores, 30 for stats
+    // 70 req / 24hr = ~3 req/hr average
+    // Strategy: fast when live, slow otherwise
     const hour = new Date().getHours();
-    const isNight = hour < 7 || hour >= 0; // midnight-7am
+    const isNight = hour >= 1 && hour < 7;   // 1am–7am EAT: almost no games
     let delay;
-    if (hasLiveMatches)     delay = 90000;          // 90s  — live games
-    else if (!isNight)      delay = 12 * 60000;     // 12min — day, no live
-    else                    delay = 30 * 60000;     // 30min — night
+    if (hasLiveMatches) delay = 4 * 60000;   // 4 min — live games (15 req/hr max)
+    else if (isNight)   delay = 30 * 60000;  // 30 min — night, no games
+    else                delay = 15 * 60000;  // 15 min — daytime, no live
+    // Daily budget at worst case: 4h live × 15/hr + 20h no-live × 4/hr = 60+80 = well under 100
     scoresTimer = setTimeout(() => fetchLiveScores(true), delay);
 }
 
@@ -3556,7 +3615,7 @@ async function onUserLoggedIn(user) {
     // SUSPENDED — sign out immediately, show message
     if (userStatus === 'suspended') {
         await supabaseClient.auth.signOut();
-        showToast('🚫 Your account has been paused. Contact support.', 'error');
+        showToast('🚫 Your account has been suspended. Contact support.', 'error');
         onUserLoggedOut();
         return;
     }
@@ -3664,7 +3723,7 @@ async function fetchAIPredictionsLimited() {
                     🔒 ${preds.length - 1} MORE PREDICTIONS LOCKED
                 </div>
                 <button class="pred-lock-btn" onclick="openAuthModal('signup')">
-                     Sign Up Free to Unlock All
+                    🎯 Sign Up Free to Unlock All
                 </button>
             </div>
         </div>
