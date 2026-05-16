@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>AL Sports — Football Predictions, Live Scores & Betting Tips</title>
@@ -2637,6 +2640,18 @@ function subscribeToRealtimeUpdates() {
 
 // Initialize
 async function init() {
+    // Clear old cache keys from previous versions of the site
+    // so stale data from old builds doesn't persist across updates
+    const CURRENT_BUILD = 'als_v8';
+    if (localStorage.getItem('als_build') !== CURRENT_BUILD) {
+        const keepKeys = ['kfc_football_api_key_a', 'kfc_football_api_key_b',
+                          'kfc_backend_url', 'kfc_gemini_key', 'als_build'];
+        Object.keys(localStorage)
+            .filter(k => !keepKeys.includes(k) && !k.startsWith('sb-'))
+            .forEach(k => localStorage.removeItem(k));
+        localStorage.setItem('als_build', CURRENT_BUILD);
+        console.log('[Cache] Cleared stale cache for new build.');
+    }
     // Register service worker — auto-reloads when new version is deployed
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').then(reg => {
@@ -3247,6 +3262,68 @@ async function swAddToBetSlip(code, bookmaker, link) {
 }
 
 init();
+
+// ══════════════════════════════════════════════════════════════
+//  REAL-TIME PUSH — no more clearing cache on other phones
+//  When admin publishes/updates anything in Supabase, every
+//  connected browser updates automatically within seconds.
+// ══════════════════════════════════════════════════════════════
+function setupRealtime() {
+    if (!supabaseClient) return;
+
+    // 1. Sure Win — when admin publishes or updates booking code,
+    //    instantly push to every phone/browser viewing the site
+    supabaseClient
+        .channel('sure_wins_live')
+        .on('postgres_changes', {
+            event:  '*',        // INSERT, UPDATE, DELETE
+            schema: 'public',
+            table:  'sure_wins'
+        }, () => {
+            console.log('[Realtime] Sure Win updated — refreshing…');
+            loadSureWin();
+        })
+        .subscribe();
+
+    // 2. Ads — when admin changes ads, push update
+    supabaseClient
+        .channel('ads_live')
+        .on('postgres_changes', {
+            event: '*', schema: 'public', table: 'ads'
+        }, () => {
+            if (typeof loadAds === 'function') loadAds();
+        })
+        .subscribe();
+
+    // 3. Announcement ticker — push instantly when admin changes it
+    supabaseClient
+        .channel('ticker_live')
+        .on('postgres_changes', {
+            event: '*', schema: 'public', table: 'site_settings'
+        }, () => {
+            if (typeof loadTicker === 'function') loadTicker();
+        })
+        .subscribe();
+
+    console.log('[Realtime] Subscriptions active — all devices auto-update.');
+}
+
+// ── VISIBILITY — re-check data when user returns to the tab ──
+// Covers: switching apps, locking phone, switching browser tabs
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    // User came back — silently refresh time-sensitive data
+    loadSureWin();
+    fetchLiveScores(true);
+    // Upcoming matches only if cache is stale (>25 min old)
+    try {
+        const ts = parseInt(localStorage.getItem('als_tsdb_ts') || '0');
+        if (Date.now() - ts > 25 * 60000) fetchUpcomingMatches(true);
+    } catch(e) {}
+});
+
+// Start realtime after a short delay so Supabase auth is ready
+setTimeout(setupRealtime, 2000);
 
 // Absolute fallback — loader always dismisses when page fully loads
 window.addEventListener('load', () => {
