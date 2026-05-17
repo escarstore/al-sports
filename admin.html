@@ -401,6 +401,7 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
       <div class="nav-section">Site Settings</div>
       <div class="nav-item" data-page="users"><span class="nav-icon">👥</span><span>Users</span></div>
       <div class="nav-item" data-page="betting-clicks"><span class="nav-icon">🎰</span><span>Betting Registrations</span></div>
+      <div class="nav-item" data-page="sure-win"><span class="nav-icon">🏆</span><span>Sure Win Publisher</span></div>
       <div class="nav-item" data-page="ticker"><span class="nav-icon">📢</span><span>Announcement Bar</span></div>
       <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span>Settings</span></div>
     </nav>
@@ -612,6 +613,104 @@ body{font-family:'Barlow',sans-serif;background:#060d24;color:var(--white);min-h
           </div>
         </div>
       </div>
+
+      <!-- SURE WIN PAGE -->
+      <div class="page" id="page-sure-win">
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-head-title">🏆 SURE WIN PUBLISHER</div>
+            <div style="font-size:11px;color:var(--grey)">Select 5 matches · Set booking code · Publish to users</div>
+          </div>
+          <div class="sec-body">
+            <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px">
+              <div class="field"><label>Bookmaker</label>
+                <select id="sw-bookmaker" onchange="swAutoAffiliate()">
+                  <option value="1xBet">1xBet</option>
+                  <option value="MelBet">MelBet</option>
+                  <option value="BetPawa">BetPawa</option>
+                  <option value="SportPesa">SportPesa</option>
+                </select>
+              </div>
+              <div class="field"><label>Booking / Bet Slip Code</label>
+                <input type="text" id="sw-booking-code" placeholder="e.g. ABC123XYZ" oninput="swCheckReady()" style="font-family:monospace;font-size:15px;letter-spacing:2px;text-transform:uppercase">
+              </div>
+              <div class="field"><label>Affiliate Link</label>
+                <input type="text" id="sw-affiliate-link" placeholder="Auto-filled or paste manually" oninput="swCheckReady()">
+              </div>
+            </div>
+            <div style="margin-bottom:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <button class="btn btn-grey btn-sm" onclick="swAutoAffiliate()">⚡ Auto-fill affiliate link</button>
+              <div id="sw-affiliate-preview" style="font-size:11px;color:var(--accent)"></div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;color:var(--white)">SELECT EXACTLY 5 MATCHES</div>
+                <div style="font-size:11px;color:var(--grey);margin-top:3px">Load from upcoming fixtures or add manually</div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-grey btn-sm" onclick="swLoadFromPredictions()">🤖 Load Fixtures</button>
+                <button class="btn btn-grey btn-sm" onclick="swAddManualRow()">➕ Add Match</button>
+                <button class="btn btn-grey btn-sm" onclick="swClearAll()" style="color:var(--red);border-color:rgba(255,61,87,.3)">✕ Clear</button>
+              </div>
+            </div>
+            <div id="sw-counter" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:14px;padding:10px 16px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;gap:12px">
+              <span id="sw-count-num" style="font-size:26px;color:var(--grey)">0</span>
+              <span style="color:var(--grey)">/5 selected</span>
+              <div style="flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;max-width:180px">
+                <div id="sw-count-fill" style="height:100%;width:0%;background:var(--accent);border-radius:3px;transition:width .3s ease"></div>
+              </div>
+              <span id="sw-count-msg" style="font-size:11px;color:var(--grey)">Pick 5 matches to unlock Publish</span>
+            </div>
+            <div id="sw-matches-pool" style="display:flex;flex-direction:column;gap:8px">
+              <div style="text-align:center;padding:36px;color:var(--grey);font-size:13px;border:1px dashed rgba(255,255,255,.1);border-radius:10px">
+                🤖 Click <b>Load Fixtures</b> or <b>Add Match</b> to begin
+              </div>
+            </div>
+            <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+              <button class="btn btn-accent" id="sw-publish-btn" onclick="swPublish()" disabled style="padding:12px 32px;font-size:14px;opacity:.35;cursor:not-allowed">
+                🚀 PUBLISH SURE WIN
+              </button>
+              <div id="sw-publish-msg" style="font-size:12px;color:var(--grey)">Select 5 matches and enter a booking code first.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Update -->
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-head-title">⚡ QUICK UPDATE BOOKING CODE</div>
+            <div style="font-size:11px;color:var(--grey)">Update today's code without re-selecting matches</div>
+          </div>
+          <div class="sec-body">
+            <div class="form-grid" style="grid-template-columns:auto 1fr auto;align-items:end;gap:14px">
+              <div class="field"><label>Active Sure Win</label>
+                <select id="sw-quick-id" style="min-width:200px"><option value="">— select —</option></select>
+              </div>
+              <div class="field"><label>New Booking Code</label>
+                <input type="text" id="sw-quick-code" placeholder="Paste new code" style="font-family:monospace;font-size:15px;letter-spacing:2px;text-transform:uppercase">
+              </div>
+              <button class="btn btn-accent" onclick="swQuickUpdate()" style="white-space:nowrap">💾 Update Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="sec-card">
+          <div class="sec-head">
+            <div class="sec-head-title">📋 PUBLISHED SURE WINS</div>
+            <button class="btn btn-grey btn-sm" onclick="swLoadHistory()">🔄 Refresh</button>
+          </div>
+          <div class="sec-body" style="padding:0">
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead><tr><th>Published</th><th>Bookmaker</th><th>Booking Code</th><th>Matches</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="sw-history-tbody"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--grey)">Click Refresh to load</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END SURE WIN PAGE -->
 
       <!-- SETTINGS PAGE -->
       <div class="page" id="page-settings">
@@ -951,7 +1050,8 @@ function goTo(page) {
         videos: 'Match Videos', reviews: 'Fan Reviews', sponsors: 'Sponsors',
         inquiries: 'Sponsor Proposals', ads: 'Advertisements', analytics: 'Ad Analytics', 
         ticker: 'Announcement Bar', settings: 'Settings', news: 'Club News', leagues: 'Leagues',
-        users: 'User Management', 'betting-clicks': '🎰 Betting Registrations'
+        users: 'User Management', 'betting-clicks': '🎰 Betting Registrations',
+        'sure-win': '🏆 Sure Win Publisher'
     };
     document.getElementById('topbar-title').textContent = titles[page] || page;
     
@@ -973,6 +1073,7 @@ function goTo(page) {
     if (page === 'leagues') renderLeaguesAdmin();
     if (page === 'users') renderUsersAdmin();
     if (page === 'betting-clicks') renderBettingClicks();
+    if (page === 'sure-win') initSureWinPage();
     
     if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
 }
@@ -1810,6 +1911,305 @@ async function exportBettingCSV() {
         toast('📥 CSV exported!');
     } catch(e) { toast('❌ Export failed: ' + e.message, true); }
 }
+
+// ══════════════════════════════════════════════════════════════
+//  SURE WIN PUBLISHER
+// ══════════════════════════════════════════════════════════════
+const AFFILIATE_LINKS = {
+    '1xBet':    'https://reffpa.com/L?tag=d_5500916m_97c_Kitanga_FC&site=5500916&ad=97&r=registration/',
+    'MelBet':   'https://refpa3665.com/L?tag=d_5503059m_2170c_Kitanga_FC&site=5503059&ad=2170&r=registration/',
+    'BetPawa':  'https://www.betpawa.ug/register',
+    'SportPesa':'https://www.sportpesa.ug/register',
+};
+
+// All available tip options — including all Over lines
+const TIP_OPTIONS = `
+    <option value="1">1 — Home Win</option>
+    <option value="X">X — Draw</option>
+    <option value="2">2 — Away Win</option>
+    <option value="1X">1X — Home or Draw</option>
+    <option value="X2">X2 — Draw or Away</option>
+    <option value="GG">GG — Both Teams Score</option>
+    <option value="NG">NG — No Goal</option>
+    <option value="Over 0.5">Over 0.5 Goals</option>
+    <option value="Over 1.5">Over 1.5 Goals</option>
+    <option value="Over 2.5">Over 2.5 Goals</option>
+    <option value="Over 3.5">Over 3.5 Goals</option>
+    <option value="Under 0.5">Under 0.5 Goals</option>
+    <option value="Under 1.5">Under 1.5 Goals</option>
+    <option value="Under 2.5">Under 2.5 Goals</option>
+`;
+
+let swSelectedMatches = [];
+
+function initSureWinPage() {
+    swAutoAffiliate();
+    swLoadHistory();
+    swPopulateQuickSelect();
+}
+
+function swAutoAffiliate() {
+    const bm   = document.getElementById('sw-bookmaker')?.value;
+    const link = AFFILIATE_LINKS[bm] || '';
+    const el   = document.getElementById('sw-affiliate-link');
+    if (el) el.value = link;
+    const prev = document.getElementById('sw-affiliate-preview');
+    if (prev) prev.textContent = link ? `✅ ${bm} link loaded` : '';
+    swCheckReady();
+}
+
+function swCheckReady() {
+    const code  = (document.getElementById('sw-booking-code')?.value || '').trim();
+    const link  = (document.getElementById('sw-affiliate-link')?.value || '').trim();
+    const count = swSelectedMatches.length;
+    const ready = code && link && count === 5;
+    const btn   = document.getElementById('sw-publish-btn');
+    const msg   = document.getElementById('sw-publish-msg');
+    if (btn) { btn.disabled = !ready; btn.style.opacity = ready ? '1' : '.35'; btn.style.cursor = ready ? 'pointer' : 'not-allowed'; }
+    if (msg) {
+        if (!code)       msg.textContent = '⚠️ Enter a booking code.';
+        else if (!link)  msg.textContent = '⚠️ Affiliate link missing — click Auto-fill.';
+        else if (count < 5) msg.textContent = `⚠️ Select ${5 - count} more match${5-count===1?'':'es'}.`;
+        else if (count > 5) msg.textContent = `⚠️ Too many — deselect ${count-5}.`;
+        else msg.textContent = '✅ Ready to publish!';
+    }
+    const fill = document.getElementById('sw-count-fill');
+    const num  = document.getElementById('sw-count-num');
+    const cmsg = document.getElementById('sw-count-msg');
+    if (fill) { fill.style.width = Math.min(100, count/5*100) + '%'; fill.style.background = count===5 ? 'var(--green)' : count>5 ? 'var(--red)' : 'var(--accent)'; }
+    if (num)  { num.textContent = count; num.style.color = count===5 ? 'var(--green)' : count>5 ? 'var(--red)' : 'var(--grey)'; }
+    if (cmsg) cmsg.textContent = count===5 ? '✅ Ready!' : count>5 ? '❌ Too many.' : `Select ${5-count} more`;
+}
+
+async function swLoadFromPredictions() {
+    const pool = document.getElementById('sw-matches-pool');
+    if (!pool) return;
+    pool.innerHTML = '<div class="pred-loading" style="justify-content:center;padding:20px"><div class="pred-spinner"></div> Loading fixtures…</div>';
+    const TSDB = [
+        { id: 4328, comp: 'Premier League' }, { id: 4335, comp: 'La Liga' },
+        { id: 4331, comp: 'Bundesliga' },     { id: 4332, comp: 'Serie A' },
+        { id: 4334, comp: 'Ligue 1' },        { id: 4480, comp: 'UCL' },
+        { id: 4481, comp: 'Europa League' },
+    ];
+    const results = await Promise.allSettled(
+        TSDB.map(lg =>
+            fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${lg.id}`)
+            .then(r => r.json()).then(d => ({ lg, events: d.events || [] })).catch(() => ({ lg, events:[] }))
+        )
+    );
+    const matches = [];
+    results.forEach(r => {
+        if (r.status !== 'fulfilled') return;
+        const { lg, events } = r.value;
+        (events || []).slice(0, 3).forEach(ev => {
+            if (!ev.strHomeTeam || !ev.strAwayTeam) return;
+            const kickoff = new Date(`${ev.dateEvent}T${ev.strTime||'00:00:00'}Z`);
+            matches.push({
+                id: ev.idEvent || Math.random().toString(36).slice(2),
+                home: ev.strHomeTeam, away: ev.strAwayTeam, league: lg.comp,
+                date: ev.dateEvent,
+                time: kickoff.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }),
+                venue: ev.strVenue || 'TBD',
+            });
+        });
+    });
+    if (!matches.length) {
+        pool.innerHTML = '<div style="text-align:center;padding:30px;color:var(--grey)">No upcoming fixtures found. Add matches manually.</div>';
+        return;
+    }
+    swSelectedMatches = []; swCheckReady();
+    pool.innerHTML = `<div style="font-size:11px;color:var(--grey);margin-bottom:10px;letter-spacing:1px">✅ Check boxes to select. Fill in odds. Pick exactly 5.</div>
+        ${matches.map((m, i) => swMatchRow(m, i)).join('')}`;
+}
+
+function swMatchRow(m, idx) {
+    return `<div id="sw-row-${m.id}" style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:rgba(255,255,255,.03);transition:border-color .2s;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <input type="checkbox" id="sw-chk-${m.id}" onchange="swToggle('${m.id}')" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent)">
+        <div style="flex:1;min-width:200px">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px">${m.home} <span style="color:var(--grey);font-size:11px">vs</span> ${m.away}</div>
+            <div style="font-size:11px;color:var(--grey);margin-top:3px">📅 ${m.date} · 🕐 ${m.time} · 🏆 ${m.league} · 📍 ${m.venue}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <select id="sw-tip-${m.id}" style="background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.3);color:var(--gold);border-radius:5px;padding:5px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px">
+                ${TIP_OPTIONS}
+            </select>
+            <input type="text" id="sw-oh-${m.id}" placeholder="1.xx" style="width:56px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--white);font-family:monospace;font-size:12px;text-align:center" title="Home odds">
+            <input type="text" id="sw-od-${m.id}" placeholder="X.xx" style="width:56px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--white);font-family:monospace;font-size:12px;text-align:center" title="Draw odds">
+            <input type="text" id="sw-oa-${m.id}" placeholder="2.xx" style="width:56px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--white);font-family:monospace;font-size:12px;text-align:center" title="Away odds">
+        </div>
+    </div>`;
+}
+
+function swAddManualRow() {
+    const pool = document.getElementById('sw-matches-pool');
+    const notice = pool.querySelector('[style*="dashed"]');
+    if (notice) notice.remove();
+    const id = 'manual_' + Date.now();
+    const div = document.createElement('div');
+    div.innerHTML = `<div id="sw-row-${id}" style="border:1px solid rgba(0,194,255,.25);border-radius:10px;padding:14px 16px;background:rgba(0,194,255,.04);display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+        <input type="checkbox" id="sw-chk-${id}" onchange="swToggle('${id}')" style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent);margin-bottom:4px">
+        <div class="field" style="flex:1;min-width:110px"><label>Home Team</label><input type="text" id="sw-mhome-${id}" placeholder="e.g. Arsenal"></div>
+        <div class="field" style="flex:1;min-width:110px"><label>Away Team</label><input type="text" id="sw-maway-${id}" placeholder="e.g. Chelsea"></div>
+        <div class="field" style="min-width:90px"><label>League</label><input type="text" id="sw-mleague-${id}" placeholder="La Liga"></div>
+        <div class="field" style="min-width:110px"><label>Date</label><input type="date" id="sw-mdate-${id}" value="${new Date().toISOString().slice(0,10)}"></div>
+        <div class="field" style="min-width:70px"><label>Time</label><input type="time" id="sw-mtime-${id}" value="20:00"></div>
+        <div class="field" style="min-width:100px"><label>Venue</label><input type="text" id="sw-mvenue-${id}" placeholder="Stadium"></div>
+        <select id="sw-tip-${id}" style="background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.3);color:var(--gold);border-radius:5px;padding:5px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;align-self:flex-end;margin-bottom:2px">${TIP_OPTIONS}</select>
+        <input type="text" id="sw-oh-${id}" placeholder="1.xx" style="width:52px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--white);font-family:monospace;font-size:12px;text-align:center;align-self:flex-end;margin-bottom:2px" title="Home odds">
+        <input type="text" id="sw-od-${id}" placeholder="X.xx" style="width:52px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--white);font-family:monospace;font-size:12px;text-align:center;align-self:flex-end;margin-bottom:2px" title="Draw odds">
+        <input type="text" id="sw-oa-${id}" placeholder="2.xx" style="width:52px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--white);font-family:monospace;font-size:12px;text-align:center;align-self:flex-end;margin-bottom:2px" title="Away odds">
+        <button onclick="this.closest('[id^=sw-row]').remove();swCheckReady()" style="background:rgba(255,61,87,.1);border:1px solid rgba(255,61,87,.3);color:var(--red);border-radius:5px;padding:5px 8px;cursor:pointer;font-size:12px;align-self:flex-end;margin-bottom:2px">✕</button>
+    </div>`;
+    pool.appendChild(div);
+}
+
+function swToggle(id) {
+    const chk = document.getElementById(`sw-chk-${id}`);
+    const row = document.getElementById(`sw-row-${id}`);
+    if (!chk) return;
+    if (chk.checked) {
+        const isManual = id.startsWith('manual_');
+        const m = isManual ? {
+            id, home: (document.getElementById(`sw-mhome-${id}`)?.value||'Home').trim(),
+            away: (document.getElementById(`sw-maway-${id}`)?.value||'Away').trim(),
+            league: (document.getElementById(`sw-mleague-${id}`)?.value||'').trim(),
+            date: document.getElementById(`sw-mdate-${id}`)?.value||'',
+            time: document.getElementById(`sw-mtime-${id}`)?.value||'',
+            venue: (document.getElementById(`sw-mvenue-${id}`)?.value||'TBD').trim(),
+        } : {
+            id,
+            home: row.querySelector('[style*="font-weight:700"]')?.textContent.split(' vs ')[0]?.trim()||'',
+            away: row.querySelector('[style*="font-weight:700"]')?.textContent.split(' vs ')[1]?.trim()||'',
+            league: row.querySelector('[style*="color:var(--grey)"]')?.textContent.split('🏆')[1]?.split('·')[0]?.trim()||'',
+            date: row.querySelector('[style*="color:var(--grey)"]')?.textContent.split('📅')[1]?.split('·')[0]?.trim()||'',
+            time: row.querySelector('[style*="color:var(--grey)"]')?.textContent.split('🕐')[1]?.split('·')[0]?.trim()||'',
+            venue: row.querySelector('[style*="color:var(--grey)"]')?.textContent.split('📍')[1]?.trim()||'TBD',
+        };
+        swSelectedMatches = swSelectedMatches.filter(s => s.id !== id);
+        swSelectedMatches.push(m);
+        if (row) row.style.borderColor = 'var(--accent)';
+    } else {
+        swSelectedMatches = swSelectedMatches.filter(s => s.id !== id);
+        if (row) row.style.borderColor = 'var(--border)';
+    }
+    swCheckReady();
+}
+
+function swClearAll() {
+    swSelectedMatches = [];
+    document.querySelectorAll('[id^="sw-chk-"]').forEach(c => c.checked = false);
+    document.querySelectorAll('[id^="sw-row-"]').forEach(r => r.style.borderColor = 'var(--border)');
+    swCheckReady();
+}
+
+async function swPublish() {
+    if (swSelectedMatches.length !== 5) { toast('Select exactly 5 matches', true); return; }
+    const code = (document.getElementById('sw-booking-code')?.value||'').trim().toUpperCase();
+    const link = (document.getElementById('sw-affiliate-link')?.value||'').trim();
+    const bm   = document.getElementById('sw-bookmaker')?.value || '1xBet';
+    if (!code) { toast('Booking code required', true); return; }
+    if (!link) { toast('Affiliate link required', true); return; }
+    const matches = swSelectedMatches.map(m => ({
+        home: m.home, away: m.away, league: m.league,
+        date: m.date, time: m.time, venue: m.venue,
+        tip:       document.getElementById(`sw-tip-${m.id}`)?.value || '1',
+        odds_home: document.getElementById(`sw-oh-${m.id}`)?.value  || '',
+        odds_draw: document.getElementById(`sw-od-${m.id}`)?.value  || '',
+        odds_away: document.getElementById(`sw-oa-${m.id}`)?.value  || '',
+    }));
+    try {
+        const { error } = await supabaseClient.from('sure_wins').insert([{
+            bookmaker: bm, booking_code: code, affiliate_link: link,
+            matches, is_active: true, published_at: new Date().toISOString()
+        }]);
+        if (error) throw error;
+        toast('🏆 Sure Win published! Users see it instantly.');
+        swSelectedMatches = [];
+        document.getElementById('sw-booking-code').value = '';
+        swCheckReady();
+        swLoadHistory(); swPopulateQuickSelect();
+    } catch(e) { toast('❌ ' + e.message, true); }
+}
+
+async function swLoadHistory() {
+    const tbody = document.getElementById('sw-history-tbody');
+    if (!tbody || !supabaseClient) return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:var(--grey)">Loading…</td></tr>';
+    try {
+        const { data, error } = await supabaseClient.from('sure_wins').select('*').order('published_at',{ascending:false}).limit(20);
+        if (error) throw error;
+        if (!data?.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--grey)">No sure wins published yet.</td></tr>'; return; }
+        tbody.innerHTML = data.map(sw => {
+            const ts = sw.published_at ? new Date(sw.published_at).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—';
+            const ml = (sw.matches||[]).map(m => `<div style="font-size:11px;padding:2px 0">${m.home} vs ${m.away} <span style="color:var(--gold);font-weight:700">${m.tip||''}</span></div>`).join('');
+            return `<tr>
+                <td style="padding:10px 14px;font-size:11px;color:var(--grey);white-space:nowrap">${ts}</td>
+                <td style="padding:10px 14px"><span style="background:var(--accent);color:#000;padding:2px 8px;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700">${sw.bookmaker||'—'}</span></td>
+                <td style="padding:10px 14px;font-family:monospace;font-weight:700;letter-spacing:2px;font-size:13px;color:var(--gold)">${sw.booking_code||'—'}</td>
+                <td style="padding:10px 14px">${ml}</td>
+                <td style="padding:10px 14px">
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:${sw.is_active?'var(--green)':'var(--grey)'}">
+                        <input type="checkbox" ${sw.is_active?'checked':''} onchange="swToggleActive('${sw.id}',this.checked)" style="accent-color:var(--green)">
+                        ${sw.is_active?'Active':'Hidden'}
+                    </label>
+                </td>
+                <td style="padding:10px 14px;display:flex;gap:6px">
+                    <button class="btn btn-grey btn-sm" onclick="swEditCode('${sw.id}','${sw.booking_code||''}')">✏️ Code</button>
+                    <button class="btn btn-red btn-sm" onclick="swDelete('${sw.id}')">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
+        const el = document.getElementById('stat-sure-wins');
+        if (el) el.textContent = data.length;
+    } catch(e) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--red)">❌ ${e.message}</td></tr>`;
+    }
+}
+
+async function swPopulateQuickSelect() {
+    const sel = document.getElementById('sw-quick-id');
+    if (!sel || !supabaseClient) return;
+    const { data } = await supabaseClient.from('sure_wins').select('id,bookmaker,booking_code,published_at').eq('is_active',true).order('published_at',{ascending:false}).limit(10);
+    if (!data?.length) return;
+    sel.innerHTML = '<option value="">— select active sure win —</option>' +
+        data.map(sw => `<option value="${sw.id}">${sw.bookmaker} · ${sw.booking_code} · ${new Date(sw.published_at).toLocaleDateString('en-GB')}</option>`).join('');
+}
+
+async function swQuickUpdate() {
+    const id   = document.getElementById('sw-quick-id')?.value;
+    const code = (document.getElementById('sw-quick-code')?.value||'').trim().toUpperCase();
+    if (!id)   { toast('Select a sure win first', true); return; }
+    if (!code) { toast('Enter the new booking code', true); return; }
+    try {
+        const { error } = await supabaseClient.from('sure_wins').update({booking_code: code}).eq('id', id);
+        if (error) throw error;
+        toast('✅ Booking code updated! Users see it immediately.');
+        document.getElementById('sw-quick-code').value = '';
+        swLoadHistory(); swPopulateQuickSelect();
+    } catch(e) { toast('❌ ' + e.message, true); }
+}
+
+async function swToggleActive(id, active) {
+    try { await supabaseClient.from('sure_wins').update({is_active: active}).eq('id', id); toast(active ? '✅ Activated' : '⏸ Hidden'); }
+    catch(e) { toast('❌ ' + e.message, true); }
+}
+
+async function swEditCode(id, currentCode) {
+    const newCode = prompt(`Update booking code:\n(current: ${currentCode})`, currentCode);
+    if (!newCode || newCode.trim() === currentCode) return;
+    try {
+        const { error } = await supabaseClient.from('sure_wins').update({booking_code: newCode.trim().toUpperCase()}).eq('id', id);
+        if (error) throw error;
+        toast('✅ Code updated!'); swLoadHistory(); swPopulateQuickSelect();
+    } catch(e) { toast('❌ ' + e.message, true); }
+}
+
+async function swDelete(id) {
+    if (!confirm('Delete this Sure Win permanently?')) return;
+    try { await supabaseClient.from('sure_wins').delete().eq('id', id); toast('🗑️ Deleted'); swLoadHistory(); swPopulateQuickSelect(); }
+    catch(e) { toast('❌ ' + e.message, true); }
+}
+
 async function loadAllData() {
     const sections = [
         renderPlayers, renderFixtures, renderResults, renderFormation,
