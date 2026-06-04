@@ -1171,22 +1171,35 @@ const DataService = {
     },
 
     async uploadImage(file, folder) {
-        if (supabaseClient) {
-            try {
-                const ext = file.name.split('.').pop();
-                const name = folder + '/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
-                const { data, error } = await supabaseClient.storage.from('club-media').upload(name, file, { upsert: true });
-                if (!error) {
-                    const { data: { publicUrl } } = supabaseClient.storage.from('club-media').getPublicUrl(name);
-                    return publicUrl;
+        if (!supabaseClient) { toast('❌ Supabase not connected', true); return null; }
+        try {
+            const ext  = file.name.split('.').pop().toLowerCase();
+            const name = folder + '/' + Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
+            const { data, error } = await supabaseClient.storage
+                .from('club-media')
+                .upload(name, file, { upsert: true, contentType: file.type });
+            if (error) {
+                console.error('Storage upload error:', error);
+                // Give a specific message for common errors
+                if (error.message?.includes('Bucket not found') || error.message?.includes('bucket')) {
+                    toast('❌ Storage bucket missing — run the SQL setup in Supabase', true);
+                } else if (error.message?.includes('policy') || error.statusCode === 403) {
+                    toast('❌ Storage permission denied — check RLS policies', true);
+                } else {
+                    toast('❌ Upload failed: ' + error.message, true);
                 }
-            } catch(e) { console.warn('Upload failed, using base64:', e); }
+                return null;
+            }
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from('club-media')
+                .getPublicUrl(name);
+            return publicUrl;
+        } catch(e) {
+            console.error('Upload exception:', e);
+            toast('❌ Upload error: ' + (e.message || 'Network error'), true);
+            return null;
         }
-        return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.readAsDataURL(file);
-        });
+        // NOTE: No base64 fallback — base64 is too large for the database
     }
 };
 
@@ -1237,7 +1250,69 @@ function toggleVideoPlatform() {
 let currentPhotoData = null;
 function previewPlayerPhoto(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = e => { currentPhotoData = e.target.result; document.getElementById('p-photo-preview').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`; }; reader.readAsDataURL(input.files[0]); } }
 async function openPlayerModal(id = null) { let player = null; if (id) { const players = await DataService.getData('players'); player = players.find(p => p.id === id); } document.getElementById('player-edit-id').value = id || ''; document.getElementById('p-name').value = player?.name || ''; document.getElementById('p-num').value = player?.number || ''; document.getElementById('p-pos').value = player?.position || 'GK'; document.getElementById('p-nat').value = player?.nationality || ''; document.getElementById('p-goals').value = player?.goals || 0; document.getElementById('p-assists').value = player?.assists || 0; document.getElementById('p-apps').value = player?.appearances || 0; document.getElementById('p-age').value = player?.age || ''; document.getElementById('p-rating').value = player?.rating || ''; document.getElementById('p-bio').value = player?.bio || ''; currentPhotoData = player?.photo || null; const preview = document.getElementById('p-photo-preview'); if (player?.photo) preview.innerHTML = `<img src="${player.photo}" style="width:100%;height:100%;object-fit:cover">`; else preview.innerHTML = '<span>No photo</span>'; openModal('player-modal'); }
-async function savePlayer() { const name = document.getElementById('p-name').value.trim(); if (!name) { toast('Player name required', true); return; } let photoUrl = currentPhotoData; const data = { id: document.getElementById('player-edit-id').value || uid(), name, number: parseInt(document.getElementById('p-num').value) || 0, position: document.getElementById('p-pos').value, nationality: document.getElementById('p-nat').value, goals: parseInt(document.getElementById('p-goals').value) || 0, assists: parseInt(document.getElementById('p-assists').value) || 0, appearances: parseInt(document.getElementById('p-apps').value) || 0, age: parseInt(document.getElementById('p-age').value) || null, rating: parseFloat(document.getElementById('p-rating').value) || null, bio: document.getElementById('p-bio').value, photo: photoUrl }; const eid = document.getElementById('player-edit-id').value; let result; if (eid) { result = await DataService.updateItem('players', eid, data); } else { result = await DataService.addItem('players', data); } if (result) { currentPhotoData = null; closeModal('player-modal'); await renderPlayers(); updateStats(); } }
+async function savePlayer() {
+    const name = document.getElementById('p-name').value.trim();
+    if (!name) { toast('Player name required', true); return; }
+
+    const saveBtn = document.querySelector('[onclick="savePlayer()"]');
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving…'; }
+
+    let photoUrl = null;
+
+    // If a new file was chosen, upload it to Supabase Storage
+    const photoFile = document.getElementById('p-photo').files[0];
+    if (photoFile) {
+        toast('📤 Uploading photo…');
+        try {
+            const uploaded = await DataService.uploadImage(photoFile, 'players');
+            if (uploaded) {
+                photoUrl = uploaded;
+            } else {
+                toast('⚠️ Photo upload failed — saving without photo', true);
+            }
+        } catch(e) {
+            toast('⚠️ Photo error: ' + e.message, true);
+        }
+    } else {
+        // Keep existing photo URL — but reject base64 strings (too large for DB)
+        const existing = currentPhotoData;
+        photoUrl = (existing && !existing.startsWith('data:')) ? existing : null;
+    }
+
+    const data = {
+        id:          document.getElementById('player-edit-id').value || uid(),
+        name,
+        number:      parseInt(document.getElementById('p-num').value) || 0,
+        position:    document.getElementById('p-pos').value,
+        nationality: document.getElementById('p-nat').value,
+        goals:       parseInt(document.getElementById('p-goals').value) || 0,
+        assists:     parseInt(document.getElementById('p-assists').value) || 0,
+        appearances: parseInt(document.getElementById('p-apps').value) || 0,
+        age:         parseInt(document.getElementById('p-age').value) || null,
+        rating:      parseFloat(document.getElementById('p-rating').value) || null,
+        bio:         document.getElementById('p-bio').value,
+        photo:       photoUrl
+    };
+
+    const eid = document.getElementById('player-edit-id').value;
+    let result;
+    if (eid) {
+        result = await DataService.updateItem('players', eid, data);
+    } else {
+        result = await DataService.addItem('players', data);
+    }
+
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save Player'; }
+
+    if (result) {
+        currentPhotoData = null;
+        document.getElementById('p-photo').value = '';
+        closeModal('player-modal');
+        await renderPlayers();
+        updateStats();
+        toast('✅ Player saved successfully!');
+    }
+}
 async function deletePlayer(id, name) { await DataService.deleteItem('players', id); await renderPlayers(); updateStats(); }
 async function renderPlayers() { const players = await DataService.getData('players'); const posColor = { GK: 'badge-upcoming', CB: 'badge-win', LB: 'badge-win', RB: 'badge-win', CM: 'badge-upcoming', ST: 'badge-win' }; document.getElementById('players-tbody').innerHTML = players.map(p => `<tr><td>${p.photo ? `<img src="${p.photo}" class="player-photo">` : `<div style="width:35px;height:35px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center">${p.name[0]}</div>`}</td><td><strong>${p.name}</strong><br><span style="font-size:10px">#${p.number}</span></td><td><span class="badge ${posColor[p.position] || ''}">${p.position}</span></td><td>${p.goals}</td><td>${p.assists}</td><td>${p.appearances}</td><td><span style="color:var(--gold)">${p.rating || '—'}</span></td><td><button class="btn btn-grey btn-sm" onclick="openPlayerModal('${p.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="deletePlayer('${p.id}','${p.name}')">🗑️</button></td></tr>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:30px">No players yet</td></tr>'; }
 
