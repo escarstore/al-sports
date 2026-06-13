@@ -1895,7 +1895,7 @@ setStar(5);
 async function postReview() {
     // Check if user is muted
     if (window._userStatus === 'muted') {
-        showToast('🔇 You have been paused and cannot post reviews.', 'error');
+        showToast('🔇 You have been muted and cannot post reviews.', 'error');
         return;
     }
     if (!currentUser) {
@@ -2642,7 +2642,7 @@ function subscribeToRealtimeUpdates() {
 async function init() {
     // Clear old cache keys from previous versions of the site
     // so stale data from old builds doesn't persist across updates
-    const CURRENT_BUILD = 'als_v8';
+    const CURRENT_BUILD = 'als_v9';
     if (localStorage.getItem('als_build') !== CURRENT_BUILD) {
         const keepKeys = ['kfc_football_api_key_a', 'kfc_football_api_key_b',
                           'kfc_backend_url', 'kfc_gemini_key', 'als_build'];
@@ -2859,6 +2859,7 @@ function generateOdds(home, away) {
 //  no daily limit — preserves all API-Football calls for live scores)
 // ══════════════════════════════════════════════════════════════
 const TSDB_LEAGUES = [
+    { id: 4429, comp: 'FIFA World Cup',         flag: '\U0001f30d' },
     { id: 4328, comp: 'Premier League',         flag: '\U0001f3f4\U000e0067\U000e0062\U000e0065\U000e006e\U000e0067\U000e007f' },
     { id: 4335, comp: 'La Liga',                flag: '\U0001f1ea\U0001f1f8' },
     { id: 4331, comp: 'Bundesliga',             flag: '\U0001f1e9\U0001f1ea' },
@@ -2876,6 +2877,8 @@ const TSDB_NAME_MAP = {
     'UEFA Champions League':'UEFA Champions League','UEFA Europa League':'UEFA Europa League',
     'UEFA Europa Conference League':'UEFA Conference League',
     'Saudi Professional League':'Saudi Pro League',
+    'FIFA World Cup':'FIFA World Cup','World Cup':'FIFA World Cup',
+    'FIFA World Cup 2026':'FIFA World Cup',
 };
 function teamInitialsSVG(name) {
     const initials = (name||'?').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
@@ -2949,11 +2952,11 @@ async function fetchUpcomingMatches(force) {
 
     if (!collected.length) {
         if (!hasCached) grid.innerHTML = `<div class="scores-empty" style="grid-column:1/-1;padding:32px 20px">
-            <div style="font-size:36px;margin-bottom:12px"></div>
+            <div style="font-size:36px;margin-bottom:12px">⚽</div>
             <div style="font-weight:700;font-size:15px;margin-bottom:10px">No fixtures right now</div>
             <div style="font-size:12px;color:var(--grey);line-height:1.9">
-                Most European leagues end mid-May and resume August.<br>
-                <b style="color:var(--gold)">World Cup 2026 kicks off June 11</b> — check back soon!<br>
+                Club leagues are on their summer break.<br>
+                <b style="color:var(--gold)">🌍 World Cup 2026 is underway</b> — try the World Cup tab or Refresh.<br>
                 <span style="color:var(--accent)">⟳ Refresh to try again</span>
             </div>
             <button onclick="fetchUpcomingMatches(true)" style="margin-top:16px;background:var(--accent);border:none;color:#000;padding:10px 24px;border-radius:8px;font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer">⟳ REFRESH</button>
@@ -3958,7 +3961,7 @@ function showWarningBanner(message) {
         letter-spacing:1px;text-align:center;display:flex;align-items:center;
         justify-content:space-between;gap:12px`;
     banner.innerHTML = `
-        <span>🌐 Infor: ${message}</span>
+        <span>⚠️ Admin Warning: ${message}</span>
         <button onclick="document.getElementById('warning-banner').remove()" 
             style="background:none;border:none;font-size:20px;cursor:pointer;color:#000">✕</button>`;
     document.body.prepend(banner);
